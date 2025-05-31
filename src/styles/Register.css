@@ -9,6 +9,37 @@
   padding: 2rem;
 }
 
+.flowers-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 540px;
+}
+.flowers-top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 540px;
+}
+
+.flowers-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: 540px;
+}
+.flowers-bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-width: 540px;
+}
+
+
 .flowers-top,
 .flowers-bottom {
   width: 100%;
@@ -37,4 +68,33 @@
 .register-form-container {
   width: 100%;
   max-width: 400px;
+}
+
+.logo-brain {
+  max-width: 180px;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.register-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Added fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease forwards;
 }

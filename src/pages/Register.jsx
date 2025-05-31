@@ -1,18 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 
 function Register() {
+  const [fadeIn, setFadeIn] = useState(false);
+  const [animate, setAnimate] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
+  const handleSignInClick = (e) => {
+    e.preventDefault();
+    setAnimate(true);
+  };
+
+  const handleAnimationEnd = () => {
+    if (animate) {
+      navigate("/login");
+    }
+  };
+
   return (
-    <div className="register-container d-flex">
+    <div
+      className={`register-container d-flex ${fadeIn ? "fade-in" : ""}`}
+      onAnimationEnd={handleAnimationEnd}
+    >
       {/* Kiri: Ilustrasi */}
-      <div className="register-left d-flex flex-column align-items-center justify-content-between">
+      <div className={`register-left d-flex flex-column align-items-center justify-content-between ${animate ? "slide-right" : ""}`}>
+        <img src="/images/flowers-top.svg" alt="Flowers Top-right" className="flowers-top-right" />
         <img src="/images/flowers-top.svg" alt="Flowers Top" className="flowers-top" />
         <img src="/images/logo-brain.svg" alt="Logo Brain" className="logo-brain" />
+        <img src="/images/flowers-bottom.svg" alt="Flowers Bottom-right" className="flowers-bottom-right" />
         <img src="/images/flowers-bottom.svg" alt="Flowers Bottom" className="flowers-bottom" />
       </div>
 
       {/* Kanan: Formulir */}
-      <div className="register-right">
+      <div className={`register-right ${animate ? "slide-left" : ""}`}>
         <div className="register-form-container">
           <h1 className="fw-bold mb-5 text-center">Sign Up</h1>
 
@@ -57,7 +82,14 @@ function Register() {
           </form>
 
           <p className="text-center mt-3">
-            Already have an account? <a href="/login" className="text-decoration-none fw-semibold">Sign In</a>
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="text-decoration-none fw-semibold"
+              onClick={handleSignInClick}
+            >
+              Sign In
+            </a>
           </p>
         </div>
       </div>
