@@ -1,4 +1,4 @@
-const BASE_URL = "https://tenangin-backend.vercel.app/api";
+const BASE_URL = "https://tenangin-backend.vercel.app";
 
 const getAuthHeaders = (token) => ({
   Authorization: `Bearer ${token}`,
@@ -6,11 +6,12 @@ const getAuthHeaders = (token) => ({
 });
 
 // Authentication
-export async function registerUser(email, password) {
+export async function registerUser(username, email, password, confirmPassword) {
+  
   const response = await fetch(`${BASE_URL}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, email, password, confirm_password: confirmPassword }),
   });
   return response.json();
 }
@@ -29,14 +30,14 @@ export const googleOAuthUrl = `${BASE_URL}/auth/google`;
 
 // Profile
 export async function getProfile(token) {
-  const response = await fetch(`${BASE_URL}/profile`, {
+  const response = await fetch(`${BASE_URL}/api/profile`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
 }
 
 export async function createProfile(token, profileData) {
-  const response = await fetch(`${BASE_URL}/profile/add`, {
+  const response = await fetch(`${BASE_URL}/api/profile/add`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(profileData),
@@ -45,7 +46,7 @@ export async function createProfile(token, profileData) {
 }
 
 export async function updateProfile(token, profileData) {
-  const response = await fetch(`${BASE_URL}/profile/edit`, {
+  const response = await fetch(`${BASE_URL}/api/profile/edit`, {
     method: "PUT",
     headers: getAuthHeaders(token),
     body: JSON.stringify(profileData),
@@ -55,14 +56,14 @@ export async function updateProfile(token, profileData) {
 
 // Assessment History
 export async function getAssessments(token) {
-  const response = await fetch(`${BASE_URL}/assessment`, {
+  const response = await fetch(`${BASE_URL}/api/assessment`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
 }
 
 export async function createAssessment(token, assessmentData) {
-  const response = await fetch(`${BASE_URL}/assessment`, {
+  const response = await fetch(`${BASE_URL}/api/assessment`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(assessmentData),
@@ -72,14 +73,14 @@ export async function createAssessment(token, assessmentData) {
 
 // Journal Entries
 export async function getJournalEntries(token) {
-  const response = await fetch(`${BASE_URL}/journal`, {
+  const response = await fetch(`${BASE_URL}/api/journal`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
 }
 
 export async function createJournalEntry(token, journalData) {
-  const response = await fetch(`${BASE_URL}/journal/add`, {
+  const response = await fetch(`${BASE_URL}/api/journal/add`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(journalData),
@@ -89,13 +90,13 @@ export async function createJournalEntry(token, journalData) {
 
 // Clinics (no authentication required)
 export async function getClinics() {
-  const response = await fetch(`${BASE_URL}/clinics`);
+  const response = await fetch(`${BASE_URL}/api/clinics`);
   return response.json();
 }
 
 // Chatbot Sessions
 export async function createChatbotSession(token, sessionData) {
-  const response = await fetch(`${BASE_URL}/chatbot/sessions`, {
+  const response = await fetch(`${BASE_URL}/api/chatbot/sessions`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(sessionData),
@@ -104,21 +105,21 @@ export async function createChatbotSession(token, sessionData) {
 }
 
 export async function getChatbotSessions(token) {
-  const response = await fetch(`${BASE_URL}/chatbot/sessions`, {
+  const response = await fetch(`${BASE_URL}/api/chatbot/sessions`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
 }
 
 export async function getChatbotSessionMessages(token, sessionId) {
-  const response = await fetch(`${BASE_URL}/chatbot/sessions/${sessionId}/messages`, {
+  const response = await fetch(`${BASE_URL}/api/chatbot/sessions/${sessionId}/messages`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
 }
 
 export async function addChatbotMessage(token, sessionId, messageData) {
-  const response = await fetch(`${BASE_URL}/chatbot/sessions/${sessionId}/messages`, {
+  const response = await fetch(`${BASE_URL}/api/chatbot/sessions/${sessionId}/messages`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(messageData),
@@ -128,14 +129,14 @@ export async function addChatbotMessage(token, sessionId, messageData) {
 
 // Reminders
 export async function getReminders(token) {
-  const response = await fetch(`${BASE_URL}/reminders`, {
+  const response = await fetch(`${BASE_URL}/api/reminders`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
 }
 
 export async function createReminder(token, reminderData) {
-  const response = await fetch(`${BASE_URL}/reminders/add`, {
+  const response = await fetch(`${BASE_URL}/api/reminders/add`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(reminderData),
