@@ -6,18 +6,39 @@ import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import Chatbot from '../pages/chatbot';
 import Journaling from '../pages/Journaling';
+import PrivateRoute from '../components/PrivateRoute';
 
 export default function AppRoutes() {
     return (
         <BrowserRouter>
         <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={
+              <PrivateRoute>
+                <LandingPage />
+              </PrivateRoute>
+            } />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/chatbot" element={<Chatbot />} />
-            <Route path="/journaling" element={<Journaling />} />
+            <Route path="/dashboard" element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            } />
+            <Route path="/profile" element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            } />
+            <Route path="/chatbot" element={
+              <PrivateRoute>
+                <Chatbot />
+              </PrivateRoute>
+            } />
+            <Route path="/journaling" element={
+              <PrivateRoute>
+                <Journaling />
+              </PrivateRoute>
+            } />
         </Routes>
         </BrowserRouter>
     );
