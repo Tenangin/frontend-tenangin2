@@ -68,3 +68,37 @@
 .text-pink {
   color: #d6336c !important;
 }
+
+.edit-profile-button-container {
+  margin-top: 1rem;
+  text-align: right;
+  width: 100%;
+}
+
+
+.edit-profile-button-container > button {
+  margin-right: 1rem;
+}
+
+/* Added styles for ProfileModalPopup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  min-width: 350px;
+  max-width: 90vw;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
