@@ -110,7 +110,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
         {successMessage && <p className="text-success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
-            <label className="form-label">Full Name</label>
+            <label className="form-label fw-bold">Full Name</label>
             <input
               type="text"
               className="form-control"
@@ -122,7 +122,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
             />
           </div>
           <div className="mb-2">
-            <label className="form-label">Place of Birth</label>
+            <label className="form-label fw-bold">Place of Birth</label>
             <input
               type="text"
               className="form-control"
@@ -134,7 +134,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
             />
           </div>
           <div className="mb-2">
-            <label className="form-label">Date of Birth</label>
+            <label className="form-label fw-bold">Date of Birth</label>
             <input
               type="date"
               className="form-control"
@@ -146,7 +146,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
             />
           </div>
           <div className="mb-2">
-            <label className="form-label">Age</label>
+            <label className="form-label fw-bold">Age</label>
             <input
               type="number"
               className="form-control"
@@ -159,7 +159,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
             />
           </div>
           <div className="mb-2">
-            <label className="form-label">Gender</label>
+            <label className="form-label fw-bold">Gender</label>
             <select
               className="form-select"
               name="gender"
@@ -174,7 +174,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
             </select>
           </div>
           <div className="mb-2">
-            <label className="form-label">Address</label>
+            <label className="form-label fw-bold">Address</label>
             <textarea
               className="form-control"
               name="address"
@@ -185,7 +185,7 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">About Me</label>
+            <label className="form-label fw-bold">About Me</label>
             <textarea
               className="form-control"
               name="about_me"
