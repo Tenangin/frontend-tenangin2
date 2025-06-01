@@ -1,39 +1,48 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Account from "../components/Account";
 import Notifications from "../components/Notifications";
 import ProfileCard from "../components/ProfileCard";
 import ProfileTabs from "../components/ProfileTabs";
 import ModalPopup from "../components/ProfileModalPopup";
+import { getProfile } from "../data/api/api";
+import { getToken, getUserId } from "../utils/auth";
 import "../styles/Profile.css";
 
 function Profile() {
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({
-    fullName: "",
-    placeOfBirth: "",
-    dateOfBirth: "",
-    age: "",
-    gender: "",
-    address: "",
-    aboutMe: "",
-  });
+  const [profileData, setProfileData] = useState(null);
+  const token = getToken();
+  const userId = getUserId();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const fetchProfile = React.useCallback(() => {
+    getProfile(token, userId)
+      .then((data) => {
+        if (data && !data.error) {
+          setProfileData(data.profile);
+        } else {
+          setProfileData(null);
+        }
+      })
+      .catch(() => {
+        setProfileData(null);
+      });
+  }, [token, userId]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: Submit logic here
-    setShowModal(false);
-  };
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const handleCancel = () => {
     setShowModal(false);
   };
+
+  const handleUpdate = () => {
+    fetchProfile();
+    setShowModal(false);
+    window.location.reload();
+  };
+
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
@@ -51,28 +60,26 @@ function Profile() {
         </div>
         <div className="profile-wrapper">
           {/* Top Section */}
-          <ProfileCard />
+          <ProfileCard profileData={profileData} />
           {/* Tabs */}
-          <ProfileTabs />
-        <div className="edit-profile-button-container">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => setShowModal(true)}
-          >
-            Edit Profile
-          </button>
-        </div>
+          <ProfileTabs profileData={profileData} />
+          <div className="edit-profile-button-container">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => setShowModal(true)}
+            >
+              Edit Profile
+            </button>
+          </div>
         </div>
         {/* Modal PopUp */}
         <ModalPopup
-            showModal={showModal}
-            form={form}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            handleCancel={handleCancel}
+          showModal={showModal}
+          handleCancel={handleCancel}
+          onUpdate={handleUpdate}
+          profileData={profileData}
         />
-
       </div>
     </div>
   );

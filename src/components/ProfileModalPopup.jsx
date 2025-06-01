@@ -3,7 +3,7 @@ import "../styles/Profile.css";
 import { getProfile, updateProfile } from "../data/api/api";
 import { getToken, getUserId } from "../utils/auth";
 
-function ModalPopup({ showModal, handleCancel }) {
+function ModalPopup({ showModal, handleCancel, onUpdate }) {
   const [form, setForm] = useState({
     full_name: "",
     place_of_birth: "",
@@ -15,6 +15,7 @@ function ModalPopup({ showModal, handleCancel }) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const token = getToken();
   const userId = getUserId();
@@ -66,7 +67,8 @@ function ModalPopup({ showModal, handleCancel }) {
       const response = await updateProfile(token, userId, form);
       console.log(response);
       if (response && !response.error) {
-        handleCancel(); // Close modal on success
+        setSuccessMessage("Profile edited was successful");
+        onUpdate(); // Call onUpdate callback on success
       } else {
         setError(response.error || "Failed to update profile");
       }
@@ -77,6 +79,13 @@ function ModalPopup({ showModal, handleCancel }) {
     }
   };
 
+  useEffect(() => {
+    if (!showModal) {
+      setSuccessMessage("");
+      setError(null);
+    }
+  }, [showModal]);
+
   if (!showModal) return null;
 
   return (
@@ -85,6 +94,7 @@ function ModalPopup({ showModal, handleCancel }) {
         <h5 className="mb-3">Edit Profile</h5>
         {loading && <p>Loading...</p>}
         {error && <p className="text-danger">{error}</p>}
+        {successMessage && <p className="text-success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
             <label className="form-label">Full Name</label>
