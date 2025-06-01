@@ -29,8 +29,8 @@ export async function loginUser(email, password) {
 export const googleOAuthUrl = `${BASE_URL}/auth/google`;
 
 // Profile
-export async function getProfile(token) {
-  const response = await fetch(`${BASE_URL}/api/profile`, {
+export async function getProfile(token, id) {
+  const response = await fetch(`${BASE_URL}/api/profile/${id}`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
@@ -45,8 +45,8 @@ export async function createProfile(token, profileData) {
   return response.json();
 }
 
-export async function updateProfile(token, profileData) {
-  const response = await fetch(`${BASE_URL}/api/profile/edit`, {
+export async function updateProfile(token, id, profileData) {
+  const response = await fetch(`${BASE_URL}/api/profile/edit/${id}`, {
     method: "PUT",
     headers: getAuthHeaders(token),
     body: JSON.stringify(profileData),
