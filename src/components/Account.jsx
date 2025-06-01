@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { removeToken } from '../utils/auth';
+import { removeToken, removeEmail, removeUserId, removeUsername } from '../utils/auth';
 
 const Account = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -19,6 +19,9 @@ const Account = () => {
 
   const handleLogout = () => {
     // Implement logout logic here, e.g., clear auth tokens, etc.
+    removeEmail();
+    removeUserId();
+    removeUsername();
     removeToken();
     setDropdownOpen(false);
     navigate('/login');
