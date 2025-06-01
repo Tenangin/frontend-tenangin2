@@ -96,3 +96,39 @@
     opacity: 0.5;
   }
 }
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-left,
+  .login-right {
+    width: 100%;
+  }
+
+  .login-left {
+    order: 2;
+    padding: 2rem;
+  }
+
+  .login-right {
+    order: 1;
+    padding: 2rem;
+    height: 300px;
+  }
+
+  .logo-brain {
+    max-width: 120px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* .flowers-top,
+  .flowers-top-right,
+  .flowers-bottom,
+  .flowers-bottom-right {
+    display: none;
+  } */
+}

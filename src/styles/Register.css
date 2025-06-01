@@ -117,3 +117,42 @@
   color: #0f5132;
   border: 1px solid #badbcc;
 }
+
+
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .register-left,
+  .register-right {
+    width: 100%;
+  }
+
+  .register-left {
+    order: 2;
+    height: 250px;
+    padding: 1rem;
+  }
+
+  .register-right {
+    order: 1;
+    padding: 2rem 1rem;
+  }
+
+  .logo-brain {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 auto;
+    display: block;
+    z-index: 999;
+  }
+
+  /* .flowers-top,
+  .flowers-top-right {
+    display: none; 
+  } */
+}
