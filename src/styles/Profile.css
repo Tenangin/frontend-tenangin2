@@ -26,6 +26,8 @@
 .profile-right-info {
   text-align: right;
   font-size: 0.9rem;
+  margin-left: auto;
+  max-width: 200px;
 }
 
 .profile-tabs {
