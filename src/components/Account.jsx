@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { removeToken, removeEmail, removeUserId, removeUsername } from '../utils/auth';
+import { removeToken, removeEmail, removeUserId, removeUsername, getUsername } from '../utils/auth';
 
 const Account = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [username, setUsername] = useState('');
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -28,6 +29,13 @@ const Account = () => {
   };
 
   useEffect(() => {
+    const storedUsername = getUsername();
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+  useEffect(() => {
     if (dropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -46,7 +54,7 @@ const Account = () => {
         style={{ cursor: 'pointer', userSelect: 'none' }}
       >
         <img src="/images/user.svg" alt="Profile" className="rounded-circle" width={40} height={40} />
-        <span className="fw-semibold ms-2">Najmi</span>
+        <span className="fw-semibold ms-2">{username}</span>
       </div>
       {dropdownOpen && (
         <div
