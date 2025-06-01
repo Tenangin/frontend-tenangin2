@@ -90,8 +90,21 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <h5 className="mb-3">Edit Profile</h5>
+      <div
+  className="modal-content"
+  style={{
+    background: "#fff",
+    borderRadius: "8px",
+    padding: "5rem",
+    minWidth: "350px",
+    maxWidth: "80vw",
+    maxHeight: "90vh", // tambahkan batas tinggi
+    overflowY: "auto", // aktifkan scroll vertikal saat diperlukan
+    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+  }}
+>
+
+        <h5 className="mb-5 text-center fw-bold fs-3">Edit Profile</h5>
         {loading && <p>Loading...</p>}
         {error && <p className="text-danger">{error}</p>}
         {successMessage && <p className="text-success">{successMessage}</p>}
