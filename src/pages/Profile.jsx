@@ -25,7 +25,6 @@ function Profile() {
         <div className="profile-wrapper">
           {/* Top Section */}
             <ProfileCard />
-
           {/* Tabs */}
           <ProfileTabs />
         </div>
