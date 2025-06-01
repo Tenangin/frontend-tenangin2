@@ -59,3 +59,12 @@
   background-color: #3b82f6;
   border-radius: 2px;
 }
+
+/* Custom pink badge styles for female gender */
+.bg-pink-subtle {
+  background-color: #f8d7da !important;
+}
+
+.text-pink {
+  color: #d6336c !important;
+}
