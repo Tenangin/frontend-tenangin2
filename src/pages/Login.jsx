@@ -47,11 +47,13 @@ function Login() {
         }, 1500);
       } else {
         setError(response.message || "Login failed");
-        setSuccessMessage("")
+        setSuccessMessage("");
+        setLoading(false);
       }
     } catch {
       setError("An error occurred during login");
-      setSuccessMessage("")
+      setSuccessMessage("");
+      setLoading(false);
     }
   };
   const handleAnimationEnd = () => {
@@ -89,7 +91,10 @@ function Login() {
                   id="email"
                   placeholder="johndoe@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (error) setError("");
+                  }}
                   disabled={loading}
                   required
                 />
@@ -106,7 +111,10 @@ function Login() {
                   id="password"
                   placeholder="********"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (error) setError("");
+                  }}
                   disabled={loading}
                   required
                 />
@@ -125,7 +133,7 @@ function Login() {
               <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
             </div>
 
-            {error && <div className="alert alert-danger">{error}</div>}
+            {/* {error && <div className="alert alert-danger">{error}</div>} */}
 
             <button type="submit" className="btn btn-primary w-100 rounded-pill fw-bold mb-3 p-2" disabled={loading}>
               {loading ? "Login Account..." : "Sign In"}
