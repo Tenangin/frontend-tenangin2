@@ -32,7 +32,6 @@ const benefits = [
 const BenefitsPage = () => {
   return (
     <>
-    <LandingNavbar />
     <div className="container my-3">
       {/* Hero Section */}
       <div className="p-5 text-center rounded" style={{backgroundColor: '#4a90e2', color: 'white', marginBottom: '3rem'}}>
@@ -73,7 +72,7 @@ const BenefitsPage = () => {
         </a>
       </section>
     </div>
-    <Footer />
+    {/* <Footer /> */}
     </>
   );
 };

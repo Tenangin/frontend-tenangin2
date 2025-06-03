@@ -5,7 +5,7 @@ import Footer from '../components/FooterSection';
 const FeaturesPage = () => {
   return (
     <>
-    <LandingNavbar />
+    {/* <LandingNavbar /> */}
      <div className="container my-3">
       {/* Hero Section */}
       <div className="p-5 text-center rounded" style={{backgroundColor: '#4a90e2', color: 'white', marginBottom: '3rem'}}>
@@ -86,7 +86,7 @@ const FeaturesPage = () => {
         </a>
       </section>
     </div>
-    <Footer />
+    {/* <Footer /> */}
     </>
   );
 };

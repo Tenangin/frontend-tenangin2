@@ -9,12 +9,12 @@ import CTASection from "../components/CTASection";
 function LandingPage() {
   return (
     <>
-      <LandingNavbar />
+      {/* <LandingNavbar /> */}
       <HeroSection />
       <FeatureSection />
       <WhyTenanginSection />
       <CTASection />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
