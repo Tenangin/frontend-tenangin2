@@ -101,10 +101,35 @@ export async function createChatbotSession(token, sessionData) {
     headers: getAuthHeaders(token),
     body: JSON.stringify(sessionData),
   });
+
+  return response.json();
+}
+
+export const createChatbotMessage = async (token, sessionId, messagePayload) => {
+  // messagePayload: { sender: 'user', text: 'Isi pesan' }
+  console.log(`API CALL: createChatbotMessage for session ID: ${sessionId} with payload:`, messagePayload, "and token:", token);
+  await new Promise(resolve => setTimeout(resolve, 300));
+  // API seharusnya mengembalikan pesan yang baru dibuat dari database
+  return {
+    id: `db_msg_${Date.now()}`,
+    sessions_id: sessionId,
+    sender: messagePayload.sender,
+    message: messagePayload.text,
+    timestamp: new Date().toISOString(),
+  };
+  // throw new Error("Gagal mengirim pesan ke API");
+};
+
+export async function deleteChatbotSession(token, sessionId) {
+  const response = await fetch(`${BASE_URL}/api/chatbot/sessions/${sessionId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(token),
+  });
   return response.json();
 }
 
 export async function getChatbotSessions(token) {
+
   const response = await fetch(`${BASE_URL}/api/chatbot/sessions`, {
     headers: getAuthHeaders(token),
   });
