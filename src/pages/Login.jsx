@@ -13,6 +13,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   
 
 
@@ -106,7 +107,7 @@ function Login() {
               <div className="input-group">
                 <span className="input-group-text"><i className="bi bi-shield-lock"></i></span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control rounded-pill"
                   id="password"
                   placeholder="********"
@@ -118,7 +119,13 @@ function Login() {
                   disabled={loading}
                   required
                 />
-                <span className="input-group-text"><i className="bi bi-eye-slash"></i></span>
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i className={showPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+                </span>
               </div>
             </div>
 
