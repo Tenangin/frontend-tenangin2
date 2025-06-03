@@ -22,9 +22,6 @@ function LandingNavbar() {
                 <li className="nav-item">
                 <Link className="nav-link text-dark" to="/contact">Benefit</Link>
                 </li>
-                <li className="nav-item">
-                <Link className="nav-link text-dark" to="/features">Features</Link>
-                </li>
             </ul>
             </div>
 
