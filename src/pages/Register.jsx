@@ -28,6 +28,15 @@ function Register() {
   // State for real-time email validation error
   const [emailError, setEmailError] = useState("");
 
+  // State for password validation rules
+  const [passwordValidations, setPasswordValidations] = useState({
+    minLength: false,
+    hasLower: false,
+    hasUpper: false,
+    hasNumber: false,
+    noSpaces: false,
+  });
+
   useEffect(() => {
     setFadeIn(true);
   }, []);
@@ -199,7 +208,18 @@ function Register() {
                   id="password"
                   placeholder="********"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setPassword(value);
+
+                    setPasswordValidations({
+                      minLength: value.length >= 8,
+                      hasLower: /[a-z]/.test(value),
+                      hasUpper: /[A-Z]/.test(value),
+                      hasNumber: /\d/.test(value),
+                      noSpaces: !/\s/.test(value),
+                    });
+                  }}
                   disabled={loading}
                 />
                 <span
@@ -232,6 +252,45 @@ function Register() {
                 >
                   <i className={showConfirmPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
                 </span>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="passwordMinLength"
+                  checked={passwordValidations.minLength}
+                  readOnly
+                />
+                <label className="form-check-label" htmlFor="passwordMinLength">
+                  Minimum 8 characters
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="passwordHasLowerUpper"
+                  checked={passwordValidations.hasLower && passwordValidations.hasUpper}
+                  readOnly
+                />
+                <label className="form-check-label" htmlFor="passwordHasLowerUpper">
+                  At least 1 lowercase letter and uppercase letter
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="passwordHasNumber"
+                  checked={passwordValidations.hasNumber}
+                  readOnly
+                />
+                <label className="form-check-label" htmlFor="passwordHasNumber">
+                 At least 1 number
+                </label>
               </div>
             </div>
 
