@@ -12,11 +12,7 @@ export default function AppRoutes() {
     return (
         <BrowserRouter>
         <Routes>
-            <Route path="/" element={
-              <PrivateRoute>
-                <LandingPage />
-              </PrivateRoute>
-            } />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={
