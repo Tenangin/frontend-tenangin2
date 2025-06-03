@@ -2,51 +2,51 @@ import React from 'react';
 
 const teamMembers = [
   {
-    name: "Aulia Rahman",
-    university: "Universitas Indonesia",
-    cohortId: "Cohort 01",
+    name: "Nabila Lailatanzila",
+    university: "Universitas Islam Negeri Sunan Gunung Djati, Bandung",
+    cohortId: "MC222D5X1216",
     program: "Coding Camp powered by DBS Foundation 2025",
-    role: "Full-stack Developer",
+    role: "Machine Learning Developer",
     description: "Passionate about building impactful web applications with clean and maintainable code."
   },
   {
-    name: "Bayu Santoso",
-    university: "Institut Teknologi Bandung",
-    cohortId: "Cohort 02",
+    name: "Riza Anwar Fadil",
+    university: "Universitas Islam Negeri Sunan Gunung Djati, Bandung",
+    cohortId: "MC222D5Y1739",
     program: "Coding Camp powered by DBS Foundation 2025",
-    role: "Frontend Developer",
+    role: "Machine Learning Developer",
     description: "Loves crafting intuitive UI experiences and bringing designs to life."
   },
   {
     name: "Citra Dewi",
-    university: "Universitas Gadjah Mada",
-    cohortId: "Cohort 03",
+    university: "Universitas Islam Negeri Sunan Gunung Djati, Bandung",
+    cohortId: "MC222D5Y0633 ",
     program: "Coding Camp powered by DBS Foundation 2025",
-    role: "Backend Developer",
+    role: "Machine Learning Developerr",
     description: "Focused on developing scalable APIs and ensuring data integrity."
   },
   {
-    name: "Dimas Prakoso",
-    university: "Universitas Airlangga",
-    cohortId: "Cohort 04",
+    name: "Mochamed Fadhlan Tuhairi",
+    university: "Institut Teknologi dan Bisnis Bina Sarana Global, Tangerang",
+    cohortId: "FC511D5Y2269",
     program: "Coding Camp powered by DBS Foundation 2025",
-    role: "Mobile Developer",
+    role: "Full-Stack Developer",
     description: "Enjoys creating smooth and efficient mobile app experiences."
   },
   {
-    name: "Erika Widya",
-    university: "Universitas Brawijaya",
-    cohortId: "Cohort 05",
+    name: "Najmi Iqbal Hanif ",
+    university: "Universitas Telkom, Bandung",
+    cohortId: "FC012D5Y0322",
     program: "Coding Camp powered by DBS Foundation 2025",
-    role: "UI/UX Designer",
+    role: "Front-End Designer",
     description: "Dedicated to designing user-friendly interfaces that delight users."
   },
   {
-    name: "Fajar Nugroho",
-    university: "Universitas Diponegoro",
+    name: "Alwan Irfan F. Rasyid",
+    university: "Universitas Handayani Makassar",
     cohortId: "Cohort 06",
     program: "Coding Camp powered by DBS Foundation 2025",
-    role: "DevOps Engineer",
+    role: "Back-End Developer",
     description: "Passionate about automating processes and maintaining reliable systems."
   },
 ];
@@ -63,11 +63,10 @@ const TeamSection = () => {
           <div className="col-md-4 mb-4" key={index}>
             <div className="card h-100 shadow-sm d-flex flex-column justify-content-center p-4 text-center">
               <h5 className="card-title">{member.name}</h5>
-              <p className="card-text text-muted mb-1">{member.university}</p>
               <p className="card-text text-muted mb-1"><small>{member.cohortId}</small></p>
-              <p className="card-text text-muted fst-italic mb-2">{member.program}</p>
+              <p className="card-text text-muted mb-1">{member.university}</p>
               <h6 className="text-primary">{member.role}</h6>
-              <p>{member.description}</p>
+              <p className="card-text text-muted fst-italic mb-2">{member.program}</p>
             </div>
           </div>
         ))}
