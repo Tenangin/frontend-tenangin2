@@ -23,6 +23,9 @@ function Register() {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  // State for real-time username validation error
+  const [usernameError, setUsernameError] = useState("");
+
   useEffect(() => {
     setFadeIn(true);
   }, []);
@@ -40,6 +43,10 @@ function Register() {
     // Basic validation
     if (!username.trim()) {
       setError("Username is required");
+      return;
+    }
+    if (usernameError) {
+      setError(usernameError);
       return;
     }
     if (!email.trim()) {
@@ -113,6 +120,11 @@ function Register() {
                 {successMessage}
               </div>
             )}
+            {usernameError && (
+              <div className="alert alert-danger" role="alert">
+                {usernameError}
+              </div>
+            )}
            {error && (
               <div className="alert alert-danger" role="alert">
                 {error}
@@ -128,7 +140,15 @@ function Register() {
                   id="username"
                   placeholder="John Doe"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setUsername(value);
+                    if (/\s/.test(value)) {
+                      setUsernameError("Username cannot contain spaces");
+                    } else {
+                      setUsernameError("");
+                    }
+                  }}
                   disabled={loading}
                 />
               </div>
