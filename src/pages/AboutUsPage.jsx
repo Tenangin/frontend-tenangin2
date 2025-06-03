@@ -7,7 +7,7 @@ const AboutUsPage = () => {
   return (
     <>
       <LandingNavbar />
-      <div className="container my-5" style={{backgroundColor: '#f8f9fa'}}>
+      <div className="container my-3" style={{backgroundColor: '#f8f9fa'}}>
         {/* Hero Section */}
         <div className="p-5 text-center rounded" style={{backgroundColor: '#4a90e2', color: 'white', marginBottom: '3rem'}}>
           <h1 className="display-4">About Tenangin</h1>

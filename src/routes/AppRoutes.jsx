@@ -8,6 +8,7 @@ import Chatbot from '../pages/Chatbot';
 import Journaling from '../pages/Journaling';
 import PrivateRoute from '../components/PrivateRoute';
 import AboutUsPage from '../pages/AboutUsPage';
+import FeaturesPage from '../pages/FeaturesPage';
 
 export default function AppRoutes() {
     return (
@@ -15,6 +16,7 @@ export default function AppRoutes() {
         <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/features" element={<FeaturesPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={
