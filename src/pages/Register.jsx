@@ -25,6 +25,8 @@ function Register() {
 
   // State for real-time username validation error
   const [usernameError, setUsernameError] = useState("");
+  // State for real-time email validation error
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     setFadeIn(true);
@@ -51,6 +53,10 @@ function Register() {
     }
     if (!email.trim()) {
       setError("Email is required");
+      return;
+    }
+    if (emailError) {
+      setError(emailError);
       return;
     }
     if (!password) {
@@ -130,6 +136,11 @@ function Register() {
                 {error}
               </div>
             )}
+            {emailError && (
+              <div className="alert alert-danger" role="alert">
+                {emailError}
+              </div>
+            )}
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Username</label>
               <div className="input-group">
@@ -164,7 +175,15 @@ function Register() {
                   id="email"
                   placeholder="johndoe@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setEmail(value);
+                    if (!value.includes("@")) {
+                      setEmailError("Email must contain '@'");
+                    } else {
+                      setEmailError("");
+                    }
+                  }}
                   disabled={loading}
                 />
               </div>
