@@ -67,7 +67,7 @@ function Login() {
       onAnimationEnd={handleAnimationEnd}
     >
       {/* Kiri: Formulir */}
-      <div className={`login-left ${animate ? "slide-right" : "" }`}>
+      <div className={`login-left ${animate ? "slide-right" : "" }`} style={{ position: "relative" }}>
         <div className="login-form-container">
           <h1 className="fw-bold mb-5 text-center">Welcome</h1>
 
@@ -99,8 +99,8 @@ function Login() {
                   disabled={loading}
                   required
                 />
-              </div>
-            </div>
+        </div>
+      </div>
 
             <div className="mb-3">
               <label htmlFor="password" className="form-label">Password :</label>
@@ -162,6 +162,24 @@ function Login() {
             </a>
           </p>
         </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "25px",
+              left: "25px",
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              fontWeight: "bold",
+              color: "#0d6efd",
+              userSelect: "none",
+            }}
+            onClick={() => navigate("/")}
+          >
+            <span>Back</span>
+            <span style={{ fontSize: "20px", lineHeight: "10px" }}>▼</span>
+          </div>
       </div>
       <div className={`login-right d-flex flex-column align-items-center justify-content-center ${animate ? "slide-left" : ""}`}>
          <img src="/images/flowers-top.svg" alt="Flowers Top-right" className="flowers-top-right" />
