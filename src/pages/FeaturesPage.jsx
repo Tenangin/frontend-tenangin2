@@ -2,16 +2,16 @@ import React from 'react';
 import LandingNavbar from '../components/LandingNavbar';
 import Footer from '../components/FooterSection';
 
+
 const FeaturesPage = () => {
   return (
     <>
-    {/* <LandingNavbar /> */}
-     <div className="container my-3">
-      {/* Hero Section */}
-      <div className="p-5 text-center rounded" style={{backgroundColor: '#4a90e2', color: 'white', marginBottom: '3rem'}}>
-        <h1 className="display-4">Features of Tenangin</h1>
-        <p className="lead">Empowering students to take charge of their mental health.</p>
-      </div>
+      <main id="main-content" className="container my-3">
+        {/* Hero Section */}
+        <div className="p-5 text-center rounded" style={{backgroundColor: '#4a90e2', color: 'white', marginBottom: '3rem'}}>
+          <h1 className="display-4">Features of Tenangin</h1>
+          <p className="lead">Empowering students to take charge of their mental health.</p>
+        </div>
 
       {/* Introduction Section */}
       <section className="my-5">
@@ -85,7 +85,7 @@ const FeaturesPage = () => {
           Get Involved
         </a>
       </section>
-    </div>
+    </main>
     {/* <Footer /> */}
     </>
   );

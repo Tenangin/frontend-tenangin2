@@ -1,13 +1,11 @@
 import React from 'react';
 import TeamSection from '../components/TeamSection';
-import LandingNavbar from '../components/LandingNavbar';
 import Footer from '../components/FooterSection';
 
 const AboutUsPage = () => {
   return (
     <>
-      {/* <LandingNavbar /> */}
-      <div className="container my-3" style={{backgroundColor: '#f8f9fa'}}>
+      <main id="main-content" className="container my-3" style={{backgroundColor: '#f8f9fa'}}>
         {/* Hero Section */}
         <div className="p-5 text-center rounded" style={{backgroundColor: '#4a90e2', color: 'white', marginBottom: '3rem'}}>
           <h1 className="display-4">About Tenangin</h1>
@@ -35,7 +33,7 @@ const AboutUsPage = () => {
             Contact Us
           </a>
         </section>
-      </div>
+      </main>
       {/* <Footer /> */}
     </>
   );

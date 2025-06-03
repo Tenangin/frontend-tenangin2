@@ -4,6 +4,7 @@ import '../styles/Components.css';
 
 function LandingNavbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [skipVisible, setSkipVisible] = useState(true);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -15,6 +16,35 @@ function LandingNavbar() {
 
   return (
     <>
+      {/* Skip to Content link for accessibility */}
+      <a
+        href="#main-content"
+        className={`skip-to-content-link${skipVisible ? '' : ' skip-hidden'}`}
+        tabIndex="0"
+        onClick={(e) => {
+          e.preventDefault();
+          const mainContent = document.getElementById('main-content');
+          if (mainContent) {
+            mainContent.tabIndex = -1;
+            mainContent.focus();
+          }
+          setSkipVisible(false);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+              mainContent.tabIndex = -1;
+              mainContent.focus();
+            }
+            setSkipVisible(false);
+          }
+        }}
+      >
+        Skip to Content
+      </a>
+
       <nav className="navbar navbar-expand-lg sticky-top py-3" style={{ backgroundColor: "#f4f7ff", borderBottom: "1px solid #dce3f2" }}>
         <div className="container d-flex justify-content-between align-items-center">
           {/* Logo Kiri */}
