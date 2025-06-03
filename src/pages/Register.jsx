@@ -14,6 +14,10 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // State variables for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   // New state variables for loading, error and success message
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -151,7 +155,7 @@ function Register() {
               <div className="input-group">
                 <span className="input-group-text"><i className="bi bi-shield-lock"></i></span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control"
                   id="password"
                   placeholder="********"
@@ -159,7 +163,13 @@ function Register() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                 />
-                <span className="input-group-text"><i className="bi bi-eye-slash"></i></span>
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i className={showPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+                </span>
               </div>
             </div>
 
@@ -168,7 +178,7 @@ function Register() {
               <div className="input-group">
                 <span className="input-group-text"><i className="bi bi-key"></i></span>
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   className="form-control"
                   id="confirmPassword"
                   placeholder="password123"
@@ -176,7 +186,13 @@ function Register() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading}
                 />
-                <span className="input-group-text"><i className="bi bi-eye"></i></span>
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <i className={showConfirmPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+                </span>
               </div>
             </div>
 
