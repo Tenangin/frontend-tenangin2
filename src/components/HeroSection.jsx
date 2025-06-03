@@ -23,7 +23,7 @@ function HeroSection() {
           </p>
           <Link
             to="/explore"
-            className="btn btn-outline-primary rounded-pill px-4 py-2 mt-4 bg-white"
+            className="btn btn-outline-primary rounded-pill px-4 py-2 mt-4"
           >
             Let’s Explore
           </Link>
