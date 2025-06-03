@@ -9,6 +9,7 @@ import Journaling from '../pages/Journaling';
 import PrivateRoute from '../components/PrivateRoute';
 import AboutUsPage from '../pages/AboutUsPage';
 import FeaturesPage from '../pages/FeaturesPage';
+import BenefitsPage from '../pages/BenefitsPage';
 
 export default function AppRoutes() {
     return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutUsPage />} />
             <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/benefits" element={<BenefitsPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={
