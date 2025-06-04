@@ -9,7 +9,9 @@ function Login() {
 
   // New useEffect to parse URL params for Google OAuth login
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    // Parse URL hash instead of search for OAuth tokens
+    const hash = window.location.hash.substring(1); // remove leading '#'
+    const params = new URLSearchParams(hash);
     const access_token = params.get("access_token");
     const user_id = params.get("user_id");
     const email = params.get("email");

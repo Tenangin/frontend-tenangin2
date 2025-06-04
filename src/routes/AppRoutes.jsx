@@ -14,6 +14,7 @@ import BenefitsPage from '../pages/BenefitsPage';
 import LandingNavbar from '../components/LandingNavbar';
 import Footer from '../components/FooterSection';
 import LandingLayout from '../components/LandingLayout';
+import AuthCallback from '../pages/AuthCallback';
 import '../styles/PageTransitions.css';
 import React, { useRef } from 'react';
 
@@ -54,6 +55,7 @@ function AnimatedRoutes() {
         <Routes location={location}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/dashboard" element={
             <PrivateRoute>
               <Dashboard />
