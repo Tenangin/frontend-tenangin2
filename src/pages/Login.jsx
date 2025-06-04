@@ -1,11 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
-import { loginUser } from "../data/api/api";
+import { loginUser, googleOAuthUrl } from "../data/api/api";
 import { setToken, setUserId, setUserEmail, setUsername } from "../utils/auth";
 
 function Login() {
   const [fadeIn, setFadeIn] = useState(false);
+
+  // New useEffect to parse URL params for Google OAuth login
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const access_token = params.get("access_token");
+    const user_id = params.get("user_id");
+    const email = params.get("email");
+    const username = params.get("username");
+
+    if (access_token && user_id && email && username) {
+      setToken(access_token);
+      setUserId(user_id);
+      setUserEmail(email);
+      setUsername(username);
+      // Redirect to dashboard after setting user info
+      window.history.replaceState({}, document.title, window.location.pathname);
+      window.location.href = "/dashboard";
+    }
+  }, []);
+
   const [animate, setAnimate] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -145,7 +165,14 @@ function Login() {
             <button type="submit" className="btn btn-primary w-100 rounded-pill fw-bold mb-3 p-2" disabled={loading}>
               {loading ? "Login Account..." : "Sign In"}
             </button>
-            <button type="button" className="btn btn-dark w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 mb-3" disabled={loading}>
+            <button
+              type="button"
+              className="btn btn-dark w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 mb-3"
+              disabled={loading}
+              onClick={() => {
+                window.location.href = googleOAuthUrl;
+              }}
+            >
               <img
                 src="/images/google-logo.svg"
                 alt="Google"
