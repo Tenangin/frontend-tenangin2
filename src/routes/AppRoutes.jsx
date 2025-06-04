@@ -55,7 +55,7 @@ function AnimatedRoutes() {
         <Routes location={location}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/google/callback" element={<AuthCallback />} />
           <Route path="/dashboard" element={
             <PrivateRoute>
               <Dashboard />
