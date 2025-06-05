@@ -105,19 +105,42 @@ export async function createChatbotSession(token, sessionData) {
   return response.json();
 }
 
-export const createChatbotMessage = async (token, sessionId, messagePayload) => {
-  // messagePayload: { sender: 'user', text: 'Isi pesan' }
-  console.log(`API CALL: createChatbotMessage for session ID: ${sessionId} with payload:`, messagePayload, "and token:", token);
-  await new Promise(resolve => setTimeout(resolve, 300));
-  // API seharusnya mengembalikan pesan yang baru dibuat dari database
-  return {
-    id: `db_msg_${Date.now()}`,
-    sessions_id: sessionId,
-    sender: messagePayload.sender,
-    message: messagePayload.text,
-    timestamp: new Date().toISOString(),
-  };
-  // throw new Error("Gagal mengirim pesan ke API");
+export const createChatbotMessage = async (token, messagePayload) => {
+  const endpoint = "https://PetaniHandal-tenobot-api.hf.space/chat";
+
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, 
+      },
+      body: JSON.stringify(messagePayload), 
+    });
+
+    if (!response.ok) {
+      let errorBodyText = "Tidak ada detail tambahan dari server.";
+      try {
+        errorBodyText = await response.text();
+      } catch (e) {
+
+        console.error("Gagal membaca body error:", e);
+      }
+
+      const errorMessage = `Gagal mengirim pesan. Status: ${response.status} (${response.statusText}). Detail: ${errorBodyText}`;
+      console.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const responseData = await response.json();
+    console.log("Respons sukses dari API createChatbotMessage:", responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error("Terjadi error pada createChatbotMessage:", error.message);
+    throw error;
+  }
 };
 
 export async function deleteChatbotSession(token, sessionId) {
@@ -128,9 +151,9 @@ export async function deleteChatbotSession(token, sessionId) {
   return response.json();
 }
 
-export async function getChatbotSessions(token) {
+export async function getChatbotSessions(token,id) {
 
-  const response = await fetch(`${BASE_URL}/api/chatbot/sessions`, {
+  const response = await fetch(`${BASE_URL}/api/chatbot/sessions/:${id}`, {
     headers: getAuthHeaders(token),
   });
   return response.json();
