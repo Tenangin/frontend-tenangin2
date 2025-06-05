@@ -128,7 +128,7 @@ const Sidebar = () => {
         </ul>
 
         <div
-          className="mt-auto p-3 rounded text-white text-center"
+          className="mt-auto p-2 rounded text-white text-center"
           style={{
             backgroundColor: '#DBE6FE',
             whiteSpace: 'nowrap',
