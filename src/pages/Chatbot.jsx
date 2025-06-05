@@ -273,7 +273,7 @@ const Chatbot = () => {
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0 }}>
+      <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0, width: '60%' }}>
         <div className="bg-white p-4 border-bottom">
           <div className="d-flex flex-column chatbot-header">
             <div className="d-flex justify-content-between align-items-flex-start w-100 mb-2">
