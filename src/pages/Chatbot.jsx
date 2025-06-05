@@ -275,14 +275,19 @@ const Chatbot = () => {
       {/* Main Chat Area */}
       <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0 }}>
         <div className="bg-white p-4 border-bottom">
-          <div className="d-flex justify-content-between align-items-center">
-            <button
-              className="btn btn-outline-primary me-3"
-              onClick={toggleSidebar}
-              aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
-            >
-              <i className="bi bi-list"></i>
-            </button>
+          <div className="d-flex flex-column chatbot-header">
+            <div className="d-flex justify-content-between align-items-center w-100 mb-2">
+              <button
+                className="btn btn-outline-primary ms-3 drawer-button"
+                onClick={toggleSidebar}
+                aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
+              >
+                <i className="bi bi-list"></i>
+              </button>
+              <div className="d-flex align-items-center gap-3 notifications-account">
+                <Notifications /> <Account />
+              </div>
+            </div>
             <div>
               <h4 className="fw-bold text-primary mb-1">
                 Tenobot - Tenangin Chatbot
@@ -298,9 +303,6 @@ const Chatbot = () => {
                   ? "Memuat pesan..."
                   : `${displayMessages.length} pesan`}
               </small>
-            </div>
-            <div className="d-flex align-items-center gap-3">
-              <Notifications /> <Account />
             </div>
           </div>
         </div>

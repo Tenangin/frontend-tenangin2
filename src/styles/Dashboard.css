@@ -37,6 +37,48 @@
   }
 }
 
+/* Responsive styles for Chatbot header container */
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 750px) {
+  .chatbot-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .chatbot-header .notifications-account {
+    order: -1;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-left: 1rem;
+  }
+  .chatbot-header .drawer-button {
+    order: -2;
+  }
+}
+
+@media (max-width: 425px) {
+  .chatbot-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+  .chatbot-header .notifications-account {
+    order: -1;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}
+
 /* Sidebar overlay animation */
 .sidebar.overlay-hidden {
   transform: translateX(-100%);
