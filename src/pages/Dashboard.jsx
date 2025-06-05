@@ -35,7 +35,7 @@ function Dashboard() {
   return (
     <div className="dashboard-container d-flex">
       {isSidebarVisible && (
-        <Sidebar isOverlay={isMobile} onClose={() => setIsSidebarVisible(false)} />
+        <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
       )}
 
       {isSidebarVisible && isMobile && (
@@ -51,14 +51,16 @@ function Dashboard() {
         style={{ marginLeft: isSidebarVisible && !isMobile ? undefined : 0 }}
       >
         {/* Header */}
-        <div className="d-flex flex-column mb-4">
-          <button
-            className="btn btn-outline-primary mb-2 align-self-start"
-            onClick={toggleSidebar}
-            aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
-          >
-            <i className="bi bi-list"></i>
-          </button>
+        <div className="d-flex flex-column mb-4 position-relative">
+          <div className="toggle-button-container">
+            <button
+              className="btn btn-outline-primary mb-2 align-self-start toggle-sidebar-btn mobile"
+              onClick={toggleSidebar}
+              aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
+            >
+              <i className="bi bi-list"></i>
+            </button>
+          </div>
           <div className="d-flex justify-content-between align-items-center">
             <Greeting />
             <div className="d-flex align-items-center gap-3">

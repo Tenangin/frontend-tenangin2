@@ -14,13 +14,13 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
     boxShadow: isOverlay ? '2px 0 5px rgba(0,0,0,0.3)' : 'none',
     display: 'flex',
     flexDirection: 'column',
+    transform: isOverlay && !isVisible ? 'translateX(-100%)' : 'translateX(0)',
+    transition: 'transform 0.3s ease',
   };
-
-  const hiddenClass = isOverlay && !isVisible ? 'overlay-hidden' : '';
 
   return (
     <aside
-      className={`sidebar d-flex flex-column ${hiddenClass}`}
+      className="sidebar d-flex flex-column"
       style={baseStyles}
     >
       <div className="p-3 d-flex flex-column h-100">
