@@ -1,11 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
-import { loginUser } from "../data/api/api";
+import { loginUser, googleOAuthUrl } from "../data/api/api";
 import { setToken, setUserId, setUserEmail, setUsername } from "../utils/auth";
 
 function Login() {
   const [fadeIn, setFadeIn] = useState(false);
+
+  // New useEffect to parse URL params for Google OAuth login
+  useEffect(() => {
+    // Parse URL hash instead of search for OAuth tokens
+    const hash = window.location.hash.substring(1); // remove leading '#'
+    const params = new URLSearchParams(hash);
+    const access_token = params.get("access_token");
+    const user_id = params.get("user_id");
+    const email = params.get("email");
+    const username = params.get("username");
+
+    if (access_token && user_id && email && username) {
+      setToken(access_token);
+      setUserId(user_id);
+      setUserEmail(email);
+      setUsername(username);
+      // Redirect to dashboard after setting user info
+      window.history.replaceState({}, document.title, window.location.pathname);
+      window.location.href = "/dashboard";
+    }
+  }, []);
+
   const [animate, setAnimate] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +35,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   
 
 
@@ -47,11 +70,13 @@ function Login() {
         }, 1500);
       } else {
         setError(response.message || "Login failed");
-        setSuccessMessage("")
+        setSuccessMessage("");
+        setLoading(false);
       }
     } catch {
       setError("An error occurred during login");
-      setSuccessMessage("")
+      setSuccessMessage("");
+      setLoading(false);
     }
   };
   const handleAnimationEnd = () => {
@@ -64,7 +89,7 @@ function Login() {
       onAnimationEnd={handleAnimationEnd}
     >
       {/* Kiri: Formulir */}
-      <div className={`login-left ${animate ? "slide-right" : "" }`}>
+      <div className={`login-left ${animate ? "slide-right" : "" }`} style={{ position: "relative" }}>
         <div className="login-form-container">
           <h1 className="fw-bold mb-5 text-center">Welcome</h1>
 
@@ -89,28 +114,40 @@ function Login() {
                   id="email"
                   placeholder="johndoe@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (error) setError("");
+                  }}
                   disabled={loading}
                   required
                 />
-              </div>
-            </div>
+        </div>
+      </div>
 
             <div className="mb-3">
               <label htmlFor="password" className="form-label">Password :</label>
               <div className="input-group">
                 <span className="input-group-text"><i className="bi bi-shield-lock"></i></span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control rounded-pill"
                   id="password"
                   placeholder="********"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (error) setError("");
+                  }}
                   disabled={loading}
                   required
                 />
-                <span className="input-group-text"><i className="bi bi-eye-slash"></i></span>
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i className={showPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+                </span>
               </div>
             </div>
 
@@ -125,12 +162,19 @@ function Login() {
               <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
             </div>
 
-            {error && <div className="alert alert-danger">{error}</div>}
+            {/* {error && <div className="alert alert-danger">{error}</div>} */}
 
             <button type="submit" className="btn btn-primary w-100 rounded-pill fw-bold mb-3 p-2" disabled={loading}>
               {loading ? "Login Account..." : "Sign In"}
             </button>
-            <button type="button" className="btn btn-dark w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 mb-3" disabled={loading}>
+            <button
+              type="button"
+              className="btn btn-dark w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 mb-3"
+              disabled={loading}
+              onClick={() => {
+                window.location.href = googleOAuthUrl;
+              }}
+            >
               <img
                 src="/images/google-logo.svg"
                 alt="Google"
@@ -147,6 +191,24 @@ function Login() {
             </a>
           </p>
         </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "25px",
+              left: "25px",
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              fontWeight: "bold",
+              color: "#0d6efd",
+              userSelect: "none",
+            }}
+            onClick={() => navigate("/")}
+          >
+            <span>Back</span>
+            <span style={{ fontSize: "20px", lineHeight: "10px" }}>▼</span>
+          </div>
       </div>
       <div className={`login-right d-flex flex-column align-items-center justify-content-center ${animate ? "slide-left" : ""}`}>
          <img src="/images/flowers-top.svg" alt="Flowers Top-right" className="flowers-top-right" />

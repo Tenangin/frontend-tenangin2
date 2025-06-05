@@ -26,7 +26,7 @@ export async function loginUser(email, password) {
 }
 
 // Google OAuth URL (for redirect)
-export const googleOAuthUrl = `${BASE_URL}/auth/google`;
+export const googleOAuthUrl = `${BASE_URL}/auth/login/google`;
 
 // Profile
 export async function getProfile(token, id) {

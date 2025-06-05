@@ -8,8 +8,10 @@ import ModalPopup from "../components/ProfileModalPopup";
 import { getProfile } from "../data/api/api";
 import { getToken, getUserId } from "../utils/auth";
 import "../styles/Profile.css";
+import useSidebarToggle from "../hooks/useSidebarToggle";
 
 function Profile() {
+  const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
   const [showModal, setShowModal] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const token = getToken();
@@ -44,12 +46,30 @@ function Profile() {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
+    <div className="d-flex" style={{ minHeight: "100vh" }}>
+      {isSidebarVisible && (
+        <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
+      )}
+
+      {isSidebarVisible && isMobile && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setIsSidebarVisible(false)}
+        />
+      )}
+
       <div style={{ flex: 1, padding: "1rem 2rem" }}>
         {/* Header */}
-        <div className="profile-container p-4">
-          {/* Header */}
+        <div className="profile-container p-4 position-relative">
+          <div className="toggle-button-container">
+            <button
+              className="btn btn-outline-primary mb-2 align-self-start mobile"
+              onClick={toggleSidebar}
+              aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
+            >
+              <i className="bi bi-list"></i>
+            </button>
+          </div>
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h4 className="fw-bold text-primary">Tenangin</h4>
             <div className="d-flex align-items-center gap-3">

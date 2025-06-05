@@ -14,10 +14,28 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // State variables for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   // New state variables for loading, error and success message
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  // State for real-time username validation error
+  const [usernameError, setUsernameError] = useState("");
+  // State for real-time email validation error
+  const [emailError, setEmailError] = useState("");
+
+  // State for password validation rules
+  const [passwordValidations, setPasswordValidations] = useState({
+    minLength: false,
+    hasLower: false,
+    hasUpper: false,
+    hasNumber: false,
+    noSpaces: false,
+  });
 
   useEffect(() => {
     setFadeIn(true);
@@ -38,8 +56,16 @@ function Register() {
       setError("Username is required");
       return;
     }
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
     if (!email.trim()) {
       setError("Email is required");
+      return;
+    }
+    if (emailError) {
+      setError(emailError);
       return;
     }
     if (!password) {
@@ -99,7 +125,7 @@ function Register() {
       </div>
 
       {/* Kanan: Formulir */}
-      <div className={`register-right ${animate ? "slide-left" : ""}`}>
+      <div className={`register-right ${animate ? "slide-left" : ""}`} style={{ position: "relative" }}>
         <div className="register-form-container">
           <h1 className="fw-bold mb-5 text-center">Sign Up</h1>
 
@@ -109,9 +135,19 @@ function Register() {
                 {successMessage}
               </div>
             )}
+            {usernameError && (
+              <div className="alert alert-danger" role="alert">
+                {usernameError}
+              </div>
+            )}
            {error && (
               <div className="alert alert-danger" role="alert">
                 {error}
+              </div>
+            )}
+            {emailError && (
+              <div className="alert alert-danger" role="alert">
+                {emailError}
               </div>
             )}
             <div className="mb-3">
@@ -124,7 +160,15 @@ function Register() {
                   id="username"
                   placeholder="John Doe"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setUsername(value);
+                    if (/\s/.test(value)) {
+                      setUsernameError("Username cannot contain spaces");
+                    } else {
+                      setUsernameError("");
+                    }
+                  }}
                   disabled={loading}
                 />
               </div>
@@ -140,7 +184,15 @@ function Register() {
                   id="email"
                   placeholder="johndoe@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setEmail(value);
+                    if (!value.includes("@")) {
+                      setEmailError("Email must contain '@'");
+                    } else {
+                      setEmailError("");
+                    }
+                  }}
                   disabled={loading}
                 />
               </div>
@@ -151,15 +203,32 @@ function Register() {
               <div className="input-group">
                 <span className="input-group-text"><i className="bi bi-shield-lock"></i></span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control"
                   id="password"
                   placeholder="********"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setPassword(value);
+
+                    setPasswordValidations({
+                      minLength: value.length >= 8,
+                      hasLower: /[a-z]/.test(value),
+                      hasUpper: /[A-Z]/.test(value),
+                      hasNumber: /\d/.test(value),
+                      noSpaces: !/\s/.test(value),
+                    });
+                  }}
                   disabled={loading}
                 />
-                <span className="input-group-text"><i className="bi bi-eye-slash"></i></span>
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i className={showPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+                </span>
               </div>
             </div>
 
@@ -168,7 +237,7 @@ function Register() {
               <div className="input-group">
                 <span className="input-group-text"><i className="bi bi-key"></i></span>
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   className="form-control"
                   id="confirmPassword"
                   placeholder="password123"
@@ -176,7 +245,52 @@ function Register() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading}
                 />
-                <span className="input-group-text"><i className="bi bi-eye"></i></span>
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <i className={showConfirmPassword ? "bi bi-eye" : "bi bi-eye-slash"}></i>
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="passwordMinLength"
+                  checked={passwordValidations.minLength}
+                  readOnly
+                />
+                <label className="form-check-label" htmlFor="passwordMinLength">
+                  Minimum 8 characters
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="passwordHasLowerUpper"
+                  checked={passwordValidations.hasLower && passwordValidations.hasUpper}
+                  readOnly
+                />
+                <label className="form-check-label" htmlFor="passwordHasLowerUpper">
+                  At least 1 lowercase letter and uppercase letter
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="passwordHasNumber"
+                  checked={passwordValidations.hasNumber}
+                  readOnly
+                />
+                <label className="form-check-label" htmlFor="passwordHasNumber">
+                 At least 1 number
+                </label>
               </div>
             </div>
 
@@ -199,6 +313,32 @@ function Register() {
               Sign In
             </a>
           </p>
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "25px",
+            right: "25px",
+            fontWeight: "bold",
+            userSelect: "none",
+          }}
+        >
+          <a
+            href="/"
+            style={{
+              color: "#0d6efd",
+              cursor: "pointer",
+              textDecoration: "none",
+              display: "inline-block",
+              fontWeight: "bold",
+              userSelect: "none",
+              textAlign: "center",
+            }}
+          >
+            <span>Back</span>
+            <br />
+            <span style={{ fontSize: "20px", lineHeight: "10px" }}>▼</span>
+          </a>
         </div>
       </div>
     </div>
