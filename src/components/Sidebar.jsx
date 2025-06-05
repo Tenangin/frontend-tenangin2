@@ -1,23 +1,38 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Sidebar = ({ isOverlay, isVisible }) => {
+const Sidebar = ({ isOverlay, isVisible, onClose }) => {
   const baseStyles = {
     backgroundColor: '#EFF4FF',
     width: '240px',
     overflow: 'hidden',
     height: '100vh',
+    position: isOverlay ? 'fixed' : 'static',
+    top: isOverlay ? 0 : 'auto',
+    left: isOverlay ? 0 : 'auto',
+    zIndex: isOverlay ? 1050 : 'auto',
+    boxShadow: isOverlay ? '2px 0 5px rgba(0,0,0,0.3)' : 'none',
+    display: 'flex',
+    flexDirection: 'column',
   };
 
-  const overlayClass = isOverlay ? 'overlay' : '';
   const hiddenClass = isOverlay && !isVisible ? 'overlay-hidden' : '';
 
   return (
     <aside
-      className={`sidebar d-flex flex-column ${overlayClass} ${hiddenClass}`}
+      className={`sidebar d-flex flex-column ${hiddenClass}`}
       style={baseStyles}
     >
       <div className="p-3 d-flex flex-column h-100">
+        {isOverlay && (
+          <button
+            className="btn btn-outline-primary mb-3 align-self-start"
+            onClick={onClose}
+            aria-label="Close Sidebar"
+          >
+            <i className="bi bi-x-lg"></i>
+          </button>
+        )}
         <div className="d-flex align-items-center justify-content-between mb-4">
           <h4 className="fw-bold text-primary m-0">Tenangin</h4>
         </div>

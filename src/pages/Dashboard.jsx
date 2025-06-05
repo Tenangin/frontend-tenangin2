@@ -7,10 +7,17 @@ import Greeting from "../components/Greeting";
 
 function Dashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
         setIsSidebarVisible(false);
       } else {
         setIsSidebarVisible(true);
@@ -25,18 +32,23 @@ function Dashboard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleSidebar = () => {
-    setIsSidebarVisible(!isSidebarVisible);
-  };
-
   return (
     <div className="dashboard-container d-flex">
-      {isSidebarVisible && <Sidebar />}
+      {isSidebarVisible && (
+        <Sidebar isOverlay={isMobile} onClose={() => setIsSidebarVisible(false)} />
+      )}
+
+      {isSidebarVisible && isMobile && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setIsSidebarVisible(false)}
+        />
+      )}
 
       {/* Main content */}
       <main
         className="dashboard-main flex-grow-1 p-4"
-        style={{ marginLeft: isSidebarVisible ? undefined : 0 }}
+        style={{ marginLeft: isSidebarVisible && !isMobile ? undefined : 0 }}
       >
         {/* Header */}
         <div className="d-flex flex-column mb-4">
