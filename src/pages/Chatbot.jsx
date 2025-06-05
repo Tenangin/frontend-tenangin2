@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Sidebar from "../components/Sidebar";
 import Notifications from "../components/Notifications";
 import Account from "../components/Account";
+import useSidebarToggle from '../hooks/useSidebarToggle';
 // Sesuaikan path jika diperlukan
 import {
   getChatbotSessions,
@@ -16,6 +17,7 @@ import { getToken, getUserId } from "../utils/auth";
 
 const Chatbot = () => {
   // --- PERUBAHAN 1.1: Ubah state awal. Logika akan diatur di useEffect ---
+  const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [started, setStarted] = useState(false);
   
@@ -244,7 +246,12 @@ const Chatbot = () => {
       className="d-flex"
       style={{ height: "100vh", backgroundColor: "#f8f9fa" }}
     >
-      <Sidebar />
+      {isSidebarVisible && (
+        <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
+      )}
+      {isSidebarVisible && isMobile && (
+        <div className="sidebar-backdrop" onClick={() => setIsSidebarVisible(false)} />
+      )}
 
       {/* Sessions Sidebar */}
       <div
@@ -367,6 +374,13 @@ const Chatbot = () => {
       <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0 }}>
         <div className="bg-white p-4 border-bottom">
           <div className="d-flex justify-content-between align-items-center">
+            <button
+              className="btn btn-outline-primary me-3 d-md-none"
+              onClick={toggleSidebar}
+              aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
+            >
+              <i className="bi bi-list"></i>
+            </button>
             <div>
               <h4 className="fw-bold text-primary mb-1">
                 Tenobot - Tenangin Chatbot
