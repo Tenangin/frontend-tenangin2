@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Notifications from '../components/Notifications';
 import Account from '../components/Account';
+import useSidebarToggle from '../hooks/useSidebarToggle';
 
 const Chatbot = () => {
+  const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
   const [showModal, setShowModal] = useState(true);
   const [started, setStarted] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -38,14 +40,35 @@ const Chatbot = () => {
 
   return (
     <div className="d-flex" style={{ height: '100vh' }}>
-      <Sidebar />
+      {isSidebarVisible && (
+        <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
+      )}
+
+      {isSidebarVisible && isMobile && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setIsSidebarVisible(false)}
+        />
+      )}
+
       <div className="flex-grow-1 p-4">
         {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h4 className="fw-bold text-primary">Tenangin</h4>
-          <div className="d-flex align-items-center gap-3">
-            <Notifications />
-            <Account />
+        <div className="d-flex flex-column mb-4 position-relative">
+          <div className="toggle-button-container">
+            <button
+              className="btn btn-outline-primary mb-2 align-self-start mobile"
+              onClick={toggleSidebar}
+              aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
+            >
+              <i className="bi bi-list"></i>
+            </button>
+          </div>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h4 className="fw-bold text-primary">Tenangin</h4>
+            <div className="d-flex align-items-center gap-3">
+              <Notifications />
+              <Account />
+            </div>
           </div>
         </div>
         {/* Modal */}
@@ -113,3 +136,4 @@ const Chatbot = () => {
 };
 
 export default Chatbot;
+
