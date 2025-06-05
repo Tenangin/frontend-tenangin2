@@ -3,6 +3,7 @@ import "../styles/Dashboard.css";
 import Sidebar from "../components/Sidebar";
 import Account from "../components/Account";
 import Notifications from "../components/Notifications";
+import Greeting from "../components/Greeting";
 
 function Dashboard() {
   return (
@@ -13,10 +14,7 @@ function Dashboard() {
       <main className="dashboard-main flex-grow-1 p-4">
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <div>
-            <h5 className="fw-bold text-primary">Hi Hanif, Good Afternoon!</h5>
-            <p className="text-muted">What do you feel today?</p>
-          </div>
+          <Greeting />
           <div className="d-flex align-items-center gap-3">
             <input type="text" className="form-control rounded-pill" placeholder="Search" />
             <Notifications />
