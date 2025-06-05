@@ -125,7 +125,7 @@ function Register() {
       </div>
 
       {/* Kanan: Formulir */}
-      <div className={`register-right ${animate ? "slide-left" : ""}`}>
+      <div className={`register-right ${animate ? "slide-left" : ""}`} style={{ position: "relative" }}>
         <div className="register-form-container">
           <h1 className="fw-bold mb-5 text-center">Sign Up</h1>
 
@@ -313,6 +313,32 @@ function Register() {
               Sign In
             </a>
           </p>
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "25px",
+            right: "25px",
+            fontWeight: "bold",
+            userSelect: "none",
+          }}
+        >
+          <a
+            href="/"
+            style={{
+              color: "#0d6efd",
+              cursor: "pointer",
+              textDecoration: "none",
+              display: "inline-block",
+              fontWeight: "bold",
+              userSelect: "none",
+              textAlign: "center",
+            }}
+          >
+            <span>Back</span>
+            <br />
+            <span style={{ fontSize: "20px", lineHeight: "10px" }}>▼</span>
+          </a>
         </div>
       </div>
     </div>
