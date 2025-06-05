@@ -61,17 +61,34 @@ function Dashboard() {
               <i className="bi bi-list"></i>
             </button>
           </div>
-          <div className="d-flex justify-content-between align-items-center">
-            <Greeting />
-            <div className="d-flex align-items-center gap-3">
-              <input
-                type="text"
-                className="form-control rounded-pill"
-                placeholder="Search"
-              />
-              <Notifications />
-              <Account />
-            </div>
+          <div className="d-flex justify-content-between align-items-center flex-column flex-md-row">
+            {isMobile ? (
+              <>
+                <div className="d-flex align-items-center gap-3 mb-3">
+                  <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    placeholder="Search"
+                  />
+                  <Notifications />
+                  <Account />
+                </div>
+                <Greeting />
+              </>
+            ) : (
+              <>
+                <Greeting />
+                <div className="d-flex align-items-center gap-3">
+                  <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    placeholder="Search"
+                  />
+                  <Notifications />
+                  <Account />
+                </div>
+              </>
+            )}
           </div>
         </div>
 
