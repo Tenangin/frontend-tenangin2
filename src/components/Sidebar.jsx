@@ -9,7 +9,7 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
     height: '100vh',
     position: isOverlay ? 'fixed' : 'static',
     top: isOverlay ? 0 : 'auto',
-    left: isOverlay ? 0 : 'auto',
+    left: isOverlay ? 0 : 0,
     zIndex: isOverlay ? 1050 : 'auto',
     boxShadow: isOverlay ? '2px 0 5px rgba(0,0,0,0.3)' : 'none',
     display: 'flex',
@@ -114,8 +114,10 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
           }}
           title="You are stronger than you think"
         >
-          <p className="mb-1 fw-bold" style={{ color: '#2563EB' }}>
-            You are stronger than you think
+          <p className="mb-1 fw-bold" style={{ 
+            fontSize: '1rem',
+            color: '#2563EB' }}>
+            You are stronger <br />than you think
           </p>
           <small style={{ color: '#656565' }}>continue your progress</small>
         </div>

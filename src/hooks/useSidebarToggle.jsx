@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export default function useSidebarToggle() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 425);
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);

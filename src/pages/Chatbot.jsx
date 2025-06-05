@@ -19,6 +19,7 @@ import { getToken, getUserId } from "../utils/auth";
 const Chatbot = () => {
   // --- PERUBAHAN 1.1: Ubah state awal. Logika akan diatur di useEffect ---
   const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
+  const [isSessionsSidebarVisible, setIsSessionsSidebarVisible] = useState(true);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [started, setStarted] = useState(false);
   
@@ -259,8 +260,8 @@ const Chatbot = () => {
           deleteSessionMutation={deleteSessionMutation}
 
           isOverlay={isMobile}
-          isVisible={isSidebarVisible}
-          onClose={() => setIsSidebarVisible(false)}
+          isVisible={isSessionsSidebarVisible}
+          onClose={() => setIsSessionsSidebarVisible(false)}
         /></>
       )}
 
