@@ -276,7 +276,7 @@ const Chatbot = () => {
       <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0 }}>
         <div className="bg-white p-4 border-bottom">
           <div className="d-flex flex-column chatbot-header">
-            <div className="d-flex justify-content-between align-items-center w-100 mb-2">
+            <div className="d-flex justify-content-between align-items-flex-start w-100 mb-2">
               <button
                 className="btn btn-outline-primary ms-3 drawer-button"
                 onClick={toggleSidebar}
@@ -288,7 +288,7 @@ const Chatbot = () => {
                 <Notifications /> <Account />
               </div>
             </div>
-            <div>
+            <div style={{ justifyContent: "flex-start"}}>
               <h4 className="fw-bold text-primary mb-1">
                 Tenobot - Tenangin Chatbot
               </h4>
