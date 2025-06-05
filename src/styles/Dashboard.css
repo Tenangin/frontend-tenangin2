@@ -29,13 +29,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* Toggle button fixed position on mobile */
-.toggle-sidebar-btn.mobile {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 0;
-}
 
 /* Responsive adjustments */
 @media (max-width: 767px) {

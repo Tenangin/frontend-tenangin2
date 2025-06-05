@@ -54,7 +54,7 @@ function Dashboard() {
         <div className="d-flex flex-column mb-4 position-relative">
           <div className="toggle-button-container">
             <button
-              className="btn btn-outline-primary mb-2 align-self-start toggle-sidebar-btn mobile"
+              className="btn btn-outline-primary mb-2 align-self-start mobile"
               onClick={toggleSidebar}
               aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
             >
