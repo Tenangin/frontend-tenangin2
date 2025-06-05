@@ -1,16 +1,21 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ isOverlay, isVisible }) => {
+  const baseStyles = {
+    backgroundColor: '#EFF4FF',
+    width: '240px',
+    overflow: 'hidden',
+    height: '100vh',
+  };
+
+  const overlayClass = isOverlay ? 'overlay' : '';
+  const hiddenClass = isOverlay && !isVisible ? 'overlay-hidden' : '';
+
   return (
     <aside
-      className="sidebar d-flex flex-column"
-      style={{
-        backgroundColor: '#EFF4FF',
-        width: '240px',
-        overflow: 'hidden',
-        height: '100vh',
-      }}
+      className={`sidebar d-flex flex-column ${overlayClass} ${hiddenClass}`}
+      style={baseStyles}
     >
       <div className="p-3 d-flex flex-column h-100">
         <div className="d-flex align-items-center justify-content-between mb-4">

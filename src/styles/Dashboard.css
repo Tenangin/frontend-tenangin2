@@ -14,3 +14,29 @@
   background-color: #f8f9ff;
   overflow-y: auto;
 }
+
+/* Overlay sidebar styles */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1040;
+}
+
+/* Toggle button fixed position on mobile */
+.toggle-sidebar-btn.mobile {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+}
