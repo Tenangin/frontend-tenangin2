@@ -7,6 +7,7 @@ import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import Chatbot from '../pages/Chatbot';
 import Journaling from '../pages/Journaling';
+import HealthCheck from '../pages/healthCheck';
 import PrivateRoute from '../components/PrivateRoute';
 import AboutUsPage from '../pages/AboutUsPage';
 import FeaturesPage from '../pages/FeaturesPage';
@@ -74,6 +75,11 @@ function AnimatedRoutes() {
           <Route path="/journaling" element={
             <PrivateRoute>
               <Journaling />
+            </PrivateRoute>
+          } />
+          <Route path="/HealthCheck" element={
+            <PrivateRoute>
+              <HealthCheck />
             </PrivateRoute>
           } />
         </Routes>

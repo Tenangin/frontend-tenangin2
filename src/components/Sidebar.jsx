@@ -71,8 +71,18 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
             Reminders
           </li>
           <li className="nav-item mb-3 d-flex align-items-center" title="Health Check">
-            <i className="bi bi-heart-pulse me-2" />
-            Health Check
+             <NavLink
+                to="/healthCheck"
+                className={({ isActive }) =>
+                  'nav-link d-flex align-items-center' +
+                  (isActive ? ' active fw-bold text-primary' : '')
+                }
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                title="Profile"
+              >
+                <i className="bi bi-heart-pulse me-2" />
+              Health Check
+            </NavLink>
           </li>
           <li className="nav-item mb-3">
             <NavLink

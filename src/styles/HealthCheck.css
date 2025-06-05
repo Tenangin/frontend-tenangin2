@@ -1,0 +1,254 @@
+/* src/styles/HealthCheck.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-primary: 'Poppins', sans-serif;
+  
+  /* Palet Warna Kekinian */
+  --color-background: #f0f2f5; /* Latar belakang halaman utama yang sangat lembut */
+  --color-surface: #ffffff;    /* Latar belakang untuk card, sidebar */
+  --color-text-primary: #2d3748; /* Teks utama (gelap, tidak hitam pekat) */
+  --color-text-secondary: #718096; /* Teks sekunder, lebih lembut */
+  --color-primary: #3B82F6; /* Biru modern sebagai aksen utama (Tailwind Blue 500) */
+  --color-primary-darker: #2563EB; /* Biru lebih gelap untuk hover */
+  --color-border: #e2e8f0;     /* Warna border yang halus */
+  --color-success: #10B981;    /* Hijau untuk sukses */
+  --color-danger: #EF4444;     /* Merah untuk error */
+  --color-disabled: #9ca3af;   /* Warna untuk elemen disabled */
+  --color-input-bg: #f9fafb; /* Latar input */
+
+  --sidebar-width: 240px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  --transition-common: all 0.3s ease-in-out;
+}
+
+/* Sidebar Wrapper & Backdrop */
+.sidebar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: var(--color-surface);
+  z-index: 1050;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Content Area */
+
+.content-shifted {
+  margin-left: var(--sidebar-width);
+}
+
+/* HealthCheck Container (Card untuk form dan halaman awal) */
+.healthcheck-container {
+  background-color: var(--color-surface);
+  padding: 2rem 2.5rem; /* Padding lebih besar */
+  border-radius: var(--border-radius-lg); /* Sudut lebih bulat */
+  box-shadow: var(--shadow-lg); /* Bayangan lebih menonjol */
+  margin-bottom: 2.5rem;
+}
+.healthcheck-container h2 {
+  color: var(--color-text-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.8rem; /* Ukuran H2 lebih besar */
+}
+
+/* Start Test Section */
+.start-test-container p {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2.5rem;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 600px; /* Batasi lebar paragraf agar mudah dibaca */
+  margin-left: auto;
+  margin-right: auto;
+}
+.start-test-button, form button[type="submit"].btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.85rem 2rem; /* Padding lebih nyaman */
+  font-size: 1.05rem;
+  font-weight: 500;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition-common);
+  box-shadow: var(--shadow-md);
+  text-transform: uppercase; /* Gaya tombol modern */
+  letter-spacing: 0.5px;
+}
+.start-test-button:hover, form button[type="submit"].btn-primary:hover {
+  background-color: var(--color-primary-darker);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+.start-test-button:active, form button[type="submit"].btn-primary:active {
+  transform: translateY(0px);
+}
+form button[type="submit"].btn-primary:disabled {
+  background-color: var(--color-disabled);
+  color: var(--color-surface);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+.submit-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Form Styling */
+.question-group {
+  margin-bottom: 2.5rem; /* Jarak antar pertanyaan lebih besar */
+  padding-bottom: 2rem;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+}
+.question-group:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2rem; /* Kurangi margin bawah untuk grup terakhir sebelum tombol */
+  justify-content: center;
+}
+.question-group legend {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center; /* Inilah yang membuat teks ketengah */
+  width: 100%;         /* Supaya bisa ditengah dalam fieldset */
+  display: block;      /* Pastikan legend memenuhi baris */
+}
+
+
+.option-group, .centered-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Jarak antar opsi */
+  justify-content: center;
+}
+.centered-options {
+  justify-content: center;
+}
+
+.option-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem; /* Padding lebih nyaman */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md); /* Sudut lebih bulat */
+  cursor: pointer;
+  transition: var(--transition-common);
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
+}
+.option-label:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.option-label input[type="radio"] {
+  margin-right: 0.75rem; /* Jarak radio button ke teks */
+  accent-color: var(--color-primary); /* Warna radio button saat terpilih */
+  transform: scale(1.2); /* Buat radio button sedikit lebih besar */
+}
+
+/* Style untuk label ketika radio button di dalamnya terpilih */
+label.option-label:has(input[type="radio"]:checked) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface); /* Teks jadi putih */
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(var(--color-primary-rgb, 59, 130, 246), 0.3); /* Bayangan sesuai warna primer */
+}
+/* Menambahkan variabel RGB untuk --color-primary jika belum ada */
+/* Jika --color-primary Anda adalah #3B82F6, RGB nya adalah 59, 130, 246 */
+/* Anda bisa menambahkannya di :root */
+/* --color-primary-rgb: 59, 130, 246; */
+
+
+/* Alert Styling */
+.alert {
+  margin-top: 2rem;
+  padding: 1.25rem; /* Padding lebih besar */
+  font-size: 1rem;
+  border-radius: var(--border-radius-md); /* Sudut seragam */
+  border-width: 0px; /* Hilangkan border default, kita pakai background + shadow */
+  box-shadow: var(--shadow-md);
+}
+.alert-success {
+  background-color: #ECFDF5; /* Warna latar hijau muda (Tailwind Green 50) */
+  color: #065F46; /* Warna teks hijau tua (Tailwind Green 800) */
+  /* border-left: 4px solid var(--color-success); */
+}
+.alert-danger {
+  background-color: #FEF2F2; /* Warna latar merah muda (Tailwind Red 50) */
+  color: #991B1B; /* Warna teks merah tua (Tailwind Red 800) */
+  /* border-left: 4px solid var(--color-danger); */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) { /* Targetkan sebelum mobile, misal tablet */
+  .content-area {
+    padding-left: 1rem; /* Kurangi padding samping untuk tablet */
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 240px; /* Sidebar lebih kecil di mobile jika masih ada */
+  }
+  .content-shifted {
+    margin-left: 0; 
+  }
+  .content-area {
+    padding-left: 1rem; /* Padding untuk mobile */
+    padding-right: 1rem;
+  }
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column; /* Header jadi vertikal */
+    align-items: flex-start !important; /* Rata kiri untuk mobile */
+    gap: 0.5rem;
+  }
+  .d-flex.justify-content-between.align-items-center h4.fw-bold {
+    font-size: 1.5rem; /* Judul lebih kecil di mobile */
+    margin-top: 3.5rem; /* Beri ruang untuk tombol toggle */
+  }
+
+  .healthcheck-container {
+    padding: 1.5rem; /* Padding lebih kecil di mobile */
+  }
+  .healthcheck-container h2 {
+    font-size: 1.5rem;
+  }
+  .question-group legend {
+    font-size: 1.1rem;
+  }
+  .option-group, .centered-options {
+    flex-direction: column; 
+    align-items: stretch; /* Opsi jadi full-width */
+  }
+  .centered-options .option-label {
+    width: auto; /* Biarkan auto agar tetap bisa center */
+    justify-content: center;
+  }
+  .option-label {
+    width: 100%; 
+    justify-content: center; /* Teks di tengah untuk opsi full-width */
+    text-align: center;
+  }
+  .option-label input[type="radio"] {
+    margin-right: 0.5rem; /* Sesuaikan jika perlu */
+  }
+}
