@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"; // Import useQueryClient
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Sidebar from "../components/Sidebar";
 import Notifications from "../components/Notifications";
 import Account from "../components/Account";
@@ -15,10 +15,12 @@ import {
 import { getToken, getUserId } from "../utils/auth";
 
 const Chatbot = () => {
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
+  // --- PERUBAHAN 1.1: Ubah state awal. Logika akan diatur di useEffect ---
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [started, setStarted] = useState(false);
+  
   const token = getToken();
-  const queryClient = useQueryClient(); // Untuk invalidasi cache
+  const queryClient = useQueryClient();
 
   // --- State Lokal Utama ---
   const [currentSessionId, setCurrentSessionId] = useState(null);
@@ -54,6 +56,23 @@ const Chatbot = () => {
     enabled: !!currentSessionId && !!token,
     staleTime: 1000 * 60 * 1,
   });
+
+  // --- PERUBAHAN 1.2: Logika untuk menampilkan modal atau memulai chat ---
+  useEffect(() => {
+    // Hanya jalankan logika ini setelah sesi selesai dimuat dan data sudah ada
+    if (!isLoadingSessions && sessions) {
+      if (sessions.length === 0) {
+        // Tidak ada sesi sama sekali, ini adalah "fresh welcome"
+        setShowWelcomeModal(true);
+        setStarted(false); // Pastikan chat belum "dimulai"
+      } else {
+        // Ada sesi, jangan tampilkan modal dan langsung mulai
+        setShowWelcomeModal(false);
+        setStarted(true);
+      }
+    }
+  }, [sessions, isLoadingSessions]);
+
 
   // Efek untuk mengatur currentSessionId saat sesi pertama kali dimuat atau berubah
   useEffect(() => {
@@ -97,45 +116,32 @@ const Chatbot = () => {
     },
   });
 
-  // GANTI MUTASI LAMA DENGAN YANG INI
   const sendMessageMutation = useMutation({
     mutationFn: (messagePayload) => createChatbotMessage(token, messagePayload),
-
-    // onMutate berjalan SEBELUM mutationFn. Di sinilah keajaibannya terjadi.
     onMutate: async (newMessagePayload) => {
-      // 1. Batalkan semua refetch yang sedang berjalan untuk query pesan
-      //    agar tidak menimpa update optimis kita.
       await queryClient.cancelQueries([
         "chatMessages",
         currentSessionId,
         token,
       ]);
-
-      // 2. Simpan data pesan yang ada saat ini (sebelum diubah) untuk rollback jika terjadi error.
       const previousMessages = queryClient.getQueryData([
         "chatMessages",
         currentSessionId,
         token,
       ]);
-
-      // 3. Buat pesan user dan pesan loading bot secara manual.
       const optimisticUserMessage = {
-        id: `temp-user-${Date.now()}`, // ID sementara yang unik
+        id: `temp-user-${Date.now()}`,
         message: newMessagePayload.message,
-        sender: "human", // Pastikan ini sesuai dengan apa yang Anda gunakan ('human' atau 'user')
+        sender: "human",
         timestamp: new Date().toISOString(),
       };
-
       const optimisticLoadingMessage = {
         id: `temp-loading-${Date.now()}`,
-        message: "...", // Teks placeholder tidak penting, kita akan render komponen loading
-        sender: "ai", // atau 'bot', sesuaikan dengan data Anda
+        message: "...",
+        sender: "ai",
         timestamp: new Date().toISOString(),
-        isLoading: true, // Flag khusus untuk menandai ini adalah pesan loading
+        isLoading: true,
       };
-
-      // 4. Update cache React Query secara langsung dengan data baru yang optimis.
-      //    Ini akan langsung memicu re-render pada UI.
       queryClient.setQueryData(
         ["chatMessages", currentSessionId, token],
         (oldQueryData) => [
@@ -144,16 +150,11 @@ const Chatbot = () => {
           optimisticLoadingMessage,
         ]
       );
-
-      // 5. Kembalikan data lama agar bisa diakses di context onError dan onSettled.
       return { previousMessages };
     },
-
-    // onError akan berjalan jika mutationFn gagal.
     onError: (err, newMessage, context) => {
       console.error("Gagal mengirim pesan (Optimistic):", err);
       alert(`Gagal mengirim pesan: ${err.message}`);
-      // Kembalikan data ke kondisi sebelum update optimis
       if (context.previousMessages) {
         queryClient.setQueryData(
           ["chatMessages", currentSessionId, token],
@@ -161,12 +162,9 @@ const Chatbot = () => {
         );
       }
     },
-
-    // onSettled berjalan setelah mutasi selesai (baik sukses maupun gagal).
-    // Ini untuk memastikan data di client sinkron dengan server.
     onSettled: () => {
       queryClient.invalidateQueries(["chatMessages", currentSessionId, token]);
-      queryClient.invalidateQueries(["chatSessions", token]);
+      queryClient.invalidateQueries(["chatSessions", token]); // Penting untuk update summary sesi
     },
   });
 
@@ -174,29 +172,28 @@ const Chatbot = () => {
   const currentSessionDetails = sessions?.find(
     (s) => s.id === currentSessionId
   );
-  const displayMessages = currentMessages || []; // Pesan yang akan ditampilkan
+  const displayMessages = currentMessages || [];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(scrollToBottom, [displayMessages]); // Scroll ketika pesan berubah
+  useEffect(scrollToBottom, [displayMessages]);
 
   // --- Event Handlers ---
+  
+  // --- PERUBAHAN 1.3: Sederhanakan handleGetStarted ---
   const handleGetStarted = () => {
     setShowWelcomeModal(false);
     setStarted(true);
-    if (!isLoadingSessions && (!sessions || sessions.length === 0)) {
-      createSessionMutation.mutate({ summary: "", mood_detected: "" });
-    } else if (sessions && sessions.length > 0 && !currentSessionId) {
-      setCurrentSessionId(sessions[0].id);
-    }
+    // Karena fungsi ini hanya dipanggil saat tidak ada sesi,
+    // kita bisa langsung membuat sesi baru.
+    createSessionMutation.mutate({ summary: "", mood_detected: "" });
   };
 
   const handleCancelWelcome = () => navigate("/dashboard");
 
   const createNewSession = () => {
-    // Dipanggil dari modal
     createSessionMutation.mutate({ summary: "", mood_detected: "" });
   };
 
@@ -207,7 +204,6 @@ const Chatbot = () => {
       alert("Tidak bisa menghapus sesi terakhir.");
       return;
     }
-    // Konfirmasi sebelum hapus
     if (window.confirm(`Anda yakin ingin menghapus sesi ini?`)) {
       deleteSessionMutation.mutate(sessionIdToDelete);
     }
@@ -219,7 +215,6 @@ const Chatbot = () => {
     if (!trimmedInput || !currentSessionId || sendMessageMutation.isLoading)
       return;
 
-    // Cukup kirim message-nya, sisanya akan diurus di mutasi
     sendMessageMutation.mutate({
       session_id: currentSessionId,
       message: trimmedInput,
@@ -227,7 +222,6 @@ const Chatbot = () => {
     });
     setInput("");
   };
-
 
   // --- Render Logic ---
   if (isLoadingSessions) {
@@ -315,13 +309,24 @@ const Chatbot = () => {
                         { weekday: "long", day: "numeric", month: "short" }
                       )}
                     </h6>
+                    {/* --- PERUBAHAN 2: Tampilkan summary chat dengan elipsis --- */}
                     <small
                       className={
                         currentSessionId === session.id
                           ? "text-white-50"
                           : "text-muted"
                       }
-                    ></small>
+                      style={{
+                        display: 'block',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {session.summary 
+                        ? (session.summary.length > 30 ? session.summary.substring(0, 30) + '...' : session.summary)
+                        : "Mulai percakapan..."}
+                    </small>
                   </div>
                   <button
                     className={`btn btn-sm ms-2 p-1 ${
@@ -361,15 +366,12 @@ const Chatbot = () => {
       {/* Main Chat Area */}
       <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0 }}>
         <div className="bg-white p-4 border-bottom">
-          {" "}
-          {/* Header Aplikasi */}
           <div className="d-flex justify-content-between align-items-center">
             <div>
               <h4 className="fw-bold text-primary mb-1">
                 Tenobot - Tenangin Chatbot
               </h4>
               <small className="text-muted">
-                Session:{" "}
                 {currentSessionDetails
                   ? new Date(
                       currentSessionDetails.session_date
@@ -382,8 +384,7 @@ const Chatbot = () => {
               </small>
             </div>
             <div className="d-flex align-items-center gap-3">
-              {" "}
-              <Notifications /> <Account />{" "}
+              <Notifications /> <Account />
             </div>
           </div>
         </div>
@@ -440,14 +441,13 @@ const Chatbot = () => {
           </div>
         )}
 
+        {/* Cek `started` dan `currentSessionId` untuk render area chat */}
         {started && currentSessionId && (
           <div
             className="flex-grow-1 bg-white rounded-lg shadow-sm border d-flex flex-column m-4"
             style={{ minHeight: 0 }}
           >
             <div className="p-3 border-bottom bg-light rounded-top">
-              {" "}
-              {/* Chat Header */}
               <div className="d-flex align-items-center">
                 <div
                   className="bg-success rounded-circle me-3"
@@ -465,8 +465,6 @@ const Chatbot = () => {
               className="flex-grow-1 p-3 overflow-auto"
               style={{ backgroundColor: "#fafafa" }}
             >
-              {" "}
-              {/* Area Pesan (Scrolling) */}
               {(isLoadingMessages ||
                 (isFetchingMessages && displayMessages.length === 0)) && (
                 <p className="text-center text-muted">Memuat pesan...</p>
@@ -518,7 +516,7 @@ const Chatbot = () => {
                             width: "32px",
                             height: "32px",
                             backgroundColor:
-                              msg.sender === "user" ? "#007bff" : "#28a745",
+                              msg.sender === "human" ? "#007bff" : "#28a745",
                             flexShrink: 0,
                           }}
                         >
@@ -538,7 +536,7 @@ const Chatbot = () => {
                             }`}
                             style={{
                               borderRadius:
-                                msg.sender === "user"
+                                msg.sender === "human"
                                   ? "18px 18px 4px 18px"
                                   : "18px 18px 18px 4px",
                             }}
@@ -554,8 +552,7 @@ const Chatbot = () => {
                             className={`d-block mt-1 ${
                               msg.sender === "human" ? "text-end" : "text-start"
                             } text-muted`}
-                          >
-                          </small>
+                          ></small>
                         </div>
                       </div>
                     </div>
@@ -565,8 +562,6 @@ const Chatbot = () => {
               )}
             </div>
             <div className="p-3 border-top bg-white">
-              {" "}
-              {/* Area Input */}
               <form onSubmit={handleSendMessage}>
                 <div className="input-group">
                   <input
@@ -616,7 +611,7 @@ const Chatbot = () => {
           </div>
         )}
 
-        {/* UI jika tidak ada sesi aktif */}
+        {/* UI jika tidak ada sesi aktif (setelah menghapus sesi terakhir) */}
         {!currentSessionId && started && !isLoadingSessions && (
           <div className="flex-grow-1 d-flex flex-column justify-content-center align-items-center p-4">
             <i
@@ -636,7 +631,6 @@ const Chatbot = () => {
             </button>
           </div>
         )}
-        {/* =================================================================== */}
       </div>
     </div>
   );
