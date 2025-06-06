@@ -1,21 +1,20 @@
-/* src/styles/HealthCheck.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
   --font-primary: 'Poppins', sans-serif;
   
   /* Palet Warna Kekinian */
-  --color-background: #f0f2f5; /* Latar belakang halaman utama yang sangat lembut */
-  --color-surface: #ffffff;    /* Latar belakang untuk card, sidebar */
-  --color-text-primary: #2d3748; /* Teks utama (gelap, tidak hitam pekat) */
-  --color-text-secondary: #718096; /* Teks sekunder, lebih lembut */
-  --color-primary: #3B82F6; /* Biru modern sebagai aksen utama (Tailwind Blue 500) */
-  --color-primary-darker: #2563EB; /* Biru lebih gelap untuk hover */
-  --color-border: #e2e8f0;     /* Warna border yang halus */
-  --color-success: #10B981;    /* Hijau untuk sukses */
-  --color-danger: #EF4444;     /* Merah untuk error */
-  --color-disabled: #9ca3af;   /* Warna untuk elemen disabled */
-  --color-input-bg: #f9fafb; /* Latar input */
+  --color-background: #f0f2f5; 
+  --color-surface: #ffffff;    
+  --color-text-primary: #2d3748;
+  --color-text-secondary: #718096; 
+  --color-primary: #3B82F6; 
+  --color-primary-darker: #2563EB; 
+  --color-border: #e2e8f0;     
+  --color-success: #10B981;   
+  --color-danger: #EF4444;     
+  --color-disabled: #9ca3af;   
+  --color-input-bg: #f9fafb; 
 
   --sidebar-width: 240px;
   --border-radius-md: 8px;
@@ -36,8 +35,6 @@
   transition: transform 0.3s ease-in-out;
 }
 
-/* Content Area */
-
 .content-shifted {
   margin-left: var(--sidebar-width);
 }
@@ -45,9 +42,9 @@
 /* HealthCheck Container (Card untuk form dan halaman awal) */
 .healthcheck-container {
   background-color: var(--color-surface);
-  padding: 2rem 2.5rem; /* Padding lebih besar */
-  border-radius: var(--border-radius-lg); /* Sudut lebih bulat */
-  box-shadow: var(--shadow-lg); /* Bayangan lebih menonjol */
+  padding: 2rem 2.5rem;
+  border-radius: var(--border-radius-lg); 
+  box-shadow: var(--shadow-lg);
   margin-bottom: 2.5rem;
 }
 .healthcheck-container h2 {
@@ -55,7 +52,7 @@
   margin-bottom: 2rem;
   text-align: center;
   font-weight: 600;
-  font-size: 1.8rem; /* Ukuran H2 lebih besar */
+  font-size: 1.8rem; 
 }
 
 /* Start Test Section */
@@ -65,7 +62,7 @@
   margin-bottom: 2.5rem;
   text-align: center;
   line-height: 1.7;
-  max-width: 600px; /* Batasi lebar paragraf agar mudah dibaca */
+  max-width: 600px; 
   margin-left: auto;
   margin-right: auto;
 }
@@ -73,7 +70,7 @@
   background-color: var(--color-primary);
   color: white;
   border: none;
-  padding: 0.85rem 2rem; /* Padding lebih nyaman */
+  padding: 0.85rem 2rem; 
   font-size: 1.05rem;
   font-weight: 500;
   border-radius: var(--border-radius-md);
@@ -98,7 +95,7 @@ form button[type="submit"].btn-primary:disabled {
   cursor: not-allowed;
   transform: translateY(0);
 }
-.submit-button-container {
+.button-group .submit-button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,14 +103,14 @@ form button[type="submit"].btn-primary:disabled {
 
 /* Form Styling */
 .question-group {
-  margin-bottom: 2.5rem; /* Jarak antar pertanyaan lebih besar */
+  margin-bottom: 2.5rem;
   padding-bottom: 2rem;
   border: none;
   border-bottom: 1px solid var(--color-border);
 }
 .question-group:last-of-type {
   border-bottom: none;
-  margin-bottom: 2rem; /* Kurangi margin bawah untuk grup terakhir sebelum tombol */
+  margin-bottom: 2rem; 
   justify-content: center;
 }
 .question-group legend {
@@ -121,16 +118,16 @@ form button[type="submit"].btn-primary:disabled {
   font-weight: 500;
   color: var(--color-text-primary);
   margin-bottom: 1.5rem;
-  text-align: center; /* Inilah yang membuat teks ketengah */
-  width: 100%;         /* Supaya bisa ditengah dalam fieldset */
-  display: block;      /* Pastikan legend memenuhi baris */
+  text-align: center; 
+  width: 100%;         
+  display: block;      
 }
 
 
 .option-group, .centered-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem; /* Jarak antar opsi */
+  gap: 1rem; 
   justify-content: center;
 }
 .centered-options {
@@ -140,10 +137,10 @@ form button[type="submit"].btn-primary:disabled {
 .option-label {
   display: inline-flex;
   align-items: center;
-  padding: 0.75rem 1.25rem; /* Padding lebih nyaman */
+  padding: 0.75rem 1.25rem; 
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md); /* Sudut lebih bulat */
+  border-radius: var(--border-radius-md); 
   cursor: pointer;
   transition: var(--transition-common);
   font-size: 0.95rem;
@@ -157,77 +154,124 @@ form button[type="submit"].btn-primary:disabled {
   transform: translateY(-1px);
 }
 .option-label input[type="radio"] {
-  margin-right: 0.75rem; /* Jarak radio button ke teks */
-  accent-color: var(--color-primary); /* Warna radio button saat terpilih */
-  transform: scale(1.2); /* Buat radio button sedikit lebih besar */
+  margin-right: 0.75rem; 
+  accent-color: var(--color-primary); 
+  transform: scale(1.2); 
 }
 
-/* Style untuk label ketika radio button di dalamnya terpilih */
 label.option-label:has(input[type="radio"]:checked) {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
-  color: var(--color-surface); /* Teks jadi putih */
+  color: var(--color-surface); 
   font-weight: 500;
-  box-shadow: 0 4px 10px rgba(var(--color-primary-rgb, 59, 130, 246), 0.3); /* Bayangan sesuai warna primer */
+  box-shadow: 0 4px 10px rgba(var(--color-primary-rgb, 59, 130, 246), 0.3); 
 }
-/* Menambahkan variabel RGB untuk --color-primary jika belum ada */
-/* Jika --color-primary Anda adalah #3B82F6, RGB nya adalah 59, 130, 246 */
-/* Anda bisa menambahkannya di :root */
-/* --color-primary-rgb: 59, 130, 246; */
-
 
 /* Alert Styling */
 .alert {
   margin-top: 2rem;
-  padding: 1.25rem; /* Padding lebih besar */
+  padding: 1.25rem; 
   font-size: 1rem;
-  border-radius: var(--border-radius-md); /* Sudut seragam */
-  border-width: 0px; /* Hilangkan border default, kita pakai background + shadow */
+  border-radius: var(--border-radius-md); 
+  border-width: 0px;
   box-shadow: var(--shadow-md);
 }
 .alert-success {
-  background-color: #ECFDF5; /* Warna latar hijau muda (Tailwind Green 50) */
-  color: #065F46; /* Warna teks hijau tua (Tailwind Green 800) */
-  /* border-left: 4px solid var(--color-success); */
+  background-color: #ECFDF5;
+  color: #065F46; 
 }
 .alert-danger {
-  background-color: #FEF2F2; /* Warna latar merah muda (Tailwind Red 50) */
-  color: #991B1B; /* Warna teks merah tua (Tailwind Red 800) */
-  /* border-left: 4px solid var(--color-danger); */
+  background-color: #FEF2F2; 
+  color: #991B1B; 
 }
 
+/* Gaya untuk Kartu Hasil Tes */
+.result-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.result-item span {
+  font-size: 1.1rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.result-item strong {
+  font-size: 1.2rem;
+  color: #0d6efd; /* Warna utama Bootstrap */
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+}
+
+.result-note {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  background-color: #f8f9fa;
+  border-left: 5px solid #0d6efd;
+  text-align: left;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.result-note strong {
+  color: #212529;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; 
+  gap: 1rem; 
+  margin-top: 2rem;
+}
+
+/* Animasi sederhana untuk kartu hasil */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* Responsive adjustments */
-@media (max-width: 992px) { /* Targetkan sebelum mobile, misal tablet */
+@media (max-width: 992px) { 
   .content-area {
-    padding-left: 1rem; /* Kurangi padding samping untuk tablet */
+    padding-left: 1rem; 
     padding-right: 1rem;
   }
 }
 
 @media (max-width: 768px) {
   :root {
-    --sidebar-width: 240px; /* Sidebar lebih kecil di mobile jika masih ada */
+    --sidebar-width: 240px; 
   }
   .content-shifted {
     margin-left: 0; 
   }
   .content-area {
-    padding-left: 1rem; /* Padding untuk mobile */
+    padding-left: 1rem; 
     padding-right: 1rem;
   }
   .d-flex.justify-content-between.align-items-center {
-    flex-direction: column; /* Header jadi vertikal */
-    align-items: flex-start !important; /* Rata kiri untuk mobile */
+    flex-direction: column; 
+    align-items: flex-start !important; 
     gap: 0.5rem;
   }
   .d-flex.justify-content-between.align-items-center h4.fw-bold {
-    font-size: 1.5rem; /* Judul lebih kecil di mobile */
-    margin-top: 3.5rem; /* Beri ruang untuk tombol toggle */
+    font-size: 1.5rem; 
+    margin-top: 3.5rem; 
   }
 
   .healthcheck-container {
-    padding: 1.5rem; /* Padding lebih kecil di mobile */
+    padding: 1.5rem; 
   }
   .healthcheck-container h2 {
     font-size: 1.5rem;
@@ -237,18 +281,18 @@ label.option-label:has(input[type="radio"]:checked) {
   }
   .option-group, .centered-options {
     flex-direction: column; 
-    align-items: stretch; /* Opsi jadi full-width */
+    align-items: stretch; 
   }
   .centered-options .option-label {
-    width: auto; /* Biarkan auto agar tetap bisa center */
+    width: auto; 
     justify-content: center;
   }
   .option-label {
     width: 100%; 
-    justify-content: center; /* Teks di tengah untuk opsi full-width */
+    justify-content: center; 
     text-align: center;
   }
   .option-label input[type="radio"] {
-    margin-right: 0.5rem; /* Sesuaikan jika perlu */
+    margin-right: 0.5rem; 
   }
 }

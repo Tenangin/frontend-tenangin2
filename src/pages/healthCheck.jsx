@@ -1,6 +1,5 @@
-// src/pages/HealthCheck.jsx
 import React, { useState } from 'react';
-import '../styles/HealthCheck.css'; // Impor file CSS
+import '../styles/HealthCheck.css';
 import Sidebar from '../components/Sidebar';
 import Notifications from '../components/Notifications';
 import Account from '../components/Account';
@@ -8,12 +7,17 @@ import useSidebarToggle from '../hooks/useSidebarToggle';
 
 const HealthCheck = () => {
   const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
-  // ... (state lainnya tetap sama)
+
+  const [view, setView] = useState('start'); 
+  const [resultData, setResultData] = useState(null);
+
   const [formData, setFormData] = useState({});
-  const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [testStarted, setTestStarted] = useState(false); // Untuk halaman awal
+
+  const handleGoToDashboard = () => {
+    navigate('/dashboard'); // belum diubah
+  };
 
   const orderedFeatureNames = [
     "Sadness", "Euphoric", "Exhausted", "Sleep_dissorder",
@@ -24,11 +28,10 @@ const HealthCheck = () => {
   ];
 
   const questions = [
-    // ... (definisi questions tetap sama)
-    { id: 1, name: "Sadness", legend: "Seberapa sering Anda merasa sedih?", options: [{ text: "Most-Often", value: "0" }, { text: "Seldom", value: "1" }, { text: "Sometimes", value: "2" }, { text: "Usually", value: "3" }] },
-    { id: 2, name: "Euphoric", legend: "Seberapa sering Anda merasa euforia atau sangat bahagia secara tiba-tiba?", options: [{ text: "Most-Often", value: "0" }, { text: "Seldom", value: "1" }, { text: "Sometimes", value: "2" }, { text: "Usually", value: "3" }] },
-    { id: 3, name: "Exhausted", legend: "Seberapa sering Anda merasa sangat lelah secara emosional atau fisik?", options: [{ text: "Most-Often", value: "0" }, { text: "Seldom", value: "1" }, { text: "Sometimes", value: "2" }, { text: "Usually", value: "3" }] },
-    { id: 4, name: "Sleep_dissorder", legend: "Seberapa sering Anda mengalami gangguan tidur?", options: [{ text: "Most-Often", value: "0" }, { text: "Seldom", value: "1" }, { text: "Sometimes", value: "2" }, { text: "Usually", value: "3" }] },
+    { id: 1, name: "Sadness", legend: "Seberapa sering Anda merasa sedih?", options: [{ text: "Sering", value: "0" }, { text: "Biasanya", value: "1" }, { text: "Kadang-kadang", value: "2" }, { text: "Jarang", value: "3" }] },
+    { id: 2, name: "Euphoric", legend: "Seberapa sering Anda merasa euforia atau sangat bahagia secara tiba-tiba?", options: [{ text: "Sering", value: "0" }, { text: "Biasanya", value: "1" }, { text: "Kadang-kadang", value: "2" }, { text: "Jarang", value: "3" }] },
+    { id: 3, name: "Exhausted", legend: "Seberapa sering Anda merasa sangat lelah secara emosional atau fisik?", options: [{ text: "Sering", value: "0" }, { text: "Biasanya", value: "1" }, { text: "Kadang-kadang", value: "2" }, { text: "Jarang", value: "3" }] },
+    { id: 4, name: "Sleep_dissorder", legend: "Seberapa sering Anda mengalami gangguan tidur?", options: [{ text: "Sering", value: "0" }, { text: "Biasanya", value: "1" }, { text: "Kadang-kadang", value: "2" }, { text: "Jarang", value: "3" }] },
     { id: 5, name: "Mood_Swing", legend: "Apakah Anda sering mengalami perubahan suasana hati secara tiba-tiba?", options: [{ text: "YA", value: "1" }, { text: "TIDAK", value: "0" }], centered: true },
     { id: 6, name: "Suicidal_thoughts", legend: "Apakah Anda pernah berpikiran untuk bunuh diri?", options: [{ text: "YA", value: "1" }, { text: "TIDAK", value: "0" }], centered: true },
     { id: 7, name: "Anorxia", legend: "Apakah Anda pernah mengalami kehilangan nafsu makan yang ekstrem (anoreksia)?", options: [{ text: "YA", value: "1" }, { text: "TIDAK", value: "0" }], centered: true },
@@ -44,9 +47,7 @@ const HealthCheck = () => {
     { id: 17, name: "Optimisim", legend: "Seberapa tinggi tingkat optimisme Anda terhadap masa depan?", options: Array.from({ length: 8 }, (_, i) => ({ text: (i + 1).toString(), value: i.toString() })) },
   ];
 
-
   const handleInputChange = (e) => {
-    // ... (fungsi tetap sama)
     const { name, value } = e.target;
     setFormData(prevData => ({
       ...prevData,
@@ -55,24 +56,14 @@ const HealthCheck = () => {
   };
 
   const handleSubmit = async (e) => {
-    // ... (fungsi tetap sama)
     e.preventDefault();
     setIsLoading(true);
-    setResult(null);
     setError(null);
 
-    let allQuestionsAnswered = true;
-    for (const name of orderedFeatureNames) {
-      if (formData[name] === undefined) {
-        allQuestionsAnswered = false;
-        break;
-      }
-    }
-
-    if (!allQuestionsAnswered) {
-      setError("Pastikan semua 17 pertanyaan telah dijawab.");
-      setIsLoading(false);
-      return;
+    if (Object.keys(formData).length < orderedFeatureNames.length) {
+        setError("Pastikan semua 17 pertanyaan telah dijawab.");
+        setIsLoading(false);
+        return;
     }
 
     const features = orderedFeatureNames.map(name => parseFloat(formData[name]));
@@ -90,23 +81,13 @@ const HealthCheck = () => {
         body: JSON.stringify({ features: features })
       });
 
-      if (!response.ok) {
-        let errorDetail = `Server error: ${response.status}`;
-        try {
-          const errorData = await response.json();
-          if (errorData && errorData.detail) {
-            if (Array.isArray(errorData.detail)) {
-              errorDetail = errorData.detail.map(err => `${err.loc ? err.loc.join(' -> ') + ': ' : ''}${err.msg}`).join('; ');
-            } else {
-              errorDetail = errorData.detail;
-            }
-          }
-        } catch { }
-        throw new Error(errorDetail);
-      }
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
       const data = await response.json();
-      setResult(data);
+      
+      setResultData(data);
+      setView('results');
+
     } catch (error) {
       setError(error.message);
     } finally {
@@ -114,27 +95,116 @@ const HealthCheck = () => {
     }
   };
 
+  const handleRetakeTest = () => {
+    setView('start');
+    setFormData({});
+    setResultData(null);
+    setError(null);
+  };
+
+  const getImageAndExplanation = (condition) => {
+    switch (condition?.toLowerCase() ?? 'unknown') {
+      case "bipolar type-1":
+        return {
+          image: "/images/bipolar1.png",
+          explanation: "Bipolar Tipe 1 ditandai dengan episode mania berat, yang mungkin disertai depresi. Kondisi ini dapat memengaruhi aktivitas sehari-hari secara signifikan.",
+        };
+      case "bipolar type-2":
+        return {
+          image: "/images/bipolar2.png",
+          explanation: "Bipolar Tipe 2 ditandai dengan pola episode depresi berat dan hipomania (bentuk mania yang lebih ringan).",
+        };
+      case "depression":
+        return {
+          image: "/images/depression.png",
+          explanation: "Depresi adalah gangguan suasana hati yang menyebabkan perasaan sedih terus-menerus, kehilangan minat, dan kelelahan.",
+        };
+      case "normal":
+        return {
+          image: "/images/normal.png",
+          explanation: "Hasil Anda menunjukkan tidak adanya indikasi gangguan mood seperti depresi atau bipolar. Tetap jaga kesehatan mental Anda.",
+        };
+      default:
+        return {
+          image: "/images/unknown.png",
+          explanation: "Hasil tidak dikenali. Silakan ulangi tes atau konsultasikan dengan profesional.",
+        };
+    }
+  };
+
   const renderStartTest = () => (
-    // ... (fungsi tetap sama)
     <div className="healthcheck-container start-test-container">
       <h2>Tes Cek Kondisi Mental</h2>
       <p>
         Tes ini terdiri dari 17 pertanyaan yang dirancang untuk membantu Anda memahami kondisi mental Anda saat ini. 
         Hasil tes bersifat indikatif dan bukan merupakan diagnosis medis formal.
       </p>
-      <div class="submit-button-container">
-        <button onClick={() => setTestStarted(true)} className="start-test-button">
+      <div className="submit-button-container">
+        {/* Ubah onClick untuk menampilkan kuesioner */}
+        <button onClick={() => setView('questions')} className="start-test-button">
             Mulai Tes
         </button>
-        </div>
+      </div>
     </div>
   );
 
+  const renderResults = () => {
+    const condition = resultData?.prediction || resultData?.kondisi;
+    const { image, explanation } = getImageAndExplanation(condition);
+
+    return (
+      <div className="healthcheck-container result-container text-center">
+        <h2>Hasil Tes Anda</h2>
+        {resultData ? (
+          <>
+            <img
+              src={image}
+              alt={condition}
+              className="img-fluid my-3"
+              style={{ maxWidth: "300px", margin: "0 auto" }}
+            />
+            <div className="result-item">
+              <strong>{condition}</strong>
+            </div>
+            <div className="result-item">
+              <span>Probabilitas:</span> 
+                {((resultData.confidence) * 100).toFixed(2)}%
+            </div>
+            <div className="result-explanation mt-3 mb-4">
+              <p><strong>Penjelasan:</strong></p>
+              <p>{explanation}</p>
+            </div>
+            <div className="result-note mt-4">
+              <p><strong>Catatan:</strong></p>
+              <p className="mb-0">
+                Hasil ini adalah sebuah indikator awal dan <strong>bukan diagnosis medis</strong>. Ini adalah langkah yang baik untuk lebih mengenali diri sendiri. 
+                Jika Anda merasa khawatir atau ingin mendapatkan pemahaman lebih dalam, jangan ragu untuk mengambil langkah berikutnya.
+              </p>
+              <p>
+                Anda dapat menjelajahi fitur <strong>Rekomendasi Psikolog</strong> kami untuk menemukan dukungan profesional yang tepat.
+              </p>
+            </div>
+            <div className="button-group">
+              <button onClick={handleGoToDashboard} className="btn btn-outline-primary me-2">
+                Kembali ke Dashboard
+              </button>
+              <button onClick={handleRetakeTest} className="btn btn-primary">
+                Ulangi Tes
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="alert alert-warning">Tidak ada data hasil untuk ditampilkan.</div>
+        )}
+      </div>
+    );
+  };
+
+
   return (
     <div className="d-flex" style={{ minHeight: '100vh' }}>
-      {/* Berikan class pada Sidebar atau wrapper jika Sidebar tidak bisa diubah langsung */}
       {isSidebarVisible && (
-        <div className="sidebar-wrapper"> {/* Anda bisa gunakan class ini, atau pastikan Sidebar component Anda memiliki class yang bisa ditargetkan */}
+        <div className="sidebar-wrapper">
           <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
         </div>
       )}
@@ -143,10 +213,7 @@ const HealthCheck = () => {
         <div className="sidebar-backdrop" onClick={() => setIsSidebarVisible(false)} />
       )}
 
-      <div 
-        className={`flex-grow-1 p-3 p-md-4 content-area ${isSidebarVisible && !isMobile ? 'content-shifted' : ''}`} 
-        style={{ overflowY: 'auto' }}
-      >
+      <div className={`flex-grow-1 p-3 p-md-4 content-area ${isSidebarVisible && !isMobile ? 'content-shifted' : ''}`} style={{ overflowY: 'auto' }}>
         <div className="toggle-button-container">
           <button className="btn btn-outline-primary mb-2 align-self-start mobile" onClick={toggleSidebar}>
             <i className="bi bi-list"></i>
@@ -163,7 +230,9 @@ const HealthCheck = () => {
           </div>
         </div>
 
-        {!testStarted ? renderStartTest() : (
+        {view === 'start' && renderStartTest()}
+
+        {view === 'questions' && (
           <div className="healthcheck-container">
             <form onSubmit={handleSubmit}>
               {questions.map(q => (
@@ -178,6 +247,7 @@ const HealthCheck = () => {
                           value={opt.value}
                           checked={formData[q.name] === opt.value}
                           onChange={handleInputChange}
+                          required
                         />
                         {opt.text}
                       </label>
@@ -185,16 +255,17 @@ const HealthCheck = () => {
                   </div>
                 </fieldset>
               ))}
-              {error && <div className="alert alert-danger">{error}</div>}
-              {result && <div className="alert alert-success">Hasil: {JSON.stringify(result)}</div>}
+              {error && <div className="alert alert-danger mt-3">{error}</div>}
               <div className="submit-button-container">
                 <button type="submit" className="btn btn-primary" disabled={isLoading}>
                     {isLoading ? 'Memproses...' : 'Kirim'}
                 </button>
-                </div>
+              </div>
             </form>
           </div>
         )}
+
+        {view === 'results' && renderResults()}
       </div>
     </div>
   );
