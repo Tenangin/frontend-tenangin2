@@ -66,8 +66,8 @@ const Recomendasi = () => {
           setUserLocation({ lat: latitude, lon: longitude });
         },
         (err) => {
-          setError('Tidak dapat mengakses lokasi. Menggunakan lokasi default (Jakarta).');
-          setUserLocation(DEFAULT_LOCATION); 
+          setError('Tidak dapat mengakses lokasi. Menggunakan lokasi default (Jakarta).', err);
+          setUserLocation(DEFAULT_LOCATION);
         }
       );
     } else {
