@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-primary: 'Poppins', sans-serif;
+  
+  /* Palet Warna Kekinian */
+  --color-background: #f0f2f5; 
+  --color-surface: #ffffff;    
+  --color-text-primary: #2d3748;
+  --color-text-secondary: #718096; 
+  --color-primary: #3B82F6; 
+  --color-primary-darker: #2563EB; 
+  --color-border: #e2e8f0;     
+  --color-success: #10B981;   
+  --color-danger: #EF4444;     
+  --color-disabled: #9ca3af;   
+  --color-input-bg: #f9fafb; 
+
+  --sidebar-width: 240px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  --transition-common: all 0.3s ease-in-out;
+}
+
+/* Sidebar Wrapper & Backdrop */
+.sidebar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: var(--color-surface);
+  z-index: 1050;
+  transition: transform 0.3s ease-in-out;
+}
+
+.content-shifted {
+  margin-left: var(--sidebar-width);
+}
+
+/* HealthCheck Container (Card untuk form dan halaman awal) */
+.healthcheck-container {
+  background-color: var(--color-surface);
+  padding: 2rem 2.5rem;
+  border-radius: var(--border-radius-lg); 
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2.5rem;
+}
+.healthcheck-container h2 {
+  color: var(--color-text-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.8rem; 
+}
+
+/* Start Test Section */
+.start-test-container p {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2.5rem;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 600px; 
+  margin-left: auto;
+  margin-right: auto;
+}
+.start-test-button, form button[type="submit"].btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.85rem 2rem; 
+  font-size: 1.05rem;
+  font-weight: 500;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition-common);
+  box-shadow: var(--shadow-md);
+  text-transform: uppercase; /* Gaya tombol modern */
+  letter-spacing: 0.5px;
+}
+.start-test-button:hover, form button[type="submit"].btn-primary:hover {
+  background-color: var(--color-primary-darker);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+.start-test-button:active, form button[type="submit"].btn-primary:active {
+  transform: translateY(0px);
+}
+form button[type="submit"].btn-primary:disabled {
+  background-color: var(--color-disabled);
+  color: var(--color-surface);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+.button-group .submit-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Form Styling */
+.question-group {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+}
+.question-group:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2rem; 
+  justify-content: center;
+}
+.question-group legend {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  text-align: center; 
+  width: 100%;         
+  display: block;      
+}
+
+
+.option-group, .centered-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; 
+  justify-content: center;
+}
+.centered-options {
+  justify-content: center;
+}
+
+.option-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem; 
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md); 
+  cursor: pointer;
+  transition: var(--transition-common);
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
+}
+.option-label:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.option-label input[type="radio"] {
+  margin-right: 0.75rem; 
+  accent-color: var(--color-primary); 
+  transform: scale(1.2); 
+}
+
+label.option-label:has(input[type="radio"]:checked) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface); 
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(var(--color-primary-rgb, 59, 130, 246), 0.3); 
+}
+
+/* Alert Styling */
+.alert {
+  margin-top: 2rem;
+  padding: 1.25rem; 
+  font-size: 1rem;
+  border-radius: var(--border-radius-md); 
+  border-width: 0px;
+  box-shadow: var(--shadow-md);
+}
+.alert-success {
+  background-color: #ECFDF5;
+  color: #065F46; 
+}
+.alert-danger {
+  background-color: #FEF2F2; 
+  color: #991B1B; 
+}
+
+/* Gaya untuk Kartu Hasil Tes */
+.result-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.result-item span {
+  font-size: 1.1rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.result-item strong {
+  font-size: 1.2rem;
+  color: #0d6efd; /* Warna utama Bootstrap */
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+}
+
+.result-note {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  background-color: #f8f9fa;
+  border-left: 5px solid #0d6efd;
+  text-align: left;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.result-note strong {
+  color: #212529;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; 
+  gap: 1rem; 
+  margin-top: 2rem;
+}
+
+/* Animasi sederhana untuk kartu hasil */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) { 
+  .content-area {
+    padding-left: 1rem; 
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 240px; 
+  }
+  .content-shifted {
+    margin-left: 0; 
+  }
+  .content-area {
+    padding-left: 1rem; 
+    padding-right: 1rem;
+  }
+  .d-flex.justify-content-between.align-items-center {
+    flex-direction: column; 
+    align-items: flex-start !important; 
+    gap: 0.5rem;
+  }
+  .d-flex.justify-content-between.align-items-center h4.fw-bold {
+    font-size: 1.5rem; 
+    margin-top: 3.5rem; 
+  }
+
+  .healthcheck-container {
+    padding: 1.5rem; 
+  }
+  .healthcheck-container h2 {
+    font-size: 1.5rem;
+  }
+  .question-group legend {
+    font-size: 1.1rem;
+  }
+  .option-group, .centered-options {
+    flex-direction: column; 
+    align-items: stretch; 
+  }
+  .centered-options .option-label {
+    width: auto; 
+    justify-content: center;
+  }
+  .option-label {
+    width: 100%; 
+    justify-content: center; 
+    text-align: center;
+  }
+  .option-label input[type="radio"] {
+    margin-right: 0.5rem; 
+  }
+}
