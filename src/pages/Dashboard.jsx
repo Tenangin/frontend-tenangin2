@@ -4,6 +4,8 @@ import Sidebar from "../components/Sidebar";
 import Account from "../components/Account";
 import Notifications from "../components/Notifications";
 import Greeting from "../components/Greeting";
+import Reminders from "../components/RecordTest";
+import Journaling from "../components/Journaling";
 import ProfileFormPopup from "../components/ProfileFormPopup";
 import { getToken, getUserId } from "../utils/auth";
 import { getProfile } from "../data/api/api";
@@ -70,6 +72,7 @@ function Dashboard() {
     setShowProfileForm(false);
     setSuccessMessage("Profile sudah di tambahkan");
     setTimeout(() => setSuccessMessage(""), 3000);
+    window.location.reload();
   };
 
   return (
@@ -162,52 +165,8 @@ function Dashboard() {
 
         {/* Reminders & Journaling */}
         <div className="row">
-          <div className="col-md-6">
-            <h6 className="text-primary mb-3">Reminders</h6>
-            {["Js", "Nextjs", "React", "React"].map((item, idx) => (
-              <div
-                key={idx}
-                className="p-3 rounded-4  d-flex justify-content-between align-items-center mb-3"
-                style={{ backgroundColor: "#EFF4FF" }}
-              >
-                <div>
-                  <h6 className="mb-1 fw-semibold">Week 01 Assignment</h6>
-                  <small className="text-muted">{item} assignment</small>
-                </div>
-                <span className="badge bg-primary rounded-pill">7:00 pm</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="col-md-6">
-            <h6 className="text-primary mb-3">Journaling</h6>
-            <div
-              className="p-3 rounded-4  mb-3 d-flex justify-content-between"
-              style={{ backgroundColor: "#EFF4FF" }}
-            >
-              <div>
-                <h6 className="mb-1 fw-semibold">My Day</h6>
-                <p className="text-muted small mb-0">
-                  Today felt a bit slow, but I managed to get some important things
-                  done...
-                </p>
-              </div>
-              <span className="badge bg-primary rounded-pill">7:00 pm</span>
-            </div>
-            {["Nextjs", "React"].map((item, idx) => (
-              <div
-                key={idx}
-                className="p-3 rounded-4  d-flex justify-content-between align-items-center mb-3"
-                style={{ backgroundColor: "#EFF4FF" }}
-              >
-                <div>
-                  <h6 className="mb-1 fw-semibold">Week 01 Assignment</h6>
-                  <small className="text-muted">{item} assignment</small>
-                </div>
-                <span className="badge bg-primary rounded-pill">7:00 pm</span>
-              </div>
-            ))}
-          </div>
+          <Reminders />
+          <Journaling />
         </div>
         {showProfileForm && (
           <ProfileFormPopup
