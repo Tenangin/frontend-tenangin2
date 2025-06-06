@@ -7,14 +7,28 @@ import Greeting from "../components/Greeting";
 import Reminders from "../components/RecordTest";
 import Journaling from "../components/Journaling";
 import ProfileFormPopup from "../components/ProfileFormPopup";
+import SearchInput from "../components/SearchInput";
 import { getToken, getUserId } from "../utils/auth";
 import { getProfile } from "../data/api/api";
+// import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const [filteredResults, setFilteredResults] = useState([]);
+
+  // const navigate = useNavigate();
+
+  // const menuItems = [
+  //   { name: "Dashboard", path: "/Dashboard" },
+  //   { name: "Journaling", path: "/Journaling" },
+  //   { name: "Teno Bot", path: "/Chatbot" },
+  //   { name: "HealthCheck", path: "/HealthCheck" },
+  //   { name: "Profile", path: "/Profile" },
+  // ];
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -38,10 +52,11 @@ function Dashboard() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const userId = getUserId();
-  const token = getToken();
+
   useEffect(() => {
     async function checkProfile() {
+      const userId = getUserId();
+      const token = getToken();
       try {
         const data = await getProfile(token, userId);
         if (data && data.profile) {
@@ -68,6 +83,23 @@ function Dashboard() {
     checkProfile();
   }, []);
 
+  // useEffect(() => {
+  //   if (searchTerm === "") {
+  //     setFilteredResults([]);
+  //   } else {
+  //     const results = menuItems.filter((item) =>
+  //       item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //     setFilteredResults(results);
+  //   }
+  // }, [searchTerm]);
+
+  // const handleSelect = (item) => {
+  //   setSearchTerm("");
+  //   setFilteredResults([]);
+  //   navigate(item.path);
+  // };
+
   const handleProfileUpdate = () => {
     setShowProfileForm(false);
     setSuccessMessage("Profile sudah di tambahkan");
@@ -78,7 +110,11 @@ function Dashboard() {
   return (
     <div className="dashboard-container d-flex">
       {isSidebarVisible && (
-        <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
+        <Sidebar
+          isOverlay={isMobile}
+          isVisible={isSidebarVisible}
+          onClose={() => setIsSidebarVisible(false)}
+        />
       )}
 
       {isSidebarVisible && isMobile && (
@@ -107,29 +143,21 @@ function Dashboard() {
           <div className="d-flex justify-content-between align-items-center flex-column flex-md-row">
             {isMobile ? (
               <>
-                <div className="d-flex align-items-center gap-3 mb-3">
-                  <input
-                    type="text"
-                    className="form-control rounded-pill"
-                    placeholder="Search"
-                  />
-                  <Notifications />
-                  <Account />
-                </div>
+              <div className="d-flex align-items-center gap-3 mb-3 position-relative">
+                <SearchInput />
+                <Notifications />
+                <Account />
+              </div>
                 <Greeting />
               </>
             ) : (
               <>
                 <Greeting />
-                <div className="d-flex align-items-center gap-3">
-                  <input
-                    type="text"
-                    className="form-control rounded-pill"
-                    placeholder="Search"
-                  />
-                  <Notifications />
-                  <Account />
-                </div>
+              <div className="d-flex align-items-center gap-3 position-relative">
+                <SearchInput />
+                <Notifications />
+                <Account />
+              </div>
               </>
             )}
           </div>
