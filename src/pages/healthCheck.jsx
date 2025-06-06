@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createAssessment } from '../data/api/api.jsx';
+import { getToken } from '../utils/auth.js';
 import '../styles/HealthCheck.css';
 import Sidebar from '../components/Sidebar';
 import Notifications from '../components/Notifications';
@@ -7,6 +10,7 @@ import useSidebarToggle from '../hooks/useSidebarToggle';
 
 const HealthCheck = () => {
   const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
+  const navigate = useNavigate();
 
   const [view, setView] = useState('start'); 
   const [resultData, setResultData] = useState(null);
@@ -80,6 +84,7 @@ const HealthCheck = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ features: features })
       });
+      console.log(response);
 
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
@@ -88,12 +93,60 @@ const HealthCheck = () => {
       setResultData(data);
       setView('results');
 
+// =======
+//       setResultData(data);
+//       setView('results');
+
+      // New code to save assessment data to backend
+      const token = getToken();
+      const condition = data.prediction || data.kondisi;
+      const explanation = (() => {
+        switch ((condition?.toLowerCase() ?? 'unknown')) {
+          case "bipolar type-1":
+            return "Bipolar Tipe 1 ditandai dengan episode mania berat, yang mungkin disertai depresi. Kondisi ini dapat memengaruhi aktivitas sehari-hari secara signifikan.";
+          case "bipolar type-2":
+            return "Bipolar Tipe 2 ditandai dengan pola episode depresi berat dan hipomania (bentuk mania yang lebih ringan).";
+          case "depression":
+            return "Depresi adalah gangguan suasana hati yang menyebabkan perasaan sedih terus-menerus, kehilangan minat, dan kelelahan.";
+          case "normal":
+            return "Hasil Anda menunjukkan tidak adanya indikasi gangguan mood seperti depresi atau bipolar. Tetap jaga kesehatan mental Anda.";
+          default:
+            return "Hasil tidak dikenali. Silakan ulangi tes atau konsultasikan dengan profesional.";
+        }
+      })();
+
+      const assessmentData = {
+        score: data.confidence,
+        condition: condition,
+        result_text: explanation,
+      };
+      console.log("Assessment Data:", assessmentData);
+
+      if (token) {
+        createAssessment(token, assessmentData)
+          .then(res => {
+            console.log("Assessment saved successfully:", res);
+          })
+          .catch(err => {
+            console.error("Failed to save assessment:", err);
+          });
+      } else {
+        console.warn("No token found, skipping assessment save.");
+      }
+
     } catch (error) {
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleRetakeTest = () => {
     setView('start');

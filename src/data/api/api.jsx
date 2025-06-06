@@ -63,7 +63,7 @@ export async function getAssessments(token) {
 }
 
 export async function createAssessment(token, assessmentData) {
-  const response = await fetch(`${BASE_URL}/api/assessment`, {
+  const response = await fetch(`${BASE_URL}/api/assessment/add`, {
     method: "POST",
     headers: getAuthHeaders(token),
     body: JSON.stringify(assessmentData),
