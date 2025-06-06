@@ -18,7 +18,7 @@ const teamMembers = [
     description: "Loves crafting intuitive UI experiences and bringing designs to life."
   },
   {
-    name: "Citra Dewi",
+    name: "Muhammad Rizki Al-Fathir",
     university: "Universitas Islam Negeri Sunan Gunung Djati, Bandung",
     cohortId: "MC222D5Y0633 ",
     program: "Coding Camp powered by DBS Foundation 2025",
