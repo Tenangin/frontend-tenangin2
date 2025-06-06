@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { getProfile } from "../data/api/api.jsx";
 import { getToken, getUserId } from "../utils/auth.js";
+import '../styles/ProfileTabs.css';
 
-const ProfileTabs = () => {
+const ProfileTabs = ({ setShowModal }) => {
   const [activeTab, setActiveTab] = useState("about");
   const [profile, setProfile] = useState(null);
   const token = getToken();
@@ -50,21 +51,30 @@ const ProfileTabs = () => {
       {activeTab === "about" && (
         <>
           {/* Address */}
-          <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
-            <h6 className="fw-bold text-primary mb-3">Address</h6>
+          <div className="profile-info-card">
+            <h6>Address</h6>
             <div className="d-flex flex-wrap gap-3">
-              <p className="text-muted mb-0">
+              <p>
                 {profile.address}
               </p>
             </div>
           </div>
           
           {/* About Card */}
-          <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
-            <h6 className="fw-bold text-primary mb-2">About</h6>
-            <p className="text-muted mb-0">
+          <div className="profile-info-card">
+            <h6>About</h6>
+            <p>
               {profile.about_me}
             </p>
+          </div>
+          <div className="edit-profile-button-container">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => setShowModal(true)}
+            >
+              Edit Profile
+            </button>
           </div>
         </>
       )}

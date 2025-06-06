@@ -82,16 +82,7 @@ function Profile() {
           {/* Top Section */}
           <ProfileCard profileData={profileData} />
           {/* Tabs */}
-          <ProfileTabs profileData={profileData} />
-          <div className="edit-profile-button-container">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => setShowModal(true)}
-            >
-              Edit Profile
-            </button>
-          </div>
+          <ProfileTabs profileData={profileData} setShowModal={setShowModal} />
         </div>
         {/* Modal PopUp */}
         <ModalPopup
