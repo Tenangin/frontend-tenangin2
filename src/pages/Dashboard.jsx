@@ -4,10 +4,15 @@ import Sidebar from "../components/Sidebar";
 import Account from "../components/Account";
 import Notifications from "../components/Notifications";
 import Greeting from "../components/Greeting";
+import ProfileFormPopup from "../components/ProfileFormPopup";
+import { getToken, getUserId } from "../utils/auth";
+import { getProfile } from "../data/api/api";
 
 function Dashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [showProfileForm, setShowProfileForm] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -31,6 +36,41 @@ function Dashboard() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  const userId = getUserId();
+  const token = getToken();
+  useEffect(() => {
+    async function checkProfile() {
+      try {
+        const data = await getProfile(token, userId);
+        if (data && data.profile) {
+          const p = data.profile;
+          if (
+            !p.full_name ||
+            !p.age ||
+            !p.gender ||
+            !p.address ||
+            !p.place_of_birth ||
+            !p.date_of_birth ||
+            !p.about_me
+          ) {
+            setShowProfileForm(true);
+          }
+        } else {
+          setShowProfileForm(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+        setShowProfileForm(true);
+      }
+    }
+    checkProfile();
+  }, []);
+
+  const handleProfileUpdate = () => {
+    setShowProfileForm(false);
+    setSuccessMessage("Profile sudah di tambahkan");
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
 
   return (
     <div className="dashboard-container d-flex">
@@ -91,6 +131,12 @@ function Dashboard() {
             )}
           </div>
         </div>
+
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
 
         {/* Highlight Card */}
         <div
@@ -163,6 +209,13 @@ function Dashboard() {
             ))}
           </div>
         </div>
+        {showProfileForm && (
+          <ProfileFormPopup
+            showModal={showProfileForm}
+            handleCancel={() => setShowProfileForm(false)}
+            onUpdate={handleProfileUpdate}
+          />
+        )}
       </main>
     </div>
   );
