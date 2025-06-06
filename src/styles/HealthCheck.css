@@ -77,7 +77,6 @@
   cursor: pointer;
   transition: var(--transition-common);
   box-shadow: var(--shadow-md);
-  text-transform: uppercase; /* Gaya tombol modern */
   letter-spacing: 0.5px;
 }
 .start-test-button:hover, form button[type="submit"].btn-primary:hover {
@@ -95,7 +94,8 @@ form button[type="submit"].btn-primary:disabled {
   cursor: not-allowed;
   transform: translateY(0);
 }
-.button-group .submit-button-container {
+
+.submit-button-container {
   display: flex;
   flex-direction: column;
   align-items: center;

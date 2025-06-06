@@ -66,9 +66,19 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
               Journaling
             </NavLink>
           </li>
-          <li className="nav-item mb-3 d-flex align-items-center" title="Reminders">
-            <i className="bi bi-clock me-2" />
-            Reminders
+          <li className="nav-item mb-3 d-flex align-items-center" title="Find Clinic">
+            <NavLink
+                to="/Rekomendasi"
+                className={({ isActive }) =>
+                  'nav-link d-flex align-items-center' +
+                  (isActive ? ' active fw-bold text-primary' : '')
+                }
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                title="Find Clinic"
+              >
+              <i className="bi bi-search me-2" />
+              Find Clinic
+            </NavLink>
           </li>
           <li className="nav-item mb-3 d-flex align-items-center" title="Health Check">
              <NavLink
@@ -78,7 +88,7 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
                   (isActive ? ' active fw-bold text-primary' : '')
                 }
                 style={{ textDecoration: 'none', color: 'inherit' }}
-                title="Profile"
+                title="Health Check"
               >
                 <i className="bi bi-heart-pulse me-2" />
               Health Check

@@ -8,7 +8,7 @@ import Profile from '../pages/Profile';
 import Chatbot from '../pages/Chatbot';
 import Journaling from '../pages/Journaling';
 import HealthCheck from '../pages/healthCheck';
-import RealthCheck from '../pages/resultCheck';
+import Rekomendasi from '../pages/Rekomendasi';
 import PrivateRoute from '../components/PrivateRoute';
 import AboutUsPage from '../pages/AboutUsPage';
 import FeaturesPage from '../pages/FeaturesPage';
@@ -83,9 +83,9 @@ function AnimatedRoutes() {
               <HealthCheck />
             </PrivateRoute>
           } />
-          <Route path="/resultCheck" element={
+          <Route path="/Rekomendasi" element={
             <PrivateRoute>
-              <resultCheck />
+              <Rekomendasi />
             </PrivateRoute>
           } />
         </Routes>
