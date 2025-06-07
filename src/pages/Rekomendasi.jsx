@@ -87,6 +87,25 @@ const Recomendasi = () => {
     }
   }, []);
 
+  // Tambahkan ini di dalam komponen Recomendasi (setelah useEffect lainnya)
+useEffect(() => {
+  const handleResize = () => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.invalidateSize();
+    }
+  };
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+useEffect(() => {
+  if (mapInstanceRef.current) {
+    setTimeout(() => {
+      mapInstanceRef.current.invalidateSize();
+    }, 500); // delay lebih lama dari sebelumnya
+  }
+}, [recommendations]);
+
+
   useEffect(() => {
     if (!userLocation) return; 
 
@@ -203,7 +222,7 @@ const Recomendasi = () => {
         
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h4 className="fw-bold text-primary">Rekomendasi Psikolog</h4>
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-3" id='header-icons'>
             <Notifications />
             <Account />
           </div>
