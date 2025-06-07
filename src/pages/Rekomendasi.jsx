@@ -162,6 +162,24 @@ const Recomendasi = () => {
     }
   };
 
+  const [savedRecommendations, setSavedRecommendations] = useState(() => {
+    const stored = localStorage.getItem('savedRecommendations');
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  const handleSaveRecommendations = (psikolog) => {
+    const alreadySaved = savedRecommendations.some(item => item.place_id === psikolog.place_id);
+    if (!alreadySaved) {
+      const updated = [...savedRecommendations, psikolog];
+      setSavedRecommendations(updated);
+      localStorage.setItem('savedRecommendations', JSON.stringify(updated));
+      alert(`${psikolog.name} telah disimpan!`);
+    } else {
+      alert(`${psikolog.name} sudah ada di daftar simpan.`);
+    }
+  };
+
+
   return (
     <div className="d-flex" style={{ minHeight: '100vh' }}>
       {isSidebarVisible && (
@@ -215,6 +233,11 @@ const Recomendasi = () => {
                       <p>{psikolog.addres_full || "Alamat tidak tersedia"}{psikolog.provinsi ? `, ${psikolog.provinsi}` : ''}</p>
                       <p dangerouslySetInnerHTML={{ __html: `Rating: ${getRatingStars(psikolog.rating)} (${psikolog.review_count || 0} ulasan)` }} />
                       {psikolog.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(psikolog.jarak_km).toFixed(2)} km</p>}
+                      <div className="text-center mt-3">
+                        <button className="btn btn-primary" onClick={handleSaveRecommendations}>
+                          Simpan
+                        </button>
+                      </div>
                     </li>
                   ))}
                 </ul>
