@@ -126,3 +126,16 @@ body {
     height: 500px;
   }
 }
+
+/* Added for small screen responsiveness */
+@media (max-width: 425px) {
+  .map-container {
+    height: 300px !important;
+  }
+  .recommendation-list li h3 {
+    font-size: 1rem;
+  }
+  .recommendation-list li p {
+    font-size: 0.85rem;
+  }
+}

@@ -54,6 +54,17 @@ const Recomendasi = () => {
 
       mapInstanceRef.current = map;
       markersLayerRef.current = L.layerGroup().addTo(map);
+
+      // Add window resize listener to invalidate map size
+      const handleResize = () => {
+        map.invalidateSize();
+      };
+      window.addEventListener('resize', handleResize);
+
+      // Cleanup listener on unmount
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
     }
   }, []);
 
@@ -147,6 +158,15 @@ const Recomendasi = () => {
     }
 
   }, [recommendations, userLocation]);
+
+  // Invalidate map size after userLocation changes to fix rendering issues on small screens
+  useEffect(() => {
+    if (mapInstanceRef.current) {
+      setTimeout(() => {
+        mapInstanceRef.current.invalidateSize();
+      }, 300);
+    }
+  }, [userLocation]);
 
   const handleListItemClick = (lat, lon) => {
     const map = mapInstanceRef.current;
