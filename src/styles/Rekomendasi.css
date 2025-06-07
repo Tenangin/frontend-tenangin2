@@ -137,15 +137,56 @@ body {
     height: 500px;
   }
 
+  #map {
+    width: 100% !important;
+  }
+  #header-icons {
+    justify-content: flex-end !important;
+  }
+  #header-container {
+    flex-direction: column-reverse !important;
+    align-items: flex-end !important;
+  }
+  #header-container h4 {
+    width: 100%;
+    text-align: center !important;
+    margin-top: 0.5rem;
+  }
+  .recommendation-page-container {
+    min-height: 350px !important;
+  }
+  .content-wrapper {
+    min-height: 350px !important;
+  }
 }
 
 /* Added for small screen responsiveness */
 @media (max-width: 425px) {
   .map-container {
     height: 300px !important;
+    width: 100% !important;
+    min-height: 300px !important;
   }
   #map {
-    height: 100% !important; /* Penting agar Leaflet tahu ukuran berubah */
+    width: 100% !important;
+  }
+  #header-icons {
+    justify-content: flex-end !important;
+  }
+  #header-container {
+    flex-direction: column-reverse !important;
+    align-items: flex-end !important;
+  }
+  #header-container h4 {
+    width: 100%;
+    text-align: center !important;
+    margin-top: 0.5rem;
+  }
+  .recommendation-page-container {
+    min-height: 350px !important;
+  }
+  .content-wrapper {
+    min-height: 350px !important;
   }
   .recommendation-list li h3 {
     font-size: 1rem;
