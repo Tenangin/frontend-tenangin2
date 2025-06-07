@@ -135,7 +135,7 @@ const ProfileTabs = ({ setShowModal }) => {
             ))}
           </div>
           )}
-          <div className="mt-4">
+          <div className="mt-4 d-flex justify-content-end">
             <button
               type="button"
               className="btn btn-primary"

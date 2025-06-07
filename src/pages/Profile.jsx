@@ -71,7 +71,7 @@ function Profile() {
             </button>
           </div>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h4 className="fw-bold text-primary">Tenangin</h4>
+            <h4 className="fw-bold text-primary">Profile</h4>
             <div className="d-flex align-items-center gap-3">
               <Notifications />
               <Account />
