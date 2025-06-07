@@ -207,7 +207,7 @@ const HealthCheck = () => {
 
     return (
       <div className="healthcheck-container result-container text-center">
-        <h2>Hasil Tes Anda</h2>
+        <h3>Hasil Tes Anda</h3>
         {resultData ? (
           <>
             <img
@@ -271,15 +271,16 @@ const HealthCheck = () => {
           <button className="btn btn-outline-primary mb-2 align-self-start mobile" onClick={toggleSidebar}>
             <i className="bi bi-list"></i>
           </button>
+
+          <div className="d-flex align-items-center gap-3">
+            <Notifications />
+            <Account />
+          </div>
         </div>
 
-        <div className="d-flex flex-column mb-4 position-relative">
+        <div className="d-flex flex-column m-4 position-relative align-items-center border-bottom pb-3">
           <div className="d-flex justify-content-between align-items-center">
-            <h4 className="fw-bold text-primary">Health Check Kuesioner</h4>
-            <div className="d-flex align-items-center gap-3">
-              <Notifications />
-              <Account />
-            </div>
+            <h2 className="fw-bold text-primary">Health Check Kuesioner</h2>
           </div>
         </div>
 
