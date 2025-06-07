@@ -218,14 +218,14 @@ useEffect(() => {
           <button className="btn btn-outline-primary mb-2 align-self-start mobile" onClick={toggleSidebar}>
             <i className="bi bi-list"></i>
           </button>
-        </div>
-
-        <div className="d-flex justify-content-between align-items-center mb-4" id='header-container'>
-          <h4 className="fw-bold text-primary">Rekomendasi Psikolog</h4>
-          <div className="d-flex align-items-flex-end gap-3" id='header-icons'>
+          <div className="d-flex align-items-self-end gap-3" id='header-icons'>
             <Notifications />
             <Account />
           </div>
+        </div>
+
+        <div className="d-flex justify-content-between align-items-center mb-4" id='header-container'>
+          <h2 className="fw-bold text-primary">Rekomendasi Psikolog</h2>
         </div>
 
         <div className="recommendation-page-container">
