@@ -69,13 +69,13 @@ function Profile() {
             >
               <i className="bi bi-list"></i>
             </button>
-          </div>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h4 className="fw-bold text-primary">Profile</h4>
             <div className="d-flex align-items-center gap-3">
               <Notifications />
               <Account />
             </div>
+          </div>
+          <div className="d-flex justify-content-between align-items-center m-4 border-bottom">
+            <h2 className="fw-bold text-primary">Profile</h2>
           </div>
         </div>
         <div className="profile-wrapper">

@@ -143,31 +143,44 @@
     margin-left: auto !important;
     margin-right: auto !important;
   }
+  .profile-container > .d-flex.justify-content-between.align-items-center h2 {
+    text-align: center !important;
+    width: 100%;
+  }
 }
 
 @media (max-width: 700px) {
   .profile-container > .d-flex.justify-content-between.align-items-center {
     flex-direction: column-reverse !important;
     align-items: center !important;
+    justify-content: center !important;
   }
-  .profile-container > .d-flex.justify-content-between.align-items-center h4 {
+  .profile-container > .d-flex.justify-content-between.align-items-center h2 {
     width: 100%;
     text-align: center !important;
     margin-top: 6px !important;
-    font-size: 1.75rem !important;
+    font-size: 2rem !important;
   }
   .profile-container > .d-flex.justify-content-between.align-items-center > div.d-flex.align-items-center.gap-3 {
     justify-content: flex-end !important;
     width: 100%;
     margin: 5px;
   }
+}
+
+@media (min-width: 993px) {
+  .profile-container > .d-flex.justify-content-between.align-items-center h2 {
+    text-align: center !important;
+    width: 100%;
+  }
+}
 
 @media (max-width: 450px) {
   .profile-container > .d-flex.justify-content-between.align-items-center {
     flex-direction: column-reverse !important;
     align-items: flex-end !important;
   }
-  .profile-container > .d-flex.justify-content-between.align-items-center h4 {
+  .profile-container > .d-flex.justify-content-between.align-items-center h2 {
     width: 100%;
     text-align: center !important;
     margin-top: 0.5rem;
@@ -176,5 +189,4 @@
     justify-content: flex-end !important;
     width: 100%;
   }
-}
 }
