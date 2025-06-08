@@ -1,7 +1,7 @@
 .profile-info-card {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background-color: #f8f9fa; /* light gray background */
+  background-color: #d0e4ff; /* soft blue background */
   border: 1px solid #dee2e6; /* light border */
   border-radius: 0.75rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -21,4 +21,28 @@
 .profile-info-card p {
   color: #495057; /* bootstrap text-secondary */
   margin-bottom: 0;
+}
+
+/* Added styles for recommendation list cards */
+.recommendation-list-area {
+  padding: 1rem;
+}
+
+.recommendation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recommendation-list li {
+  background-color: #d0e4ff; /* soft blue background */
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.recommendation-list li:hover {
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
 }

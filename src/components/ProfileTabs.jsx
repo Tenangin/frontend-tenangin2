@@ -1,16 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { getProfile, getAssessments } from "../data/api/api.jsx";
+import { getProfile, getAssessments, getRecommendations } from "../data/api/api.jsx";
 import { getToken, getUserId } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
 import '../styles/ProfileTabs.css';
+
+// Helper function to convert rating number to star icons
+const getRatingStars = (rating) => {
+  if (typeof rating !== 'number' || rating <= 0) {
+    return '☆☆☆☆☆';
+  }
+  const fullStars = Math.floor(rating);
+  const halfStar = rating - fullStars >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+  return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+};
 
 const ProfileTabs = ({ setShowModal }) => {
   const [activeTab, setActiveTab] = useState("about");
   const [profile, setProfile] = useState(null);
   const [assessments, setAssessments] = useState([]);
+  const [savedClinics, setSavedClinics] = useState([]);
+  const [loadingClinics, setLoadingClinics] = useState(false);
+  const [errorClinics, setErrorClinics] = useState(null);
   const token = getToken();
   const id = getUserId();
   const navigate = useNavigate();
+
+  const handleOpenGoogleMaps = (lat, lon, event) => {
+    event.stopPropagation();
+    const url = `https://www.google.com/maps?q=${lat},${lon}`;
+    window.open(url, '_blank');
+  };
 
   useEffect(() => {
     async function fetchProfile() {
@@ -44,6 +64,31 @@ const ProfileTabs = ({ setShowModal }) => {
     fetchAssessments();
   }, [token]);
 
+  useEffect(() => {
+    async function fetchSavedClinics() {
+      if (activeTab === "clinicSaved" && token) {
+        setLoadingClinics(true);
+        setErrorClinics(null);
+        try {
+          const response = await getRecommendations(token);
+          console.log("Saved Clinics Response:", response);
+          if (response && Array.isArray(response)) {
+            setSavedClinics(response);
+          } else {
+            setSavedClinics([]);
+          }
+          // console.log("savedClinics:",savedClinics);
+        } catch (error) {
+          console.error("Failed to fetch saved clinics:", error);
+          setErrorClinics("Gagal memuat data klinik tersimpan.");
+        } finally {
+          setLoadingClinics(false);
+        }
+      }
+    }
+    fetchSavedClinics();
+  }, [activeTab, token]);
+
   if (!profile) {
     return <div>Loading profile...</div>;
   }
@@ -63,6 +108,12 @@ const ProfileTabs = ({ setShowModal }) => {
           onClick={() => setActiveTab("record")}
         >
           <i className="bi bi-journal-check"></i> Record Test
+        </button>
+        <button
+          className={`tab ${activeTab === "clinicSaved" ? "active" : ""}`}
+          onClick={() => setActiveTab("clinicSaved")}
+        >
+          <i className="bi bi-heart"></i> Clinic Saved
         </button>
       </div>
 
@@ -112,7 +163,7 @@ const ProfileTabs = ({ setShowModal }) => {
                 key={index}
                 className="p-4 rounded-4 shadow-sm border-0 assessment-card"
                 style={{
-                  backgroundColor: "#e7f1ff", // biru soft (mirip Bootstrap primary light)
+                  backgroundColor: "#d0e4ff", // soft blue color improved
                   borderLeft: "6px solid #0d6efd",
                   transition: "transform 0.2s ease",
                 }}
@@ -144,6 +195,45 @@ const ProfileTabs = ({ setShowModal }) => {
               Test Again
             </button>
           </div>
+        </>
+      )}
+
+      {/* Clinic Saved Tab */}
+      {activeTab === "clinicSaved" && (
+        <>
+          {loadingClinics ? (
+            <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
+              <p>Loading saved clinics...</p>
+            </div>
+          ) : errorClinics ? (
+            <div className="card mt-4 p-4 shadow-sm rounded-4 border-0 text-danger">
+              <p>{errorClinics}</p>
+            </div>
+          ) : savedClinics.length === 0 ? (
+            <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
+              <p>Tidak ada klinik tersimpan.</p>
+            </div>
+          ) : (
+            <div className={`recommendation-list-area`}>
+              <ul className="recommendation-list">
+                {savedClinics.map((clinic, index) => (
+                  <li key={clinic.place_id || index}>
+                    <h3>{clinic.clinics.name || "Nama tidak tersedia"}</h3>
+                    <p>{clinic.clinics.category || "Kategori tidak diketahui"}</p>
+                    <p>{clinic.clinics.addres_full || "Alamat tidak tersedia"}{clinic.clinics.provinsi ? `, ${clinic.clinics.provinsi}` : ''}</p>
+                    <p dangerouslySetInnerHTML={{ __html: `Rating: ${getRatingStars(clinic.clinics.rating)} (${clinic.clinics.review_count || 0} ulasan)` }} />
+                    {clinic.clinics.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(clinic.clinics.jarak_km).toFixed(2)} km</p>}
+                    <div className="text-end mt-3 justify-content-right">
+                      <button className="btn btn-primary" onClick={(event) => handleOpenGoogleMaps(clinic.clinics.latitude, clinic.clinics.longitude, event)}>
+                        <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1.2rem' }}></span>
+                        Open in Google Maps
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </>
       )}
     </>

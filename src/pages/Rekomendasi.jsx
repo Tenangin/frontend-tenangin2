@@ -241,6 +241,12 @@ useEffect(() => {
     }
   };
 
+  const handleOpenGoogleMaps = (lat, lon, event) => {
+    event.stopPropagation();
+    const url = `https://www.google.com/maps?q=${lat},${lon}`;
+    window.open(url, '_blank');
+  };
+
 
   return (
     <div className="d-flex" style={{ minHeight: '100vh' }}>
@@ -295,11 +301,15 @@ useEffect(() => {
                       <p>{psikolog.addres_full || "Alamat tidak tersedia"}{psikolog.provinsi ? `, ${psikolog.provinsi}` : ''}</p>
                       <p dangerouslySetInnerHTML={{ __html: `Rating: ${getRatingStars(psikolog.rating)} (${psikolog.review_count || 0} ulasan)` }} />
                       {psikolog.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(psikolog.jarak_km).toFixed(2)} km</p>}
-                      <div className="text-center mt-3">
-                        <button className="btn btn-primary" onClick={() => handleSaveRecommendations(psikolog)}>
-                          Simpan
-                        </button>
-                      </div>
+              <div className="text-end mt-3">
+                <button className="btn btn-primary" onClick={(event) => handleSaveRecommendations(psikolog, event)}>
+                  Simpan
+                </button>
+                <button className="btn btn-secondary ms-2" onClick={(event) => handleOpenGoogleMaps(psikolog.latitude, psikolog.longitude, event)}>
+                  <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1.2rem' }}></span>
+                  Buka di Google Maps
+                </button>
+              </div>
                     </li>
                   ))}
                 </ul>
