@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { getProfile, getAssessments, getRecommendations } from "../data/api/api.jsx";
 import { getToken, getUserId } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
+import { deleteRecommendation } from "../data/api/api.jsx";
 import '../styles/ProfileTabs.css';
+
 
 // Helper function to convert rating number to star icons
 const getRatingStars = (rating) => {
@@ -25,6 +27,39 @@ const ProfileTabs = ({ setShowModal }) => {
   const token = getToken();
   const id = getUserId();
   const navigate = useNavigate();
+
+  const fetchSavedClinics = async () => {
+    setLoadingClinics(true);
+    setErrorClinics(null);
+    try {
+      const response = await getRecommendations(token);
+      console.log("Saved Clinics Response:", response);
+      if (response && Array.isArray(response)) {
+        console.log("Saved Clinics Length:", response.length);
+        setSavedClinics(response);
+      } else {
+        console.log("Saved Clinics is not an array or empty");
+        setSavedClinics([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch saved clinics:", error);
+      setErrorClinics("Gagal memuat data klinik tersimpan.");
+    } finally {
+      setLoadingClinics(false);
+    }
+  };
+
+  const handleDeleteRecommendation = async (recommendationId, event) => {
+    event.stopPropagation();
+    try {
+      await deleteRecommendation(token, recommendationId);
+      alert("Klinik berhasil dihapus.");
+      await fetchSavedClinics();
+    } catch (error) {
+      console.error("Failed to delete recommendation:", error);
+      alert("Gagal menghapus klinik. Silakan coba lagi.");
+    }
+  };
 
   const handleOpenGoogleMaps = (lat, lon, event) => {
     event.stopPropagation();
@@ -65,28 +100,9 @@ const ProfileTabs = ({ setShowModal }) => {
   }, [token]);
 
   useEffect(() => {
-    async function fetchSavedClinics() {
-      if (activeTab === "clinicSaved" && token) {
-        setLoadingClinics(true);
-        setErrorClinics(null);
-        try {
-          const response = await getRecommendations(token);
-          console.log("Saved Clinics Response:", response);
-          if (response && Array.isArray(response)) {
-            setSavedClinics(response);
-          } else {
-            setSavedClinics([]);
-          }
-          // console.log("savedClinics:",savedClinics);
-        } catch (error) {
-          console.error("Failed to fetch saved clinics:", error);
-          setErrorClinics("Gagal memuat data klinik tersimpan.");
-        } finally {
-          setLoadingClinics(false);
-        }
-      }
+    if (activeTab === "clinicSaved" && token) {
+      fetchSavedClinics();
     }
-    fetchSavedClinics();
   }, [activeTab, token]);
 
   if (!profile) {
@@ -202,8 +218,9 @@ const ProfileTabs = ({ setShowModal }) => {
       {activeTab === "clinicSaved" && (
         <>
           {loadingClinics ? (
-            <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
-              <p>Loading saved clinics...</p>
+            <div className="card mt-4 p-4 shadow-sm rounded-4 border-0 d-flex justify-content-center align-items-center" style={{ height: '100px' }}>
+              <div className="spinner-border text-primary" role="status" aria-hidden="true"></div>
+              <span className="visually-hidden">Loading...</span>
             </div>
           ) : errorClinics ? (
             <div className="card mt-4 p-4 shadow-sm rounded-4 border-0 text-danger">
@@ -227,6 +244,9 @@ const ProfileTabs = ({ setShowModal }) => {
                       <button className="btn btn-primary" onClick={(event) => handleOpenGoogleMaps(clinic.clinics.latitude, clinic.clinics.longitude, event)}>
                         <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1.2rem' }}></span>
                         Open in Google Maps
+                      </button>
+                      <button className="btn btn-danger ms-2" onClick={(event) => handleDeleteRecommendation(clinic.id, event)}>
+                        Hapus
                       </button>
                     </div>
                   </li>

@@ -208,3 +208,11 @@ export async function createRecommendation(token, recommendationData) {
   });
   return response.json();
 }
+
+export async function deleteRecommendation(token, recommendationId) {
+  const response = await fetch(`${BASE_URL}/api/recommendations/${recommendationId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(token),
+  });
+  return response.json();
+}
