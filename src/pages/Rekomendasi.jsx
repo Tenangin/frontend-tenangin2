@@ -6,6 +6,8 @@ import Sidebar from '../components/Sidebar';
 import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
+import { createRecommendation } from '../data/api/api';
+import { getToken } from '../utils/auth';
 
 // --- Helper Function (Tidak Berubah) ---
 const getRatingStars = (rating) => {
@@ -118,6 +120,7 @@ useEffect(() => {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
         const data = await response.json();
+        console.log('Fetched recommendations:', data);
         setRecommendations(data || []);
         setStatusMessage(data && data.length > 0 ? `Berikut adalah rekomendasi psikolog terdekat dari lokasi Anda.` : 'Tidak ada rekomendasi ditemukan di sekitar Anda.');
       } catch (err) {
@@ -206,13 +209,33 @@ useEffect(() => {
     return stored ? JSON.parse(stored) : [];
   });
 
-  const handleSaveRecommendations = (psikolog) => {
+  const handleSaveRecommendations = async (psikolog) => {
     const alreadySaved = savedRecommendations.some(item => item.place_id === psikolog.place_id);
-    if (!alreadySaved) {
-      const updated = [...savedRecommendations, psikolog];
-      setSavedRecommendations(updated);
-      localStorage.setItem('savedRecommendations', JSON.stringify(updated));
-      alert(`${psikolog.name} telah disimpan!`);
+    console.log(savedRecommendations, 'savedRecommendations');
+    console.log('Already saved:', alreadySaved, 'for', psikolog.name, 'id', psikolog.id);
+    if (alreadySaved) {
+      try {
+        const token = getToken();
+        const data = {
+          clinics_id: psikolog.id,
+          notes: "",
+        };
+        console.log("data:", data);
+        const response = await createRecommendation(token, data);
+        console.log('API createRecommendation response:', response);
+
+        const updated = [...savedRecommendations, psikolog];
+        setSavedRecommendations(updated);
+        localStorage.setItem('savedRecommendations', JSON.stringify(updated));
+        alert(`${psikolog.name} telah disimpan!, Cek Di Profile mu untuk mendapatkan Rute`);
+      } catch (error) {
+        console.error('Failed to save recommendation:', error);
+        if (error && error.error && error.error.includes('duplicate key value')) {
+          alert(`Rekomendasi ${psikolog.name} sudah ada di server.`);
+        } else {
+          alert(`Gagal menyimpan ${psikolog.name}. Silakan coba lagi.`);
+        }
+      }
     } else {
       alert(`${psikolog.name} sudah ada di daftar simpan.`);
     }
@@ -273,7 +296,7 @@ useEffect(() => {
                       <p dangerouslySetInnerHTML={{ __html: `Rating: ${getRatingStars(psikolog.rating)} (${psikolog.review_count || 0} ulasan)` }} />
                       {psikolog.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(psikolog.jarak_km).toFixed(2)} km</p>}
                       <div className="text-center mt-3">
-                        <button className="btn btn-primary" onClick={handleSaveRecommendations}>
+                        <button className="btn btn-primary" onClick={() => handleSaveRecommendations(psikolog)}>
                           Simpan
                         </button>
                       </div>

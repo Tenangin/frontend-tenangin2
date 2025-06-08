@@ -191,3 +191,20 @@ export async function createReminder(token, reminderData) {
   });
   return response.json();
 }
+
+// Recomendations
+export async function getRecommendations(token) {
+  const response = await fetch(`${BASE_URL}/api/recommendations`, {
+    headers: getAuthHeaders(token),
+  });
+  return response.json();
+}
+
+export async function createRecommendation(token, recommendationData) {
+  const response = await fetch(`${BASE_URL}/api/recommendations/add`, {
+    method: "POST",
+    headers: getAuthHeaders(token),
+    body: JSON.stringify(recommendationData),
+  });
+  return response.json();
+}
