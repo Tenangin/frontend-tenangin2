@@ -248,6 +248,40 @@ const ProfileTabs = ({ setShowModal }) => {
             <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
               <p>No assessment records found.</p>
             </div>
+          ) : filteredAssessments.length > 4 ? (
+            <div className="assessment-cards-container mt-4 d-flex flex-column gap-4" style={{ maxHeight: '600px', overflowY: 'auto' }}>
+              {filteredAssessments.map((assessment, index) => (
+                <div
+                  key={index}
+                  className="p-4 rounded-4 shadow-sm border-0 assessment-card"
+                  style={{
+                    backgroundColor: "#d0e4ff", // soft blue color improved
+                    borderLeft: "6px solid #0d6efd",
+                    transition: "transform 0.2s ease",
+                  }}
+                >
+                  <div className="mb-3">
+                    <h6 className="fw-semibold text-primary mb-1">Condition</h6>
+                    <p className="mb-0 text-dark">{assessment.condition}</p>
+                  </div>
+
+                  <div className="mb-3">
+                    <h6 className="fw-semibold text-primary mb-1">Score</h6>
+                    <p className="mb-0 text-dark">{assessment.score}</p>
+                  </div>
+
+                  <div>
+                    <h6 className="fw-semibold text-primary mb-1">Result Text</h6>
+                    <p className="mb-0 text-dark">{assessment.result_text}</p>
+                  </div>
+                  <div className="text-end mt-3 justify-content-right">
+                    <button className="btn btn-danger" onClick={(event) => handleDeleteAssessment(assessment.id, event)}>
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="assessment-cards-container mt-4 d-flex flex-column gap-4">
               {filteredAssessments.map((assessment, index) => (
@@ -310,6 +344,29 @@ const ProfileTabs = ({ setShowModal }) => {
           ) : savedClinics.length === 0 ? (
             <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
               <p>Tidak ada klinik tersimpan.</p>
+            </div>
+          ) : savedClinics.length > 4 ? (
+            <div className={`recommendation-list-area`} style={{ maxHeight: '600px', overflowY: 'auto' }}>
+              <ul className="recommendation-list">
+                {savedClinics.map((clinic, index) => (
+                  <li key={clinic.place_id || index}>
+                    <h3>{clinic.clinics.name || "Nama tidak tersedia"}</h3>
+                    <p>{clinic.clinics.category || "Kategori tidak diketahui"}</p>
+                    <p>{clinic.clinics.addres_full || "Alamat tidak tersedia"}{clinic.clinics.provinsi ? `, ${clinic.clinics.provinsi}` : ''}</p>
+                    <p dangerouslySetInnerHTML={{ __html: `Rating: ${getRatingStars(clinic.clinics.rating)} (${clinic.clinics.review_count || 0} ulasan)` }} />
+                    {clinic.clinics.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(clinic.clinics.jarak_km).toFixed(2)} km</p>}
+                    <div className="text-end mt-3 justify-content-right">
+                      <button className="btn btn-primary" onClick={(event) => handleOpenGoogleMaps(clinic.clinics.latitude, clinic.clinics.longitude, event)}>
+                        <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1.2rem' }}></span>
+                        Open in Google Maps
+                      </button>
+                      <button className="btn btn-danger ms-2" onClick={(event) => handleDeleteRecommendation(clinic.id, event)}>
+                        Hapus
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           ) : (
             <div className={`recommendation-list-area`}>
