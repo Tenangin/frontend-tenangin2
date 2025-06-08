@@ -31,9 +31,18 @@
 
 
 /* Responsive adjustments */
+@media (max-width: 992px) {
+  .dashboard-main > .d-flex.justify-content-between.align-items-center.flex-column.flex-md-row {
+    justify-content: center !important;
+  }
+}
+
 @media (max-width: 767px) {
   .sidebar {
     display: none;
+  }
+  .dashboard-main > .d-flex.justify-content-between.align-items-center.flex-column.flex-md-row {
+    justify-content: center !important;
   }
 }
 
