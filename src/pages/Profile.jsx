@@ -60,7 +60,7 @@ function Profile() {
         />
       )}
 
-      <div style={{ flex: 1, padding: "1rem 2rem" }}>
+      <div style={{ flex: 1, padding: "1rem 2rem", marginLeft: isSidebarVisible && !isMobile ? '250px' : 0, transition: 'margin-left 0.3s ease' }}>
         {/* Header */}
         <div className="profile-container p-4 position-relative">
           <div className="toggle-button-container">
