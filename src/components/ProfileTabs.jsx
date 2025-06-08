@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { getProfile, getAssessments, getRecommendations } from "../data/api/api.jsx";
 import { getToken, getUserId } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
-import { deleteRecommendation } from "../data/api/api.jsx";
 import '../styles/ProfileTabs.css';
+import { 
+  getProfile, 
+  getAssessments, 
+  getRecommendations, 
+  deleteAssessment, 
+  deleteRecommendation 
+} from "../data/api/api.jsx";
 
 
 // Helper function to convert rating number to star icons
@@ -61,10 +66,33 @@ const ProfileTabs = ({ setShowModal }) => {
     }
   };
 
+  const handleDeleteAssessment = async (assessmentId, event) => {
+    event.stopPropagation();
+    try {
+      await deleteAssessment(token, assessmentId);
+      alert("Assessment berhasil dihapus.");
+      await fetchAssessments();
+    } catch (error) {
+      console.error("Failed to delete assessment:", error);
+      alert("Gagal menghapus assessment. Silakan coba lagi.");
+    }
+  };
+
   const handleOpenGoogleMaps = (lat, lon, event) => {
     event.stopPropagation();
     const url = `https://www.google.com/maps?q=${lat},${lon}`;
     window.open(url, '_blank');
+  };
+
+  const fetchAssessments = async () => {
+    try {
+      const response = await getAssessments(token);
+      if (response && Array.isArray(response)) {
+        setAssessments(response);
+      }
+    } catch (error) {
+      console.error("Failed to fetch assessments:", error);
+    }
   };
 
   useEffect(() => {
@@ -84,18 +112,6 @@ const ProfileTabs = ({ setShowModal }) => {
   }, [token, id]);
 
   useEffect(() => {
-    async function fetchAssessments() {
-      if (token) {
-        try {
-          const response = await getAssessments(token);
-          if (response && Array.isArray(response)) {
-            setAssessments(response);
-          }
-        } catch (error) {
-          console.error("Failed to fetch assessments:", error);
-        }
-      }
-    }
     fetchAssessments();
   }, [token]);
 
@@ -175,30 +191,35 @@ const ProfileTabs = ({ setShowModal }) => {
           ) : (
             <div className="assessment-cards-container mt-4 d-flex flex-column gap-4">
             {assessments.map((assessment, index) => (
-              <div
-                key={index}
-                className="p-4 rounded-4 shadow-sm border-0 assessment-card"
-                style={{
-                  backgroundColor: "#d0e4ff", // soft blue color improved
-                  borderLeft: "6px solid #0d6efd",
-                  transition: "transform 0.2s ease",
-                }}
-              >
-                <div className="mb-3">
-                  <h6 className="fw-semibold text-primary mb-1">Condition</h6>
-                  <p className="mb-0 text-dark">{assessment.condition}</p>
-                </div>
+                  <div
+                    key={index}
+                    className="p-4 rounded-4 shadow-sm border-0 assessment-card"
+                    style={{
+                      backgroundColor: "#d0e4ff", // soft blue color improved
+                      borderLeft: "6px solid #0d6efd",
+                      transition: "transform 0.2s ease",
+                    }}
+                  >
+                    <div className="mb-3">
+                      <h6 className="fw-semibold text-primary mb-1">Condition</h6>
+                      <p className="mb-0 text-dark">{assessment.condition}</p>
+                    </div>
 
-                <div className="mb-3">
-                  <h6 className="fw-semibold text-primary mb-1">Score</h6>
-                  <p className="mb-0 text-dark">{assessment.score}</p>
-                </div>
+                    <div className="mb-3">
+                      <h6 className="fw-semibold text-primary mb-1">Score</h6>
+                      <p className="mb-0 text-dark">{assessment.score}</p>
+                    </div>
 
-                <div>
-                  <h6 className="fw-semibold text-primary mb-1">Result Text</h6>
-                  <p className="mb-0 text-dark">{assessment.result_text}</p>
-                </div>
-              </div>
+                    <div>
+                      <h6 className="fw-semibold text-primary mb-1">Result Text</h6>
+                      <p className="mb-0 text-dark">{assessment.result_text}</p>
+                    </div>
+                    <div className="text-end mt-3 justify-content-right">
+                      <button className="btn btn-danger" onClick={(event) => handleDeleteAssessment(assessment.id, event)}>
+                        Hapus
+                      </button>
+                    </div>
+                  </div>
             ))}
           </div>
           )}

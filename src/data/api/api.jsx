@@ -71,6 +71,14 @@ export async function createAssessment(token, assessmentData) {
   return response.json();
 }
 
+export async function deleteAssessment(token, assessmentId) {
+  const response = await fetch(`${BASE_URL}/api/assessment/${assessmentId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(token),
+  });
+  return response.json();
+}
+
 // Journal Entries
 export async function getJournalEntries(token) {
   const response = await fetch(`${BASE_URL}/api/journal`, {
