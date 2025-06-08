@@ -25,7 +25,12 @@ function ProfileCard() {
   }, [token, id]);
 
   if (!profile) {
-    return <div>Loading profile...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '150px' }}>
+        <div className="spinner-border text-primary" role="status" aria-hidden="true"></div>
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    );
   }
 
   const genderClass = profile.gender && profile.gender.toLowerCase() === "female"
