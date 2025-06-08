@@ -26,6 +26,7 @@ const ProfileTabs = ({ setShowModal }) => {
   const [activeTab, setActiveTab] = useState("about");
   const [profile, setProfile] = useState(null);
   const [assessments, setAssessments] = useState([]);
+  const [filter, setFilter] = useState("all");
   const [savedClinics, setSavedClinics] = useState([]);
   const [loadingClinics, setLoadingClinics] = useState(false);
   const [errorClinics, setErrorClinics] = useState(null);
@@ -95,6 +96,44 @@ const ProfileTabs = ({ setShowModal }) => {
     }
   };
 
+  const filterAssessments = (assessments) => {
+    const now = new Date();
+    return assessments.filter((assessment) => {
+      if (filter === "all") return true;
+      if (!assessment.created_at) return false;
+      const createdDate = new Date(assessment.created_at);
+      switch (filter) {
+        case "today": {
+          return (
+            createdDate.getDate() === now.getDate() &&
+            createdDate.getMonth() === now.getMonth() &&
+            createdDate.getFullYear() === now.getFullYear()
+          );
+        }
+        case "thisWeek": {
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() - now.getDay());
+          startOfWeek.setHours(0, 0, 0, 0);
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+          endOfWeek.setHours(23, 59, 59, 999);
+          return createdDate >= startOfWeek && createdDate <= endOfWeek;
+        }
+        case "thisMonth": {
+          return (
+            createdDate.getMonth() === now.getMonth() &&
+            createdDate.getFullYear() === now.getFullYear()
+          );
+        }
+        case "thisYear": {
+          return createdDate.getFullYear() === now.getFullYear();
+        }
+        default:
+          return true;
+      }
+    });
+  };
+
   useEffect(() => {
     async function fetchProfile() {
       if (token && id) {
@@ -129,6 +168,8 @@ const ProfileTabs = ({ setShowModal }) => {
       </div>
     );
   }
+
+  const filteredAssessments = filterAssessments(assessments);
 
   return (
     <>
@@ -189,44 +230,58 @@ const ProfileTabs = ({ setShowModal }) => {
       {/* Record Tabs */}
       {activeTab === "record" && (
         <>
-          {assessments.length === 0 ? (
+          <div className="mb-3 mt-4 d-flex justify-content-end">
+            <select
+              className="form-select w-auto"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              aria-label="Filter assessments by date"
+            >
+              <option value="all">All</option>
+              <option value="today">Today</option>
+              <option value="thisWeek">This Week</option>
+              <option value="thisMonth">This Month</option>
+              <option value="thisYear">This Year</option>
+            </select>
+          </div>
+          {filteredAssessments.length === 0 ? (
             <div className="card mt-4 p-4 shadow-sm rounded-4 border-0">
               <p>No assessment records found.</p>
             </div>
           ) : (
             <div className="assessment-cards-container mt-4 d-flex flex-column gap-4">
-            {assessments.map((assessment, index) => (
-                  <div
-                    key={index}
-                    className="p-4 rounded-4 shadow-sm border-0 assessment-card"
-                    style={{
-                      backgroundColor: "#d0e4ff", // soft blue color improved
-                      borderLeft: "6px solid #0d6efd",
-                      transition: "transform 0.2s ease",
-                    }}
-                  >
-                    <div className="mb-3">
-                      <h6 className="fw-semibold text-primary mb-1">Condition</h6>
-                      <p className="mb-0 text-dark">{assessment.condition}</p>
-                    </div>
-
-                    <div className="mb-3">
-                      <h6 className="fw-semibold text-primary mb-1">Score</h6>
-                      <p className="mb-0 text-dark">{assessment.score}</p>
-                    </div>
-
-                    <div>
-                      <h6 className="fw-semibold text-primary mb-1">Result Text</h6>
-                      <p className="mb-0 text-dark">{assessment.result_text}</p>
-                    </div>
-                    <div className="text-end mt-3 justify-content-right">
-                      <button className="btn btn-danger" onClick={(event) => handleDeleteAssessment(assessment.id, event)}>
-                        Hapus
-                      </button>
-                    </div>
+              {filteredAssessments.map((assessment, index) => (
+                <div
+                  key={index}
+                  className="p-4 rounded-4 shadow-sm border-0 assessment-card"
+                  style={{
+                    backgroundColor: "#d0e4ff", // soft blue color improved
+                    borderLeft: "6px solid #0d6efd",
+                    transition: "transform 0.2s ease",
+                  }}
+                >
+                  <div className="mb-3">
+                    <h6 className="fw-semibold text-primary mb-1">Condition</h6>
+                    <p className="mb-0 text-dark">{assessment.condition}</p>
                   </div>
-            ))}
-          </div>
+
+                  <div className="mb-3">
+                    <h6 className="fw-semibold text-primary mb-1">Score</h6>
+                    <p className="mb-0 text-dark">{assessment.score}</p>
+                  </div>
+
+                  <div>
+                    <h6 className="fw-semibold text-primary mb-1">Result Text</h6>
+                    <p className="mb-0 text-dark">{assessment.result_text}</p>
+                  </div>
+                  <div className="text-end mt-3 justify-content-right">
+                    <button className="btn btn-danger" onClick={(event) => handleDeleteAssessment(assessment.id, event)}>
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
           <div className="mt-4 d-flex justify-content-end">
             <button
