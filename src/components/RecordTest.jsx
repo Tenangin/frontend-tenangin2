@@ -17,6 +17,7 @@ const RecordTest = () => {
       }
       try {
         const data = await getAssessments(token);
+        console.log("Fetched assessments:", data);
         if (data && Array.isArray(data)) {
           setRecords(data);
           setError(null);
@@ -55,6 +56,23 @@ const RecordTest = () => {
           style={{ backgroundColor: "#EFF4FF" }}
         >
           <p>No assessment records found.</p>
+        </div>
+      ) : records.length > 4 ? (
+        <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
+          {records.map((record, idx) => (
+            <div
+              key={idx}
+              className="p-3 rounded-4 d-flex justify-content-between align-items-center mb-3"
+              style={{ backgroundColor: "#EFF4FF" }}
+            >
+              <div>
+                <h6 className="mb-1 fw-semibold">{record.condition}</h6>
+                <small className="text-muted">Score: {record.score}</small>
+                <p className="mb-0">{record.result_text}</p>
+              </div>
+              {/* <span className="badge bg-primary rounded-pill">7:00 pm</span> */}
+            </div>
+          ))}
         </div>
       ) : (
         records.map((record, idx) => (
