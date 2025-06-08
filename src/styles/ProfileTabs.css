@@ -46,3 +46,31 @@
 .recommendation-list li:hover {
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
 }
+
+/* Responsive button styles for recommendation list */
+.recommendation-list li .btn-group-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.recommendation-list li .btn-group-responsive .btn {
+  flex: 1 1 auto;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  .recommendation-list li .btn-group-responsive {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .recommendation-list li .btn-group-responsive .btn {
+    width: 100%;
+  }
+  .recommendation-list li .btn-group-responsive .btn + .btn {
+    margin-top: 0.5rem;
+    margin: 1rem;
+  }
+}

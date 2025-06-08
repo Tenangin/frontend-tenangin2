@@ -356,13 +356,15 @@ const ProfileTabs = ({ setShowModal }) => {
                     <p dangerouslySetInnerHTML={{ __html: `Rating: ${getRatingStars(clinic.clinics.rating)} (${clinic.clinics.review_count || 0} ulasan)` }} />
                     {clinic.clinics.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(clinic.clinics.jarak_km).toFixed(2)} km</p>}
                     <div className="text-end mt-3 justify-content-right">
-                      <button className="btn btn-primary" onClick={(event) => handleOpenGoogleMaps(clinic.clinics.latitude, clinic.clinics.longitude, event)}>
-                        <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1.2rem' }}></span>
-                        Open in Google Maps
-                      </button>
-                      <button className="btn btn-danger ms-2" onClick={(event) => handleDeleteRecommendation(clinic.id, event)}>
-                        Hapus
-                      </button>
+                      <div className="d-flex flex-column flex-sm-row gap-2">
+                        <button className="btn btn-primary btn-sm" style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }} onClick={(event) => handleOpenGoogleMaps(clinic.clinics.latitude, clinic.clinics.longitude, event)}>
+                          <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1rem' }}></span>
+                          Open in Google Maps
+                        </button>
+                        <button className="btn btn-danger btn-sm" style={{ fontSize: '0.85rem' }} onClick={(event) => handleDeleteRecommendation(clinic.id, event)}>
+                          Hapus
+                        </button>
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -380,7 +382,7 @@ const ProfileTabs = ({ setShowModal }) => {
                     {clinic.clinics.jarak_km !== undefined && <p className="italic-text">Perkiraan Jarak: {parseFloat(clinic.clinics.jarak_km).toFixed(2)} km</p>}
                     <div className="text-end mt-3 justify-content-right">
                       <button className="btn btn-primary" onClick={(event) => handleOpenGoogleMaps(clinic.clinics.latitude, clinic.clinics.longitude, event)}>
-                        <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1.2rem' }}></span>
+                        <span className="bi bi-geo-alt-fill me-2" style={{ fontSize: '1rem' }}></span>
                         Open in Google Maps
                       </button>
                       <button className="btn btn-danger ms-2" onClick={(event) => handleDeleteRecommendation(clinic.id, event)}>
