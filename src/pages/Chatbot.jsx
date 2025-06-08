@@ -231,7 +231,8 @@ const Chatbot = () => {
   if (isLoadingSessions) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <p>Loading sessions...</p>
+        <div className="spinner-border text-primary" role="status" aria-hidden="true"></div>
+        <span className="visually-hidden">Loading sessions...</span>
       </div>
     );
   }
