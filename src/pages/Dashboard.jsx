@@ -108,13 +108,15 @@ function Dashboard() {
   };
 
   return (
-    <div className="dashboard-container d-flex">
+    <div className="d-flex" style={{ minHeight: "100vh" }}>
       {isSidebarVisible && (
-        <Sidebar
-          isOverlay={isMobile}
-          isVisible={isSidebarVisible}
-          onClose={() => setIsSidebarVisible(false)}
-        />
+        <div className="sidebar-wrapper">
+          <Sidebar
+            isOverlay={isMobile}
+            isVisible={isSidebarVisible}
+            onClose={() => setIsSidebarVisible(false)}
+          />
+        </div>
       )}
 
       {isSidebarVisible && isMobile && (
@@ -127,7 +129,7 @@ function Dashboard() {
       {/* Main content */}
       <main
         className="dashboard-main flex-grow-1 p-4"
-        style={{ marginLeft: isSidebarVisible && !isMobile ? undefined : 0 }}
+        style={{ marginLeft: isSidebarVisible && !isMobile ? '250px' : 0 }}
       >
         {/* Header */}
         <div className="d-flex flex-column mb-4 position-relative">
