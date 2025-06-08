@@ -6,6 +6,7 @@ const Journaling = () => {
   const [journalEntries, setJournalEntries] = useState([]);
   const [filter, setFilter] = useState("All");
   const [now, setNow] = useState(new Date());
+  const [loading, setLoading] = useState(true);
   const token = getToken();
 
   useEffect(() => {
@@ -20,6 +21,8 @@ const Journaling = () => {
       } catch (error) {
         console.error("Failed to fetch journal entries:", error);
         setJournalEntries([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -55,7 +58,7 @@ const Journaling = () => {
       if (filter === "This Month") {
         return (
           entryDate.getMonth() === now.getMonth() &&
-          entryDate.getFullYear() === now.getFullYear()
+          entryDate.getFulYear() === now.getFullYear()
         );
       } else if (filter === "This Week") {
         // Adjust startOfWeek to Sunday 00:00:00
@@ -81,6 +84,16 @@ const Journaling = () => {
   };
 
   const filteredEntries = filterEntries(journalEntries);
+
+  if (loading) {
+    return (
+      <div className="col-md-6 d-flex justify-content-center align-items-center" style={{ height: '100px' }}>
+        <div className="spinner-border text-primary" role="status" aria-label="Loading">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="col-md-6">

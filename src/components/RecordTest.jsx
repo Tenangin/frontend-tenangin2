@@ -4,6 +4,7 @@ import { getToken } from "../utils/auth";
 
 const RecordTest = () => {
   const [records, setRecords] = useState([]);
+  const [filter, setFilter] = useState("harian"); // default filter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -34,8 +35,45 @@ const RecordTest = () => {
     fetchAssessments();
   }, []);
 
+  const filterRecords = (records) => {
+    const now = new Date();
+    return records.filter((record) => {
+      if (filter === "all") return true;
+      if (!record.created_at) return false;
+      const createdDate = new Date(record.created_at);
+      switch (filter) {
+        case "harian": {
+          return (
+            createdDate.getDate() === now.getDate() &&
+            createdDate.getMonth() === now.getMonth() &&
+            createdDate.getFullYear() === now.getFullYear()
+          );
+        }
+        case "mingguan": {
+          const diffTime = now - createdDate;
+          const diffDays = diffTime / (1000 * 60 * 60 * 24);
+          return diffDays <= 7;
+        }
+        case "bulanan": {
+          return (
+            createdDate.getMonth() === now.getMonth() &&
+            createdDate.getFullYear() === now.getFullYear()
+          );
+        }
+        default:
+          return true;
+      }
+    });
+  };
+
   if (loading) {
-    return <div className="col-md-6"><p>Loading records...</p></div>;
+    return (
+      <div className="col-md-6 d-flex justify-content-center align-items-center" style={{ height: '100px' }}>
+        <div className="spinner-border text-primary" role="status" aria-label="Loading">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -47,19 +85,34 @@ const RecordTest = () => {
         </div>;
   }
 
+  const filteredRecords = filterRecords(records);
+
   return (
     <div className="col-md-6">
       <h6 className="text-primary mb-3">Record Test</h6>
-      {records.length === 0 ? (
+      <div className="mb-3">
+      <select
+        className="form-select"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        aria-label="Filter records by date"
+      >
+        <option value="all">All</option>
+        <option value="harian">Harian</option>
+        <option value="mingguan">Mingguan</option>
+        <option value="bulanan">Bulanan</option>
+      </select>
+      </div>
+      {filteredRecords.length === 0 ? (
         <div
           className="p-3 rounded-4 d-flex justify-content-between align-items-center mb-3"
           style={{ backgroundColor: "#EFF4FF" }}
         >
           <p>No assessment records found.</p>
         </div>
-      ) : records.length > 4 ? (
+      ) : filteredRecords.length > 4 ? (
         <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
-          {records.map((record, idx) => (
+          {filteredRecords.map((record, idx) => (
             <div
               key={idx}
               className="p-3 rounded-4 d-flex justify-content-between align-items-center mb-3"
@@ -75,7 +128,7 @@ const RecordTest = () => {
           ))}
         </div>
       ) : (
-        records.map((record, idx) => (
+        filteredRecords.map((record, idx) => (
           <div
             key={idx}
             className="p-3 rounded-4 d-flex justify-content-between align-items-center mb-3"
