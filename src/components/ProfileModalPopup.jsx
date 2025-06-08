@@ -89,127 +89,129 @@ function ModalPopup({ showModal, handleCancel, onUpdate }) {
   if (!showModal) return null;
 
   return (
-    <div className="modal-overlay">
-      <div
-  className="modal-content"
-  style={{
-    background: "#fff",
-    borderRadius: "8px",
-    padding: "5rem",
-    minWidth: "350px",
-    maxWidth: "80vw",
-    maxHeight: "90vh", // tambahkan batas tinggi
-    overflowY: "auto", // aktifkan scroll vertikal saat diperlukan
-    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-  }}
->
-
-        <h5 className="mb-5 text-center fw-bold fs-3">Edit Profile</h5>
-        {loading && <p>Loading...</p>}
-        {error && <p className="text-danger">{error}</p>}
-        {successMessage && <p className="text-success">{successMessage}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-2">
-            <label className="form-label fw-bold">Full Name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="full_name"
-              value={form.full_name}
-              onChange={handleChange}
-              required
-              disabled={loading}
-            />
-          </div>
-          <div className="mb-2">
-            <label className="form-label fw-bold">Place of Birth</label>
-            <input
-              type="text"
-              className="form-control"
-              name="place_of_birth"
-              value={form.place_of_birth}
-              onChange={handleChange}
-              required
-              disabled={loading}
-            />
-          </div>
-          <div className="mb-2">
-            <label className="form-label fw-bold">Date of Birth</label>
-            <input
-              type="date"
-              className="form-control"
-              name="date_of_birth"
-              value={form.date_of_birth}
-              onChange={handleChange}
-              required
-              disabled={loading}
-            />
-          </div>
-          <div className="mb-2">
-            <label className="form-label fw-bold">Age</label>
-            <input
-              type="number"
-              className="form-control"
-              name="age"
-              value={form.age}
-              onChange={handleChange}
-              min="0"
-              required
-              disabled={loading}
-            />
-          </div>
-          <div className="mb-2">
-            <label className="form-label fw-bold">Gender</label>
-            <select
-              className="form-select"
-              name="gender"
-              value={form.gender}
-              onChange={handleChange}
-              required
-              disabled={loading}
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-          <div className="mb-2">
-            <label className="form-label fw-bold">Address</label>
-            <textarea
-              className="form-control"
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              rows={2}
-              disabled={loading}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label fw-bold">About Me</label>
-            <textarea
-              className="form-control"
-              name="about_me"
-              value={form.about_me}
-              onChange={handleChange}
-              rows={2}
-              disabled={loading}
-            />
-          </div>
-          <div className="d-flex justify-content-end gap-2">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              Edit Submit
-            </button>
-          </div>
-        </form>
-      </div>
+    <div
+      className="modal-content"
+      style={{
+        background: "#fff",
+        borderRadius: "8px",
+        padding: "3rem 4rem",
+        minWidth: "350px",
+        maxWidth: "900px",
+        maxHeight: "90vh",
+        overflowY: "auto",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+        position: "fixed",
+        top: "80px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 1050,
+      }}
+    >
+      <h5 className="mb-5 text-center fw-bold fs-3">Edit Profile</h5>
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-danger">{error}</p>}
+      {successMessage && <p className="text-success">{successMessage}</p>}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-2">
+          <label className="form-label fw-bold">Full Name</label>
+          <input
+            type="text"
+            className="form-control"
+            name="full_name"
+            value={form.full_name}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+        </div>
+        <div className="mb-2">
+          <label className="form-label fw-bold">Place of Birth</label>
+          <input
+            type="text"
+            className="form-control"
+            name="place_of_birth"
+            value={form.place_of_birth}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+        </div>
+        <div className="mb-2">
+          <label className="form-label fw-bold">Date of Birth</label>
+          <input
+            type="date"
+            className="form-control"
+            name="date_of_birth"
+            value={form.date_of_birth}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+        </div>
+        <div className="mb-2">
+          <label className="form-label fw-bold">Age</label>
+          <input
+            type="number"
+            className="form-control"
+            name="age"
+            value={form.age}
+            onChange={handleChange}
+            min="0"
+            required
+            disabled={loading}
+          />
+        </div>
+        <div className="mb-2">
+          <label className="form-label fw-bold">Gender</label>
+          <select
+            className="form-select"
+            name="gender"
+            value={form.gender}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div className="mb-2">
+          <label className="form-label fw-bold">Address</label>
+          <textarea
+            className="form-control"
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            rows={2}
+            disabled={loading}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label fw-bold">About Me</label>
+          <textarea
+            className="form-control"
+            name="about_me"
+            value={form.about_me}
+            onChange={handleChange}
+            rows={2}
+            disabled={loading}
+          />
+        </div>
+        <div className="d-flex justify-content-end gap-2">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleCancel}
+            disabled={loading}
+          >
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            Edit Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

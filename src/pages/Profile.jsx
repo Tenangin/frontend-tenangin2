@@ -87,12 +87,14 @@ function Profile() {
           <ProfileTabs profileData={profileData} setShowModal={setShowModal} />
         </div>
         {/* Modal PopUp */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
         <ModalPopup
           showModal={showModal}
           handleCancel={handleCancel}
           onUpdate={handleUpdate}
           profileData={profileData}
         />
+      </div>
       </div>
     </div>
   );
