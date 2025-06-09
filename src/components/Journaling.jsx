@@ -126,7 +126,7 @@ const Journaling = () => {
                 <h6 className="mb-1 fw-semibold">My Day</h6>
                 <p className="text-muted small mb-0">{entry.content}</p>
                 <p className="text-muted small mb-0">
-                  <span className="fw-semibold">Sentiment:</span> {entry.sentiment}</p>
+                  <span className="fw-semibold">Sentiment:</span> {Array.isArray(entry.sentiment) ? entry.sentiment.join(", ") : entry.sentiment}</p>
               </div>
               <span className="badge bg-primary rounded-pill">
                 {formatDateTime(entry.created_at)}
