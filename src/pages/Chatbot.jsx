@@ -277,9 +277,9 @@ const Chatbot = () => {
       <div className="flex-grow-1 d-flex flex-column" style={{ minHeight: 0, width: '60%' }}>
         <div className="bg-white p-4 border-bottom">
           <div className="d-flex flex-column chatbot-header">
-            <div className="d-flex justify-content-between align-items-flex-start w-100 mb-2">
+            <div className="d-flex flex-row justify-content-between align-items-center w-100 mb-2">
               <button
-                className="btn btn-outline-primary ms-3 drawer-button"
+                className="btn btn-outline-primary ms-0 drawer-button align-self-start"
                 onClick={toggleSidebar}
                 aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
               >

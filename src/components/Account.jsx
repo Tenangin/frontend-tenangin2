@@ -53,7 +53,7 @@ const Account = () => {
         onClick={toggleDropdown}
         style={{ cursor: 'pointer', userSelect: 'none' }}
       >
-        <img src="/images/user.svg" alt="Profile" className="rounded-circle" width={40} height={40} />
+        <img src="/images/user2.svg" alt="Profile" className="rounded-circle" width={40} height={40} />
         <span className="fw-semibold ms-2">{username}</span>
       </div>
       {dropdownOpen && (

@@ -40,7 +40,7 @@ function ProfileCard() {
   return (
     <div className="profile-top d-flex justify-content-between align-items-start gap-5 mt-4">
       <div className="d-flex align-items-center gap-3">
-        <img src="/images/user.svg" alt="Avatar" className="rounded-circle profile-avatar" />
+        <img src="/images/user2.svg" alt="Avatar" className="rounded-circle profile-avatar" />
         <div>
           <h5 className="fw-bold mb-1">{profile.full_name}</h5>
           <span className={genderClass}>{profile.gender}</span>
