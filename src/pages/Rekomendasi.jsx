@@ -3,7 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '../styles/Rekomendasi.css'; // Pastikan path ini benar
 import Sidebar from '../components/Sidebar';
-import Notifications from '../components/Notifications';
+// import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
 import { createRecommendation } from '../data/api/api';
@@ -267,7 +267,7 @@ useEffect(() => {
             <i className="bi bi-list"></i>
           </button>
           <div className="d-flex align-items-self-end gap-3" id='header-icons'>
-            <Notifications />
+            {/* <Notifications /> */}
             <Account />
           </div>
         </div>

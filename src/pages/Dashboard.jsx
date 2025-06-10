@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "../styles/Dashboard.css";
 import Sidebar from "../components/Sidebar";
 import Account from "../components/Account";
-import Notifications from "../components/Notifications";
+// import Notifications from "../components/Notifications";
 import Greeting from "../components/Greeting";
 import Reminders from "../components/RecordTest";
 import Journaling from "../components/Journaling";
-import ProfileFormPopup from "../components/ProfileFormPopup";
+// import ProfileFormPopup from "../components/ProfileFormPopup";
+import ModalPopup from "../components/ProfileModalPopup";
 import SearchInput from "../components/SearchInput";
 import { getToken, getUserId } from "../utils/auth";
 import { getProfile } from "../data/api/api";
@@ -147,7 +148,7 @@ function Dashboard() {
               <>
               <div className="d-flex align-items-center gap-3 mb-3 position-relative">
                 <SearchInput />
-                <Notifications />
+                {/* <Notifications /> */}
                 <Account />
               </div>
                 <Greeting />
@@ -157,7 +158,7 @@ function Dashboard() {
                 <Greeting />
               <div className="d-flex align-items-center gap-3 position-relative">
                 <SearchInput />
-                <Notifications />
+                {/* <Notifications /> */}
                 <Account />
               </div>
               </>
@@ -198,13 +199,15 @@ function Dashboard() {
           <Journaling />
           <Reminders />
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
         {showProfileForm && (
-          <ProfileFormPopup
+          <ModalPopup
             showModal={showProfileForm}
             handleCancel={() => setShowProfileForm(false)}
             onUpdate={handleProfileUpdate}
           />
         )}
+        </div>
       </main>
     </div>
   );

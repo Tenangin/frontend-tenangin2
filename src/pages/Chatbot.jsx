@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Sidebar from "../components/Sidebar";
-import Notifications from "../components/Notifications";
+// import Notifications from "../components/Notifications";
 import Account from "../components/Account";
 import useSidebarToggle from '../hooks/useSidebarToggle';
 import SessionsSidebar from "../components/Chatbot/SessionsSidebar";
@@ -286,7 +286,8 @@ const Chatbot = () => {
                 <i className="bi bi-list"></i>
               </button>
               <div className="d-flex align-items-center gap-3 notifications-account">
-                <Notifications /> <Account />
+                {/* <Notifications />  */}
+                <Account />
               </div>
             </div>
             <div style={{ justifyContent: "flex-start"}}>

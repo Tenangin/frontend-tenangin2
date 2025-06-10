@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Account from "../components/Account";
-import Notifications from "../components/Notifications";
+// import Notifications from "../components/Notifications";
 import ProfileCard from "../components/ProfileCard";
 import ProfileTabs from "../components/ProfileTabs";
 import ModalPopup from "../components/ProfileModalPopup";
@@ -72,7 +72,7 @@ function Profile() {
               <i className="bi bi-list"></i>
             </button>
             <div className="d-flex align-items-center gap-3">
-              <Notifications />
+              {/* <Notifications /> */}
               <Account />
             </div>
           </div>

@@ -4,7 +4,7 @@ import { createAssessment } from '../data/api/api.jsx';
 import { getToken } from '../utils/auth.js';
 import '../styles/HealthCheck.css';
 import Sidebar from '../components/Sidebar';
-import Notifications from '../components/Notifications';
+// import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
 
@@ -273,7 +273,7 @@ const HealthCheck = () => {
           </button>
 
           <div className="d-flex align-items-center gap-3">
-            <Notifications />
+            {/* <Notifications /> */}
             <Account />
           </div>
         </div>

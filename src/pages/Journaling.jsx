@@ -3,7 +3,7 @@ import {CheckCircle, XCircle, Edit3, Save, Check} from 'lucide-react';
 import { getToken, getUserId } from '../utils/auth';
 import '../styles/Journaling.css';
 import Sidebar from '../components/Sidebar';
-import Notifications from '../components/Notifications';
+// import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
 
@@ -117,7 +117,7 @@ const JournalCalendar = () => {
     if (isCurrentMonth(date) && (isToday(date) || (isPast && status.hasEntry))) {
       setSelectedDate(date);
       setModalData({
-        content: entry?.content || "KOCAK MANE BUL"
+        content: entry?.content || ""
       });
       setShowModal(true);
     }
@@ -230,7 +230,7 @@ const JournalCalendar = () => {
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h4 className="fw-bold text-primary">Journaling Calendar</h4>
           <div className="d-flex align-items-center gap-3">
-            <Notifications />
+            {/* <Notifications /> */}
             <Account />
           </div>
         </div>
