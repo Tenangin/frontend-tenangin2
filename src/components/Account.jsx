@@ -53,7 +53,7 @@ const Account = () => {
         onClick={toggleDropdown}
         style={{ cursor: 'pointer', userSelect: 'none' }}
       >
-        <img src="/images/user2.svg" alt="Profile" className="rounded-circle" width={40} height={40} />
+        <img src="/images/user2.svg" alt="Profile" className="rounded-circle account-avatar" width={40} height={40} />
         <span className="fw-semibold ms-2">{username}</span>
       </div>
       {dropdownOpen && (
@@ -79,6 +79,25 @@ const Account = () => {
           </button>
         </div>
       )}
+      {/* Animasi hover */}
+      <style jsx="true">{`
+        .account-toggle {
+          transition: background 0.2s, box-shadow 0.2s;
+          border-radius: 30px;
+          padding: 4px 10px;
+        }
+        .account-toggle:hover {
+          background:rgb(116, 171, 255);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .account-toggle:hover .account-avatar {
+          transform: scale(1.08) rotate(-3deg);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .account-avatar {
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+      `}</style>
     </div>
   );
 };
