@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
-import { loginUser, googleOAuthUrl } from "../data/api/api";
+import { loginUser } from "../data/api/api";
 import { setToken, setUserId, setUserEmail, setUsername } from "../utils/auth";
 
 function Login() {
@@ -159,7 +159,7 @@ function Login() {
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
               />
-              <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
+              {/* <label className="form-check-label" htmlFor="rememberMe">Remember me</label> */}
             </div>
 
             {/* {error && <div className="alert alert-danger">{error}</div>} */}
@@ -167,21 +167,7 @@ function Login() {
             <button type="submit" className="btn btn-primary w-100 rounded-pill fw-bold mb-3 p-2" disabled={loading}>
               {loading ? "Login Account..." : "Sign In"}
             </button>
-            <button
-              type="button"
-              className="btn btn-dark w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 mb-3"
-              disabled={loading}
-              onClick={() => {
-                window.location.href = googleOAuthUrl;
-              }}
-            >
-              <img
-                src="/images/google-logo.svg"
-                alt="Google"
-                style={{ width: "20px", height: "20px" }}
-              />
-              <span className="fw-semibold">Sign In with Google</span>
-            </button>
+           
           </form>
 
           <p className="text-center mt-3">
