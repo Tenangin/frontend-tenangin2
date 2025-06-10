@@ -1,110 +1,542 @@
-
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../components/Sidebar';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import {CheckCircle, XCircle, Edit3, Save, Check} from 'lucide-react';
+import { getToken, getUserId } from '../utils/auth';
 import '../styles/Journaling.css';
+import Sidebar from '../components/Sidebar';
 import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
 
-function Journaling() {
+const JournalCalendar = () => {
+  // Hook untuk mengelola state sidebar
   const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
-  const [date, setDate] = useState(new Date());
+
+  // State dan logika komponen
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [content, setContent] = useState('');
-  const [drafts, setDrafts] = useState({});
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [journalEntries, setJournalEntries] = useState({});
+  const [modalData, setModalData] = useState({
+    content: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [savingType, setSavingType] = useState('');
+  
+  const token = getToken();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); 
+  const todayString = today.toISOString().split('T')[0];
+
+  const sentimentEmojis = {
+    joy: { emoji: '😊', color: 'text-warning', bgColor: '#fff3cd', borderColor: '#ffecb5', label: 'Joy' },
+    sad: { emoji: '😢', color: 'text-primary', bgColor: '#cff4fc', borderColor: '#b6effb', label: 'Sad' },
+    anger: { emoji: '😠', color: 'text-danger', bgColor: '#f8d7da', borderColor: '#f5c2c7', label: 'Anger' },
+    fear: { emoji: '😰', color: 'text-secondary', bgColor: '#e2e3e5', borderColor: '#d3d3d4', label: 'Fear' },
+    neutral: { emoji: '😐', color: 'text-muted', bgColor: '#f8f9fa', borderColor: '#dee2e6', label: 'Neutral' },
+    love: { emoji: '❤️', color: 'text-danger', bgColor: '#f8d7da', borderColor: '#f5c2c7', label: 'Love' },
+  };
+
+  // Mengambil data dari localStorage saat komponen pertama kali dimuat
+  const fetchJournalEntries = () => {
+    try {
+      setLoading(true);
+      const storedEntries = localStorage.getItem('journalEntries');
+      if (storedEntries) {
+        setJournalEntries(JSON.parse(storedEntries));
+      }
+    } catch (error) {
+      console.error('Error fetching journal entries from localStorage:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Load drafts from sessionStorage
-    const savedDrafts = sessionStorage.getItem('journalingDrafts');
-    if (savedDrafts) {
-      setDrafts(JSON.parse(savedDrafts));
-    }
+    fetchJournalEntries();
   }, []);
 
-  const onDateChange = (selectedDate) => {
-    setDate(selectedDate);
-    const dateKey = selectedDate.toDateString();
-    setContent(drafts[dateKey] || '');
-    setShowModal(true);
+  const generateCalendarDays = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const firstSunday = new Date(firstDay);
+    firstSunday.setDate(firstSunday.getDate() - firstSunday.getDay());
+    const days = [];
+    const current = new Date(firstSunday);
+    for (let i = 0; i < 42; i++) {
+      days.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+    return days;
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setContent('');
+  const formatDate = (date) => date.toISOString().split('T')[0];
+  const isToday = (date) => formatDate(date) === todayString;
+  const isCurrentMonth = (date) => date.getMonth() === currentMonth.getMonth();
+
+  const getEntryStatus = (date) => {
+    const dateKey = formatDate(date);
+    const entry = journalEntries[dateKey];
+    return {
+      hasEntry: !!entry,
+      isSubmitted: entry?.submitted || false,
+      isFinal: entry?.status === 'final',
+      isDraft: entry?.status === 'draft',
+      sentiment: entry?.status === 'final' ? entry?.sentiment : null
+    };
   };
 
-  const saveJournaling = () => {
-    const dateKey = date.toDateString();
-    setDrafts((prev) => ({
-      ...prev,
-      [dateKey]: content,
-    }));
-    closeModal();
+  // Fungsi untuk mendapatkan semua sentimen dengan persentase
+  const getAllSentiments = (sentimentData) => {
+    if (!Array.isArray(sentimentData) || sentimentData.length === 0) {
+      return [];
+    }
+
+    const totalSentiments = sentimentData.length;
+    const sentimentCounts = {};
+
+    for (const sentiment of sentimentData) {
+      sentimentCounts[sentiment] = (sentimentCounts[sentiment] || 0) + 1;
+    }
+
+    const processedData = Object.entries(sentimentCounts)
+      .map(([sentiment, count]) => {
+        const score = count / totalSentiments;
+        return [sentiment, score];
+      })
+      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA); 
+    return processedData;
   };
 
+  const handleDateClick = (date) => {
+    const dateKey = formatDate(date);
+    const entry = journalEntries[dateKey];
+    const status = getEntryStatus(date);
+    const isPast = date < today;
+
+    if (isCurrentMonth(date) && (isToday(date) || (isPast && status.hasEntry))) {
+      setSelectedDate(date);
+      setModalData({
+        content: entry?.content || "KOCAK MANE BUL"
+      });
+      setShowModal(true);
+    }
+  };
+
+  const handleInputChange = (value) => {
+    setModalData(prev => ({ ...prev, content: value }));
+  };
+
+  const handleSave = async (type) => {
+    if (!selectedDate || !modalData.content.trim()) return;
+
+    try {
+        setLoading(true);
+        setSavingType(type);
+        const dateKey = formatDate(selectedDate);
+        const userId = getUserId(); // Ganti dengan ID pengguna dinamis jika perlu
+        
+        let sentimentResult = null;
+        let analysisResults = null;
+
+        if (type === 'final') {
+            const sentimentResponse = await fetch('https://nabilaalt-api-journaling.hf.space/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Header otorisasi ditambahkan di sini
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    content: modalData.content
+                })
+            });
+            
+            if (sentimentResponse.ok) {
+                const apiData = await sentimentResponse.json();
+                sentimentResult = apiData.sentiment; 
+                analysisResults = apiData.results;
+            } else {
+                // Melemparkan error dengan status response untuk logging yang lebih baik
+                throw new Error(`API request failed with status ${sentimentResponse.status}`);
+            }
+        }
+        
+        const updatedEntry = {
+            id: journalEntries[dateKey]?.id || Date.now(),
+            content: modalData.content, 
+            status: type,
+            submitted: type === 'final',
+            sentiment: sentimentResult,
+            results: analysisResults,
+            created_at: journalEntries[dateKey]?.created_at || new Date().toISOString()
+        };
+        
+        // Update state dan simpan ke localStorage
+        setJournalEntries(prevEntries => {
+            const newEntries = {
+                ...prevEntries,
+                [dateKey]: updatedEntry
+            };
+            // Simpan state baru ke localStorage
+            localStorage.setItem('journalEntries', JSON.stringify(newEntries));
+            return newEntries; // Return state baru untuk React
+        });
+        
+    } catch (error) {
+        console.error('An error occurred in handleSave:', error);
+        alert(`Failed to save the journal entry. Please check the console (F12) for more details. Error: ${error.message}`);
+        
+    } finally {
+        setLoading(false);
+        setSavingType('');
+    }
+};
+
+  const navigateMonth = (direction) => {
+    setCurrentMonth(prev => {
+      const newDate = new Date(prev);
+      newDate.setMonth(prev.getMonth() + direction);
+      return newDate;
+    });
+  };
+
+  const calendarDays = generateCalendarDays();
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  const isViewingPastEntry = selectedDate && formatDate(selectedDate) < todayString;
+  const isFinalizedEntry = selectedDate && journalEntries[formatDate(selectedDate)]?.status === 'final';
   return (
-    <div className="journaling-container d-flex">
+    <div className="d-flex" style={{ minHeight: '100vh' }}>
       {isSidebarVisible && (
-        <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
+        <div className="sidebar-wrapper">
+          <Sidebar isOverlay={isMobile} isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
+        </div>
       )}
-
       {isSidebarVisible && isMobile && (
-        <div
-          className="sidebar-backdrop"
-          onClick={() => setIsSidebarVisible(false)}
-        />
+        <div className="sidebar-backdrop" onClick={() => setIsSidebarVisible(false)} />
       )}
-
-      <div className="journaling-main flex-grow-1 p-4">
-        {/* Header */}
-        <div className="d-flex flex-column mb-4 position-relative">
-          <div className="toggle-button-container">
-            <button
-              className="btn btn-outline-primary mb-2 align-self-start mobile"
-              onClick={toggleSidebar}
-              aria-label={isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
-            >
-              <i className="bi bi-list"></i>
-            </button>
+      <div className={`flex-grow-1 p-3 p-md-4 content-area ${isSidebarVisible && !isMobile ? 'content-shifted' : ''}`}>
+        <div className="toggle-button-container">
+          <button className="btn btn-outline-primary mb-2 align-self-start mobile" onClick={toggleSidebar}>
+            <i className="bi bi-list"></i>
+          </button>
+        </div>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h4 className="fw-bold text-primary">Journaling Calendar</h4>
+          <div className="d-flex align-items-center gap-3">
+            <Notifications />
+            <Account />
           </div>
-          <div className="d-flex justify-content-between align-items-center">
-            <h4 className="fw-bold text-primary">Tenangin</h4>
-            <div className="d-flex align-items-center gap-3">
-              <Notifications />
-              <Account />
+        </div>
+        <div className="bg-light min-vh-100 py-4">
+          <div className="container-fluid">
+            <div className="mb-4">
+              <h1 className="display-6 fw-bold text-dark">Journaling</h1>
+              <p className="text-muted">Your daily activity log throughout the program.</p>
             </div>
-          </div>
-        </div>
-        <h2>Journaling Calendar</h2>  
-        <div className="calendar-wrapper">
-          <Calendar onChange={onDateChange} value={date} />
-        </div>
+            <div className="card shadow-sm">
+              <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h2 className="h4 mb-0">
+                  {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                </h2>
+                <div className="d-flex gap-2">
+                  <button onClick={() => navigateMonth(-1)} className="btn btn-outline-secondary btn-sm">‹</button>
+                  <button onClick={() => navigateMonth(1)} className="btn btn-outline-secondary btn-sm">›</button>
+                </div>
+              </div>
+              <div className="card-body p-4">
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px', marginBottom: '1rem' }}>
+                  {dayNames.map(day => (
+                    <div key={day} className="text-center text-muted fw-medium py-2">{day}</div>
+                  ))}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px', marginTop: '1rem' }}>
+                  {calendarDays.map((day, index) => {
+                    const dayForRender = new Date(day);
+                    dayForRender.setHours(0, 0, 0, 0);
 
-        {showModal && (
-          <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-content">
-              <h3>Journaling for </h3>
-              <h4>{date.toDateString()}</h4>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  rows={6}
-                  placeholder="Write your journaling content here..."
-                />
-                <div className="modal-buttons">
-                  <button onClick={closeModal}>Cancel</button>
-                  <button onClick={saveJournaling}>Save</button>
+                    const isTodayDay = isToday(dayForRender);
+                    const isCurrentMonthDate = isCurrentMonth(dayForRender);
+                    const status = getEntryStatus(dayForRender);
+                    const isPast = dayForRender < today;
+                    const isFuture = dayForRender > today;
+
+                    const canClick = isCurrentMonthDate && !isFuture && (isTodayDay || status.hasEntry);
+                    const allSentiments = getAllSentiments(journalEntries[formatDate(dayForRender)]?.results);
+
+                    return (
+                      <div key={index}>
+                        <div
+                          className={`border rounded p-3 position-relative h-100 ${isCurrentMonthDate ? 'bg-white' : 'bg-light'} ${isTodayDay ? 'border-primary border-2' : 'border-light'} ${canClick ? 'cursor-pointer hover-shadow' : 'cursor-not-allowed'} ${status.hasEntry && isCurrentMonthDate ? 'border-success border-2' : ''} ${!isCurrentMonthDate || isFuture ? 'opacity-50' : ''}`}
+                          style={{ minHeight: '220px', cursor: canClick ? 'pointer' : 'not-allowed', transition: 'all 0.2s ease' }}
+                          onClick={() => canClick && handleDateClick(dayForRender)}
+                        >
+                          <div className="d-flex justify-content-between align-items-start mb-3">
+                            <span className={`h4 fw-bold ${isTodayDay ? 'text-primary' : isCurrentMonthDate ? 'text-dark' : 'text-muted'}`}>{dayForRender.getDate()}</span>
+                            {isPast && isCurrentMonthDate && (
+                              <div className="d-flex align-items-center gap-1">
+                                {status.isFinal ? <CheckCircle size={20} className="text-success" /> : status.isDraft ? <Edit3 size={20} className="text-warning" /> : null}
+                              </div>
+                            )}
+                            {isTodayDay && !status.hasEntry && <XCircle size={20} className="text-danger" />}
+                          </div>
+                          {isCurrentMonthDate && !isFuture && (
+                            <div className="d-flex flex-column h-75">
+                                <div className="mb-3">
+                                  {status.isFinal ? (
+                                    <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Completed</span>
+                                  ) : status.isDraft ? (
+                                    <span className="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">Draft</span>
+                                  ) : isToday(dayForRender) ? (
+                                    <span className="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Not Started</span>
+                                  ) : !status.hasEntry ? (
+                                    <span className="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Missed</span>
+                                  ) : null}
+                                </div>
+                              {allSentiments.length > 0 && status.isFinal && (
+                                <div className="mt-auto">
+                                  <div className="small text-muted mb-2 fw-medium">Sentiments:</div>
+                                  <div className="d-flex flex-column gap-1" style={{ maxHeight: '120px', overflowY: 'auto' }}>
+                                    {allSentiments.map(([sentiment, score]) => {
+                                      const sentimentData = sentimentEmojis[sentiment.toLowerCase()];
+                                      if (!sentimentData) return null;
+                                      const percentage = Math.round(score * 100);
+                                      return (
+                                        <div 
+                                          key={sentiment} 
+                                          className="d-flex align-items-center justify-content-between rounded px-2 py-1" 
+                                          style={{ 
+                                            backgroundColor: sentimentData.bgColor,
+                                            border: `1px solid ${sentimentData.borderColor}`,
+                                            minHeight: '26px'
+                                          }}
+                                        >
+                                          <div className="d-flex align-items-center" style={{ gap: '4px' }}>
+                                            <span style={{ fontSize: '12px', lineHeight: '1' }}>
+                                              {sentimentData.emoji}
+                                            </span>
+                                            <span 
+                                              className={`${sentimentData.color} fw-medium`} 
+                                              style={{ fontSize: '11px', lineHeight: '1' }}
+                                            >
+                                              {sentimentData.label}
+                                            </span>
+                                          </div>
+                                          <span 
+                                            className="fw-bold" 
+                                            style={{ 
+                                              fontSize: '11px', 
+                                              lineHeight: '1',
+                                              color: '#495057'
+                                            }}
+                                          >
+                                            {percentage}%
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
+            {showModal && (
+              <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                <div className="modal-dialog modal-dialog-centered modal-lg">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <div>
+                        <h5 className="modal-title">Journal Entry</h5>
+                        <small className="text-muted">{selectedDate?.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</small>
+                      </div>
+                      <button type="button" className="btn-close" onClick={() => setShowModal(false)} disabled={loading} aria-label="Close"></button>
+                    </div>
+
+                    <div className="modal-body">
+                      {isFinalizedEntry && journalEntries[formatDate(selectedDate)]?.results && (
+                        <div className="mb-4 p-3 bg-light rounded">
+                          <h6 className="fw-bold mb-3">Sentiment Analysis Results:</h6>
+                          <div className="d-flex flex-wrap gap-3" style={{ justifyContent: 'flex-start' }}>
+                            {getAllSentiments(journalEntries[formatDate(selectedDate)]?.results).map(([sentiment, score]) => {
+                              const sentimentData = sentimentEmojis[sentiment.toLowerCase()];
+                              if (!sentimentData) return null;
+                              const percentage = Math.round(score * 100);
+                              return (
+                                <div 
+                                  key={sentiment} 
+                                  className="d-flex align-items-start p-3 rounded" 
+                                  style={{ 
+                                    flex: '1 1 200px', 
+                                    minWidth: '180px', 
+                                    maxWidth: '250px', 
+                                    backgroundColor: sentimentData.bgColor,
+                                    border: `2px solid ${sentimentData.borderColor}`
+                                  }}
+                                >
+                                  <div className="me-3">
+                                    <span style={{ fontSize: '24px', display: 'block', lineHeight: '1' }}>
+                                      {sentimentData.emoji}
+                                    </span>
+                                  </div>
+                                  <div className="flex-grow-1">
+                                    <div className={`fw-bold mb-2 ${sentimentData.color}`} style={{ fontSize: '14px' }}>
+                                      {sentimentData.label}
+                                    </div>
+                                    <div className="progress mb-2" style={{ height: '8px' }}>
+                                      <div 
+                                        className="progress-bar" 
+                                        style={{ 
+                                          width: `${percentage}%`, 
+                                          backgroundColor: sentimentData.color.includes('danger') ? '#dc3545' : 
+                                                          sentimentData.color.includes('warning') ? '#ffc107' : 
+                                                          sentimentData.color.includes('success') ? '#198754' : 
+                                                          sentimentData.color.includes('primary') ? '#0d6efd' : 
+                                                          sentimentData.color.includes('info') ? '#0dcaf0' : '#6c757d' 
+                                        }}
+                                      ></div>
+                                    </div>
+                                    <div className="fw-bold text-dark" style={{ fontSize: '16px' }}>
+                                      {percentage}%
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                      
+
+
+                      <div className="mb-3">
+                        <label htmlFor="journalContent" className="form-label fw-medium"></label>
+                        <textarea 
+                          id="journalContent" 
+                          className="form-control" 
+                          rows="8" 
+                          value={modalData.content} 
+                          onChange={(e) => handleInputChange(e.target.value)} 
+                          placeholder="How was your day? Share your thoughts..." 
+                          disabled={loading || isFinalizedEntry || isViewingPastEntry} 
+                          style={{ resize: 'none' }}
+                        />
+                        <div className="form-text">
+                          {isFinalizedEntry ? 'This entry is finalized and cannot be edited.' : 
+                           isViewingPastEntry ? 'This past entry cannot be edited.' : 
+                           'You can save as draft to continue later, or mark as done to finalize and get sentiment analysis.'}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="modal-footer bg-light">
+                      <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)} disabled={loading}>
+                        Cancel
+                      </button>
+                      {!isFinalizedEntry && !isViewingPastEntry && (
+                        <>
+                          <button 
+                            type="button" 
+                            className="btn btn-outline-primary" 
+                            onClick={() => handleSave('draft')} 
+                            disabled={loading || !modalData.content.trim()}
+                          >
+                            {loading && savingType === 'draft' ? (
+                              <> 
+                                <span className="spinner-border spinner-border-sm me-2" role="status"></span> 
+                                Saving Draft... 
+                              </>
+                            ) : (
+                              <> 
+                                <Save size={16} className="me-2" /> 
+                                Save Draft 
+                              </>
+                            )}
+                          </button>
+                          <button 
+                            type="button" 
+                            className="btn btn-success" 
+                            onClick={() => handleSave('final')} 
+                            disabled={loading || !modalData.content.trim()}
+                          >
+                            {loading && savingType === 'final' ? (
+                              <> 
+                                <span className="spinner-border spinner-border-sm me-2" role="status"></span> 
+                                Analyzing... 
+                              </> 
+                            ) : (
+                              <> 
+                                <Check size={16} className="me-2" /> 
+                                Done & Analyze 
+                              </>
+                            )}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="card mt-4">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-md-4">
+                    <h6 className="text-muted small text-center">Status</h6>
+                    <div className="d-flex flex-wrap gap-3 mb-3 justify-content-center">
+                      <div className="d-flex align-items-center gap-2">
+                        <CheckCircle size={16} className="text-success" />
+                        <small>Completed</small>
+                      </div>
+                      <div className="d-flex align-items-center gap-2">
+                        <Edit3 size={16} className="text-warning" />
+                        <small>Draft</small>
+                      </div>
+                      <div className="d-flex align-items-center gap-2">
+                        <XCircle size={16} className="text-danger" />
+                        <small>Not Started</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-8">
+                    <h6 className="text-muted small text-center">Sentiment Analysis</h6>
+                    <div className="d-flex flex-wrap gap-4 justify-content-center">
+                      {Object.entries(sentimentEmojis).map(([key, data]) => (
+                        <div key={key} className="d-flex align-items-center gap-1">
+                          <span>{data.emoji}</span>
+                          <small className={data.color}>{data.label}</small>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="text-center text-muted small mt-4">© 2025 Tenangin Apps</div>
           </div>
-        )}
+          <style jsx>{`
+            .hover-shadow:hover { 
+              box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important; 
+              transform: translateY(-2px); 
+            }
+            .cursor-pointer { cursor: pointer; }
+            .cursor-not-allowed { cursor: not-allowed; }
+          `}</style>
+        </div>
       </div>
     </div>
   );
-}
+};
 
-export default Journaling;
+export default JournalCalendar;

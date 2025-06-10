@@ -42,6 +42,7 @@ const Recomendasi = () => {
   const markersLayerRef = useRef(null);
   const userMarkerRef = useRef(null); 
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const DEFAULT_LOCATION = { lat: -6.2088, lon: 106.8456 }; 
   const TOP_K = 5;
 
@@ -68,7 +69,7 @@ const Recomendasi = () => {
         window.removeEventListener('resize', handleResize);
       };
     }
-  }, []);
+  }, [DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lon]);
 
   useEffect(() => {
     setStatusMessage('Mendeteksi lokasi Anda...');
@@ -87,7 +88,7 @@ const Recomendasi = () => {
       setError('Geolocation tidak didukung oleh browser ini. Menggunakan lokasi default.');
       setUserLocation(DEFAULT_LOCATION); 
     }
-  }, []);
+  }, [DEFAULT_LOCATION]);
 
   // Tambahkan ini di dalam komponen Recomendasi (setelah useEffect lainnya)
 useEffect(() => {

@@ -33,22 +33,22 @@ const teamMembers = [
     role: "Full-Stack Developer",
     description: "Enjoys creating smooth and efficient mobile app experiences."
   },
-  {
-    name: "Najmi Iqbal Hanif ",
-    university: "Universitas Telkom, Bandung",
-    cohortId: "FC012D5Y0322",
-    program: "Coding Camp powered by DBS Foundation 2025",
-    role: "Front-End Designer",
-    description: "Dedicated to designing user-friendly interfaces that delight users."
-  },
-  {
-    name: "Alwan Irfan F. Rasyid",
-    university: "Universitas Handayani Makassar",
-    cohortId: "Cohort 06",
-    program: "Coding Camp powered by DBS Foundation 2025",
-    role: "Back-End Developer",
-    description: "Passionate about automating processes and maintaining reliable systems."
-  },
+  // {
+  //   name: "Najmi Iqbal Hanif ",
+  //   university: "Universitas Telkom, Bandung",
+  //   cohortId: "FC012D5Y0322",
+  //   program: "Coding Camp powered by DBS Foundation 2025",
+  //   role: "Front-End Designer",
+  //   description: "Dedicated to designing user-friendly interfaces that delight users."
+  // },
+  // {
+  //   name: "Alwan Irfan F. Rasyid",
+  //   university: "Universitas Handayani Makassar",
+  //   cohortId: "Cohort 06",
+  //   program: "Coding Camp powered by DBS Foundation 2025",
+  //   role: "Back-End Developer",
+  //   description: "Passionate about automating processes and maintaining reliable systems."
+  // },
 ];
 
 const TeamSection = () => {
