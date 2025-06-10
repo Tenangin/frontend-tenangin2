@@ -195,7 +195,7 @@ function Dashboard() {
         </div>
 
         {/*Journaling */}
-        <div className="row">
+        <div className="row g-5">
           <Journaling />
           <Reminders />
         </div>

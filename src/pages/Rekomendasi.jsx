@@ -36,6 +36,7 @@ const Recomendasi = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusMessage, setStatusMessage] = useState('Menginisialisasi...');
+  const [hasFetched, setHasFetched] = useState(false);
 
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -75,14 +76,12 @@ const Recomendasi = () => {
     setStatusMessage('Mendeteksi lokasi Anda...');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lon: longitude });
-        },
-        (err) => {
-          setError('Tidak dapat mengakses lokasi. Menggunakan lokasi default (Jakarta).', err);
-          setUserLocation(DEFAULT_LOCATION);
-        }
+        (position) => setUserLocation({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        }),
+        (error) => console.error(error),
+        { enableHighAccuracy: true }
       );
     } else {
       setError('Geolocation tidak didukung oleh browser ini. Menggunakan lokasi default.');
@@ -110,30 +109,33 @@ useEffect(() => {
 
 
   useEffect(() => {
-    if (!userLocation) return; 
+  if (!userLocation) return;
+  if (hasFetched) return;
 
-    const fetchRecommendations = async () => {
-      setStatusMessage('Mengambil rekomendasi...');
-      setIsLoading(true);
-      const apiUrl = `https://rizaaf-rekomendasi.hf.space/recommend?lat=${encodeURIComponent(userLocation.lat)}&lon=${encodeURIComponent(userLocation.lon)}&top_k=${TOP_K}`;
-      
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-        const data = await response.json();
-        console.log('Fetched recommendations:', data);
-        setRecommendations(data || []);
-        setStatusMessage(data && data.length > 0 ? `Berikut adalah rekomendasi psikolog terdekat dari lokasi Anda.` : 'Tidak ada rekomendasi ditemukan di sekitar Anda.');
-      } catch (err) {
-        setError(err.message);
-        setStatusMessage(`Gagal mengambil data: ${err.message}`);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchRecommendations = async () => {
+    setStatusMessage('Mengambil rekomendasi...');
+    setIsLoading(true);
+    const apiUrl = `https://rizaaf-rekomendasi.hf.space/recommend?lat=${encodeURIComponent(userLocation.lat)}&lon=${encodeURIComponent(userLocation.lon)}&top_k=${TOP_K}`;
 
-    fetchRecommendations();
-  }, [userLocation]);
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+      const data = await response.json();
+      console.log('Fetched recommendations:', data);
+      setRecommendations(data || []);
+      setStatusMessage(data && data.length > 0 ? `Berikut adalah rekomendasi psikolog terdekat dari lokasi Anda.` : 'Tidak ada rekomendasi ditemukan di sekitar Anda.');
+      setHasFetched(true); // Supaya gak fetch lagi
+    } catch (err) {
+      setError(err.message);
+      setStatusMessage(`Gagal mengambil data: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchRecommendations();
+}, [userLocation]);
+
 
   useEffect(() => {
     const map = mapInstanceRef.current;

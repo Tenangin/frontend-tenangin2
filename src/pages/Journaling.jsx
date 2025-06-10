@@ -221,28 +221,29 @@ const JournalCalendar = () => {
       {isSidebarVisible && isMobile && (
         <div className="sidebar-backdrop" onClick={() => setIsSidebarVisible(false)} />
       )}
-      <div className={`flex-grow-1 p-3 p-md-4 content-area ${isSidebarVisible && !isMobile ? 'content-shifted' : ''}`}>
+      <div className={`flex-grow-1 p-2 p-md-4 content-area ${isSidebarVisible && !isMobile ? 'content-shifted' : ''}`}>
         <div className="toggle-button-container">
           <button className="btn btn-outline-primary mb-2 align-self-start mobile" onClick={toggleSidebar}>
             <i className="bi bi-list"></i>
           </button>
-        </div>
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h4 className="fw-bold text-primary">Journaling Calendar</h4>
           <div className="d-flex align-items-center gap-3">
             {/* <Notifications /> */}
             <Account />
           </div>
         </div>
-        <div className="bg-light min-vh-100 py-4">
-          <div className="container-fluid">
-            <div className="mb-4">
-              <h1 className="display-6 fw-bold text-dark">Journaling</h1>
-              <p className="text-muted">Your daily activity log throughout the program.</p>
+        {/* Responsive header */}
+        <div className="d-flex justify-content-center align-items-center mb-3">
+          <h4 className="fw-bold text-primary text-center mt-5">Journaling Calendar</h4>
+        </div>
+        <div className="bg-light min-vh-100 py-2 py-md-4">
+          <div className="container-fluid px-1 px-md-3">
+            <div className="mb-3 mb-md-4">
+              <h1 className="display-6 fw-bold text-dark text-center text-md-start">Journaling</h1>
+              <p className="text-muted text-center text-md-start">Your daily activity log throughout the program.</p>
             </div>
             <div className="card shadow-sm">
-              <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                <h2 className="h4 mb-0">
+              <div className="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-center py-2 py-md-3">
+                <h2 className="h5 h4 mb-2 mb-md-0">
                   {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                 </h2>
                 <div className="d-flex gap-2">
@@ -250,13 +251,15 @@ const JournalCalendar = () => {
                   <button onClick={() => navigateMonth(1)} className="btn btn-outline-secondary btn-sm">›</button>
                 </div>
               </div>
-              <div className="card-body p-4">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px', marginBottom: '1rem' }}>
+              <div className="card-body p-2 p-md-4">
+                {/* Judul hari: selalu 7 kolom */}
+                <div className="calendar-grid-header mb-2 mb-md-4">
                   {dayNames.map(day => (
-                    <div key={day} className="text-center text-muted fw-medium py-2">{day}</div>
+                    <div key={day} className="text-center text-muted fw-medium py-2 small">{day}</div>
                   ))}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px', marginTop: '1rem' }}>
+                {/* Grid tanggal: responsif */}
+                <div className="calendar-grid-responsive mt-1 mt-md-3">
                   {calendarDays.map((day, index) => {
                     const dayForRender = new Date(day);
                     dayForRender.setHours(0, 0, 0, 0);
@@ -525,14 +528,53 @@ const JournalCalendar = () => {
             </div>
             <div className="text-center text-muted small mt-4">© 2025 Tenangin Apps</div>
           </div>
-          <style jsx>{`
-            .hover-shadow:hover { 
-              box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important; 
-              transform: translateY(-2px); 
+          <style jsx="true">{`
+          .hover-shadow:hover { 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important; 
+            transform: translateY(-2px); 
+          }
+          .cursor-pointer { cursor: pointer; }
+          .cursor-not-allowed { cursor: not-allowed; }
+          /* Responsive grid for calendar */
+          .calendar-grid-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+          }
+          .calendar-grid-responsive {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+          }
+          @media (max-width: 767.98px) {
+            .calendar-grid-responsive {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 6px;
             }
-            .cursor-pointer { cursor: pointer; }
-            .cursor-not-allowed { cursor: not-allowed; }
-          `}</style>
+            .card, .modal-content {
+              border-radius: 10px !important;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+            }
+            .card-body, .card-header {
+              padding: 1rem !important;
+            }
+          }
+          @media (max-width: 400px) {
+            .calendar-grid-responsive {
+              grid-template-columns: 1fr;
+            }
+          }
+          /* Modal responsive */
+          @media (max-width: 576px) {
+            .modal-dialog {
+              max-width: 98vw !important;
+              margin: 0.5rem auto !important;
+            }
+            .modal-content {
+              padding: 0.5rem !important;
+            }
+          }
+        `}</style>
         </div>
       </div>
     </div>
