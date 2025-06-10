@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getJournalEntries } from "../data/api/api.jsx";
 import { getToken } from "../utils/auth.js";
 import SentimentProgressBar from "./SentimentProgressBar";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const Journaling = () => {
   const [journalEntries, setJournalEntries] = useState([]);
@@ -124,63 +125,66 @@ const Journaling = () => {
           {filteredEntries.slice(0, 7).map((entry, idx) => {
             const key = entry.id || entry.created_at || idx;
             const isExpanded = expandedEntries[key];
-            const shouldShowToggle = entry.content.length > 100; // tampilkan tombol jika konten panjang
 
             return (
               <div
                 key={key}
-                className="p-4 rounded-4 mb-3 d-flex justify-content-between align-items-center"
+                className="p-4 rounded-4 mb-3"
                 style={{ backgroundColor: "#EFF4FF", width: "100%" }}
               >
-                <div style={{ flex: 1 }}>
-                  <h6 className="mb-1 fw-semibold">My Day</h6>
-                  <p
-                    className="text-muted small mb-0"
-                    style={{
-                      display: "-webkit-box",
-                      WebkitLineClamp: isExpanded ? "unset" : 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: isExpanded ? "normal" : "initial",
-                      marginBottom: "5rem",
-                    }}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s'
+                  }}
+                  onClick={() => {
+                    setExpandedEntries(prev => ({ ...prev, [key]: !prev[key] }));
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#dbe9ff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#EFF4FF'; }}
+                >
+                  <h6
+                    className="mb-1 fw-semibold"
+                    style={{ userSelect: 'none', cursor: 'pointer', margin: 0 }}
                   >
-                    {entry.content}
-                  </p>
-                  <p className="mb-2"></p>
+                    My Day
+                  </h6>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span
+                      className="badge bg-primary rounded-pill me-2"
+                      style={{ userSelect: 'none' }}
+                    >
+                      {formatDateTime(entry.created_at)}
+                    </span>
+                    {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+                  </div>
+                </div>
 
-                  {shouldShowToggle && (
-                    <div style={{ marginBottom: "0.5rem" }}>
-                      <button
-                        type="button"
-                        className="btn btn-link p-0"
+                <div
+                  style={{
+                    maxHeight: isExpanded ? '500px' : '0',
+                    overflow: 'hidden',
+                    transition: 'max-height 0.5s ease',
+                  }}
+                >
+                  {isExpanded && (
+                    <div style={{ marginTop: '1rem' }}>
+                      <p
+                        className="text-muted small mb-2"
                         style={{
-                          fontSize: "0.8rem",
-                          lineHeight: "1.2",
-                          zIndex: 10,
-                          position: "relative",
-                        }}
-                        onClick={() => {
-                          setExpandedEntries((prev) => ({
-                            ...prev,
-                            [key]: !prev[key],
-                          }));
+                          whiteSpace: 'normal',
+                          marginBottom: '0.5rem',
                         }}
                       >
-                        {isExpanded ? "Show less" : "See details..."}
-                      </button>
+                        {entry.content}
+                      </p>
+                      <SentimentProgressBar sentimentResults={entry.results || entry.sentiment} small={true} />
                     </div>
                   )}
-
-                  <SentimentProgressBar
-                    sentimentResults={entry.results || entry.sentiment}
-                    small={true}
-                  />
                 </div>
-                <span className="badge bg-primary rounded-pill ms-3">
-                  {formatDateTime(entry.created_at)}
-                </span>
               </div>
             );
           })}
