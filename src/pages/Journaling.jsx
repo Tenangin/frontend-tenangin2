@@ -7,11 +7,9 @@ import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
 
-const JournalCalendar = () => {
-  // Hook untuk mengelola state sidebar
+const JournalCalendar = () => {  
   const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
 
-  // State dan logika komponen
   const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -117,7 +115,7 @@ const JournalCalendar = () => {
     if (isCurrentMonth(date) && (isToday(date) || (isPast && status.hasEntry))) {
       setSelectedDate(date);
       setModalData({
-        content: entry?.content || "KOCAK MANE BUL"
+        content: entry?.content
       });
       setShowModal(true);
     }
@@ -134,7 +132,7 @@ const JournalCalendar = () => {
         setLoading(true);
         setSavingType(type);
         const dateKey = formatDate(selectedDate);
-        const userId = getUserId(); // Ganti dengan ID pengguna dinamis jika perlu
+        const userId = getUserId(); 
         
         let sentimentResult = null;
         let analysisResults = null;
@@ -144,7 +142,6 @@ const JournalCalendar = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Header otorisasi ditambahkan di sini
                     'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
@@ -158,7 +155,6 @@ const JournalCalendar = () => {
                 sentimentResult = apiData.sentiment; 
                 analysisResults = apiData.results;
             } else {
-                // Melemparkan error dengan status response untuk logging yang lebih baik
                 throw new Error(`API request failed with status ${sentimentResponse.status}`);
             }
         }
