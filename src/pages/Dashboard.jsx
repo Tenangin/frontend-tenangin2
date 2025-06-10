@@ -193,9 +193,8 @@ function Dashboard() {
           />
         </div>
 
-        {/* Reminders & Journaling */}
+        {/*Journaling */}
         <div className="row">
-          <Reminders />
           <Journaling />
         </div>
         {showProfileForm && (
