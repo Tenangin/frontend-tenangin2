@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { getJournalEntries } from "../data/api/api.jsx";
 import { getToken } from "../utils/auth.js";
+import SentimentProgressBar from "./SentimentProgressBar";
 
 const Journaling = () => {
   const [journalEntries, setJournalEntries] = useState([]);
   const [filter, setFilter] = useState("All");
   const [now, setNow] = useState(new Date());
   const [loading, setLoading] = useState(true);
+  const [expandedEntries, setExpandedEntries] = useState({});
   const token = getToken();
 
   useEffect(() => {
@@ -31,11 +33,10 @@ const Journaling = () => {
     }
   }, [token]);
 
-  // Update current time every minute for dynamic filtering
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(new Date());
-    }, 60000); // 1 minute
+    }, 60000);
 
     return () => clearInterval(interval);
   }, []);
@@ -58,17 +59,17 @@ const Journaling = () => {
       if (filter === "This Month") {
         return (
           entryDate.getMonth() === now.getMonth() &&
-          entryDate.getFulYear() === now.getFullYear()
+          entryDate.getFullYear() === now.getFullYear()
         );
       } else if (filter === "This Week") {
-        // Adjust startOfWeek to Sunday 00:00:00
         const startOfWeek = new Date(now);
         startOfWeek.setDate(now.getDate() - now.getDay());
         startOfWeek.setHours(0, 0, 0, 0);
-        // Adjust endOfWeek to Saturday 23:59:59.999
+
         const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         endOfWeek.setHours(23, 59, 59, 999);
+
         return entryDate >= startOfWeek && entryDate <= endOfWeek;
       } else if (filter === "This Year") {
         return entryDate.getFullYear() === now.getFullYear();
@@ -79,7 +80,7 @@ const Journaling = () => {
           entryDate.getFullYear() === now.getFullYear()
         );
       }
-      return true; // "All"
+      return true;
     });
   };
 
@@ -87,7 +88,10 @@ const Journaling = () => {
 
   if (loading) {
     return (
-      <div className="col-md-6 d-flex justify-content-center align-items-center" style={{ height: '100px' }}>
+      <div
+        className="col-md-6 d-flex justify-content-center align-items-center"
+        style={{ height: "100px" }}
+      >
         <div className="spinner-border text-primary" role="status" aria-label="Loading">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -112,27 +116,74 @@ const Journaling = () => {
           <option value="This Year">This Year</option>
         </select>
       </div>
+
       {filteredEntries.length === 0 ? (
         <p className="text-muted">No journal entries found.</p>
       ) : (
-        <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
-          {filteredEntries.slice(0, 7).map((entry, idx) => (
-            <div
-              key={idx}
-              className="p-4 rounded-4 mb-3 d-flex justify-content-between align-items-center"
-              style={{ backgroundColor: "#EFF4FF", width: '100%' }}
-            >
-              <div>
-                <h6 className="mb-1 fw-semibold">My Day</h6>
-                <p className="text-muted small mb-0">{entry.content}</p>
-                <p className="text-muted small mb-0">
-                  <span className="fw-semibold">Sentiment:</span> {Array.isArray(entry.sentiment) ? entry.sentiment.join(", ") : entry.sentiment}</p>
+        <div style={{ maxHeight: "600px", overflowY: "auto" }}>
+          {filteredEntries.slice(0, 7).map((entry, idx) => {
+            const key = entry.id || entry.created_at || idx;
+            const isExpanded = expandedEntries[key];
+            const shouldShowToggle = entry.content.length > 100; // tampilkan tombol jika konten panjang
+
+            return (
+              <div
+                key={key}
+                className="p-4 rounded-4 mb-3 d-flex justify-content-between align-items-center"
+                style={{ backgroundColor: "#EFF4FF", width: "100%" }}
+              >
+                <div style={{ flex: 1 }}>
+                  <h6 className="mb-1 fw-semibold">My Day</h6>
+                  <p
+                    className="text-muted small mb-0"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: isExpanded ? "unset" : 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: isExpanded ? "normal" : "initial",
+                      marginBottom: "5rem",
+                    }}
+                  >
+                    {entry.content}
+                  </p>
+                  <p className="mb-2"></p>
+
+                  {shouldShowToggle && (
+                    <div style={{ marginBottom: "0.5rem" }}>
+                      <button
+                        type="button"
+                        className="btn btn-link p-0"
+                        style={{
+                          fontSize: "0.8rem",
+                          lineHeight: "1.2",
+                          zIndex: 10,
+                          position: "relative",
+                        }}
+                        onClick={() => {
+                          setExpandedEntries((prev) => ({
+                            ...prev,
+                            [key]: !prev[key],
+                          }));
+                        }}
+                      >
+                        {isExpanded ? "Show less" : "See details..."}
+                      </button>
+                    </div>
+                  )}
+
+                  <SentimentProgressBar
+                    sentimentResults={entry.results || entry.sentiment}
+                    small={true}
+                  />
+                </div>
+                <span className="badge bg-primary rounded-pill ms-3">
+                  {formatDateTime(entry.created_at)}
+                </span>
               </div>
-              <span className="badge bg-primary rounded-pill">
-                {formatDateTime(entry.created_at)}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
