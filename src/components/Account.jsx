@@ -71,9 +71,9 @@ const Account = () => {
             zIndex: 1000,
           }}
         >
-          {/* <Link to="/profile" className="dropdown-item" onClick={() => setDropdownOpen(false)}>
+          <Link to="/profile" className="dropdown-item" onClick={() => setDropdownOpen(false)}>
             Profile
-          </Link> */}
+          </Link>
           <button type="button" className="dropdown-item" onClick={handleLogout}>
             Logout
           </button>

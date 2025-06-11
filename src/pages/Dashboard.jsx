@@ -183,7 +183,7 @@ function Dashboard() {
               Your mental well-being matters. Let Tenangin be your safe space to
               reflect, heal, and grow.
             </p>
-            <button className="btn btn-outline-primary rounded-pill px-4">
+            <button className="btn btn-outline-primary rounded-pill px-4" onClick={() => window.location.href = "/chatbot"}>
               Get Access
             </button>
           </div>

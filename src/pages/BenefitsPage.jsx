@@ -67,7 +67,7 @@ const BenefitsPage = () => {
         <p className="lead mb-4">
           Join Tenangin today and take the first step towards a healthier, happier you.
         </p>
-        <a href="/signup" className="btn btn-primary btn-lg">
+        <a href="/register" className="btn btn-primary btn-lg">
           Get Started
         </a>
       </section>

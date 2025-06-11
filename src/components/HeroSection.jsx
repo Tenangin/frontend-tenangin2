@@ -22,7 +22,7 @@ function HeroSection() {
             listens anytime you need.
           </p>
           <Link
-            to="/explore"
+            to="/login"
             className="btn btn-outline-primary rounded-pill px-4 py-2 mt-4"
           >
             Let’s Explore

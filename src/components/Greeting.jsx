@@ -31,10 +31,19 @@ function Greeting() {
     fetchProfile();
   }, []);
 
+  // Determine greeting based on current hour
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 3) return "Good Evening";
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+
   return (
     <div>
       <h5 className="fw-bold text-primary">
-        Hi {loading ? "..." : fullName === null ? "........" : fullName || "there"}, Good Afternoon!
+        Hi {loading ? "..." : fullName === null ? "........" : fullName || "there"}, {getGreeting()}!
       </h5>
       <p className="text-muted">What do you feel today?</p>
     </div>
