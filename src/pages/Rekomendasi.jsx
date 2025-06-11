@@ -26,6 +26,8 @@ const getRatingStars = (rating) => {
   return `<span class="rating-stars">${starsHTML}</span> (${numRating.toFixed(1)})`;
 };
 
+const DEFAULT_LOCATION = { lat: -6.2088, lon: 106.8456 }; 
+const TOP_K = 5;
 // --- Komponen Utama ---
 const Recomendasi = () => {
   const { isSidebarVisible, isMobile, toggleSidebar, setIsSidebarVisible } = useSidebarToggle();
@@ -43,9 +45,7 @@ const Recomendasi = () => {
   const markersLayerRef = useRef(null);
   const userMarkerRef = useRef(null); 
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const DEFAULT_LOCATION = { lat: -6.2088, lon: 106.8456 }; 
-  const TOP_K = 5;
+
 
   useEffect(() => {
     if (mapContainerRef.current && !mapInstanceRef.current) {
@@ -75,6 +75,7 @@ const Recomendasi = () => {
   // Deteksi lokasi user (tetap seperti sebelumnya)
   useEffect(() => {
     setStatusMessage('Mendeteksi lokasi Anda...');
+    console.log("test di ue2")
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => setUserLocation({
@@ -99,6 +100,7 @@ const Recomendasi = () => {
     if (!userLocation || hasFetchedRef.current) return;
 
     const fetchRecommendations = async () => {
+      console.log("test")
       setStatusMessage('Mengambil rekomendasi...');
       setIsLoading(true);
       const apiUrl = `https://rizaaf-rekomendasi.hf.space/recommend?lat=${encodeURIComponent(userLocation.lat)}&lon=${encodeURIComponent(userLocation.lon)}&top_k=${TOP_K}`;
