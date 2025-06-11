@@ -12,11 +12,6 @@ const features = [
     desc: "Talk with our empathetic AI companion, always here to listen.",
   },
   {
-    icon: "⏰",
-    title: "Reminder",
-    desc: "Set healing goals and reminders to keep your journey on track.",
-  },
-  {
     icon: "🩺",
     title: "Health Check",
     desc: "Self-assess your mental health and identify early warning signs.",

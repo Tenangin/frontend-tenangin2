@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+
 const Sidebar = ({ isOverlay, isVisible, onClose }) => {
   const baseStyles = {
     backgroundColor: '#EFF4FF',
@@ -34,7 +35,7 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
           </button>
         )}
         <div className="d-flex align-items-center justify-content-between mb-4">
-          <h4 className="fw-bold text-primary m-0">Tenangin</h4>
+          <img src="../src/assets/logo2.png" alt="Tenangin Logo" style={{ height: "40px" }} />
         </div>
 
         <ul className="nav flex-column">
@@ -94,7 +95,7 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
               Health Check
             </NavLink>
           </li>
-          <li className="nav-item mb-3">
+          {/* <li className="nav-item mb-3">
             <NavLink
               to="/profile"
               className={({ isActive }) =>
@@ -107,7 +108,7 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
               <i className="bi bi-person-circle me-2" />
               Profile
             </NavLink>
-          </li>
+          </li> */}
           <li className="nav-item mb-3">
             <NavLink
               to="/chatbot"

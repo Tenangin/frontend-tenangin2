@@ -120,7 +120,7 @@ const RecordTest = () => {
             >
               <div>
                 <h6 className="mb-1 fw-semibold">{record.condition}</h6>
-                <small className="text-muted">Score: {record.score}</small>
+                <small className="text-muted">Confident: {record.score}</small>
                 <p className="mb-0">{record.result_text}</p>
               </div>
               {/* <span className="badge bg-primary rounded-pill">7:00 pm</span> */}
@@ -136,7 +136,7 @@ const RecordTest = () => {
           >
             <div>
               <h6 className="mb-1 fw-semibold">{record.condition}</h6>
-              <small className="text-muted">Score: {record.score}</small>
+              <small className="text-muted">Confident: {record.score}</small>
               <p className="mb-0">{record.result_text}</p>
             </div>
             {/* <span className="badge bg-primary rounded-pill">7:00 pm</span> */}
