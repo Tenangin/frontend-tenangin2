@@ -113,3 +113,27 @@
 .modal-buttons button:last-child:hover {
   background-color: #1e40af;
 }
+
+@media (max-width: 600px) {
+  .modal-content {
+    min-width: unset !important;
+    max-width: 98vw !important;
+    width: 98vw !important;
+    padding: 1rem !important;
+  }
+  .modal-container {
+    width: 100vw !important;
+    min-width: unset !important;
+    max-width: 100vw !important;
+    border-radius: 10px !important;
+  }
+  .modal-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .modal-buttons button {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
