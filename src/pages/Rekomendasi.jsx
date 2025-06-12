@@ -217,9 +217,11 @@ useEffect(() => {
     return stored ? JSON.parse(stored) : [];
   });
 
-  const handleSaveRecommendations = async (psikolog) => {
+const handleSaveRecommendations = async (psikolog, event) => {
+    event.preventDefault();
+    console.log('handleSaveRecommendations called with psikolog:', psikolog);
+    console.log('Current savedRecommendations:', savedRecommendations);
     const alreadySaved = savedRecommendations.some(item => item.place_id === psikolog.place_id);
-    console.log(savedRecommendations, 'savedRecommendations');
     console.log('Already saved:', alreadySaved, 'for', psikolog.name, 'id', psikolog.id);
     if (alreadySaved) {
       try {
@@ -228,7 +230,7 @@ useEffect(() => {
           clinics_id: psikolog.id,
           notes: "",
         };
-        console.log("data:", data);
+        console.log("data to send:", data);
         const response = await createRecommendation(token, data);
         console.log('API createRecommendation response:', response);
 
