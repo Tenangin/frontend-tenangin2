@@ -110,7 +110,7 @@ function Login() {
                 <span className="input-group-text"><i className="bi bi-envelope"></i></span>
                 <input
                   type="email"
-                  className="form-control rounded-pill"
+                  className="form-control"
                   id="email"
                   placeholder="johndoe@example.com"
                   value={email}
@@ -130,7 +130,7 @@ function Login() {
                 <span className="input-group-text"><i className="bi bi-shield-lock"></i></span>
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="form-control rounded-pill"
+                  className="form-control"
                   id="password"
                   placeholder="********"
                   value={password}
