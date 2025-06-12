@@ -38,7 +38,7 @@ const FeaturesPage = () => {
           <div className="row justify-content-center">
             {/* Feature 1: Self-Assessment */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm feature-card">
                 <img
                   src="/assets/assesment.png"
                   alt="Self-Assessment Feature"
@@ -63,7 +63,7 @@ const FeaturesPage = () => {
 
             {/* Feature 2: Counselor Recommendation */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm feature-card">
                 <img
                   src="/assets/conselor.png"
                   alt="Counselor Recommendation Feature"
@@ -88,7 +88,7 @@ const FeaturesPage = () => {
 
             {/* Feature 3: Journaling */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm feature-card">
                 <img
                   src="/assets/journaling.png"
                   alt="Journaling Feature"
@@ -113,7 +113,7 @@ const FeaturesPage = () => {
 
             {/* Feature 4: Interactive Chatbot */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm">
+              <div className="card h-100 shadow-sm feature-card">
                 <img
                   src="/assets/chatbot.png"
                   alt="Interactive Chatbot Feature"
@@ -151,6 +151,21 @@ const FeaturesPage = () => {
         </section>
       </main>
       {/* <Footer /> */}
+      <style jsx="true">{`
+        .feature-card {
+          transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+          border: 2px solid #f3f4f6;
+          cursor: pointer;
+        }
+        .feature-card:hover,
+        .feature-card:focus {
+          box-shadow: 0 8px 24px rgba(67, 97, 238, 0.15),
+            0 1.5px 6px rgba(0, 0, 0, 0.08);
+          border-color: #4361ee;
+          transform: translateY(-8px) scale(1.03);
+          background: #f5faff;
+        }
+      `}</style>
     </>
   );
 };

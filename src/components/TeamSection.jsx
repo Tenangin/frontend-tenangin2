@@ -45,7 +45,7 @@ const TeamSection = () => {
       <div className="row justify-content-center">
         {teamMembers.map((member, index) => (
           <div className="col-md-4 mb-4" key={index}>
-            <div className="card h-100 shadow-sm d-flex flex-column justify-content-center p-4 text-center">
+            <div className="card h-100 shadow-sm d-flex flex-column justify-content-center p-4 text-center team-card hover-animate">
               <h5 className="card-title">{member.name}</h5>
               <p className="card-text text-muted mb-1"><small>{member.cohortId}</small></p>
               <p className="card-text text-muted mb-1">{member.university}</p>
@@ -55,6 +55,19 @@ const TeamSection = () => {
           </div>
         ))}
       </div>
+      <style jsx="true">{`
+        .team-card {
+          transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+          border: 2px solid #e5e7eb;
+        }
+        .team-card:hover, .team-card:focus {
+          box-shadow: 0 8px 24px rgba(37,99,235,0.15), 0 1.5px 6px rgba(0,0,0,0.08);
+          border-color: #2563eb;
+          transform: translateY(-8px) scale(1.03);
+          background: #f5faff;
+          cursor: pointer;
+        }
+      `}</style>
     </section>
   );
 };

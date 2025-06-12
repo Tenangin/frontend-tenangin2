@@ -37,7 +37,7 @@ function FeatureSection() {
         <div className="row justify-content-center mb-5">
           {features.map((feature, index) => (
             <div key={index} className="col-md-4 mb-4">
-              <div className="bg-white p-4 h-100 shadow rounded-4">
+              <div className="bg-white p-4 h-100 shadow rounded-4 feature-card">
                 <div
                   className="fs-1 mb-3"
                   style={{ color: "#4361ee" }}
@@ -51,6 +51,19 @@ function FeatureSection() {
           ))}
         </div>
       </div>
+      <style jsx="true">{`
+        .feature-card {
+          transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+          border: 2px solid #f3f4f6;
+          cursor: pointer;
+        }
+        .feature-card:hover, .feature-card:focus {
+          box-shadow: 0 8px 24px rgba(67,97,238,0.15), 0 1.5px 6px rgba(0,0,0,0.08);
+          border-color: #4361ee;
+          transform: translateY(-8px) scale(1.03);
+          background: #f5faff;
+        }
+      `}</style>
     </section>
   );
 }
