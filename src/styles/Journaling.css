@@ -118,13 +118,23 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: visible;
+  box-sizing: border-box;
+  padding-left: 0.5rem; /* Ensure left padding */
+  padding-right: 0.5rem; /* Add right padding to contain calendar content */
+  scroll-padding-left: 0.5rem; /* Add scroll padding for smooth left scroll */
+  scroll-padding-right: 0.5rem; /* Add scroll padding for smooth right scroll */
+  max-width: 100%; /* Ensure container does not overflow parent */
+  max-width: 100% !important; /* Ensure does not exceed card-body width */
+  box-sizing: border-box;
 }
+
 
 .calendar-grid-header,
 .calendar-grid-responsive {
-  min-width: 560px; /* 7 x 80px, sesuaikan dengan kebutuhan */
+  min-width: 100%; /* Make grid fill the container width */
   width: 100%;
 }
+
 
 .calendar-grid-header,
 .calendar-grid-responsive {
@@ -133,6 +143,7 @@
   min-width: 560px; /* 7 x 80px, sesuaikan dengan kebutuhan */
   gap: 8px;
 }
+
 /* Responsif showmodal journaling */
 @media (max-width: 600px) {
   .modal-content {
@@ -156,25 +167,41 @@
     width: 100%;
     font-size: 1rem;
   }
+
+  /* Responsive content-area for small screens */
+  .content-area {
+    padding: 0.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
   .calendar-grid-header,
   .calendar-grid-responsive {
     min-width: 560px;
     max-width: 100vw;
   }
 
+
   .calendar-scroll-wrapper {
     /* Lebar minimum agar grid tetap kecil dan bisa discroll */
-    min-width: 560px;
-    max-width: 90vw;
+    max-width: 100%;
     overflow-x: auto;
     overflow-y: auto;
   }
+
   .calendar-grid-responsive {
-    min-width: 50px;
+    min-width: 560px;
     /* grid tetap 7 kolom agar tidak terlalu besar di mobile */
     grid-template-columns: repeat(7, 1fr) !important;
+    padding-left: 0.5rem; /* Add left padding to keep content inside */
+    padding-right: 0.5rem; /* Add right padding to keep content inside */
+    box-sizing: border-box;
   }
+
+  /* .d-flex {
+    flex-direction: column;
+  } */
 }

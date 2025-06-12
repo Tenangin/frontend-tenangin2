@@ -314,6 +314,8 @@ const JournalCalendar = () => {
           onClick={() => setIsSidebarVisible(false)}
         />
       )}
+      
+      {/* Main Content */}
       <div
         className={`flex-grow-1 p-2 p-md-4 content-area ${
           isSidebarVisible && !isMobile ? "content-shifted" : ""
@@ -847,10 +849,7 @@ const JournalCalendar = () => {
               gap: 8px;
             }
             @media (max-width: 767.98px) {
-              .calendar-grid-responsive {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
-              }
+              /* Removed grid-template-columns change to keep 7 columns */
               .card,
               .modal-content {
                 border-radius: 10px !important;
@@ -862,9 +861,7 @@ const JournalCalendar = () => {
               }
             }
             @media (max-width: 400px) {
-              .calendar-grid-responsive {
-                grid-template-columns: 1fr;
-              }
+              /* Removed grid-template-columns change to keep 7 columns */
             }
             /* Modal responsive */
             @media (max-width: 576px) {
