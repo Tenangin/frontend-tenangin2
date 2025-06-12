@@ -214,16 +214,30 @@ useEffect(() => {
 
   const [savedRecommendations, setSavedRecommendations] = useState(() => {
     const stored = localStorage.getItem('savedRecommendations');
-    return stored ? JSON.parse(stored) : [];
+    console.log('Initial localStorage savedRecommendations:', stored);
+    const parsed = stored ? JSON.parse(stored) : [];
+    console.log('Parsed savedRecommendations:', parsed);
+    return parsed;
   });
 
 const handleSaveRecommendations = async (psikolog, event) => {
     event.preventDefault();
     console.log('handleSaveRecommendations called with psikolog:', psikolog);
     console.log('Current savedRecommendations:', savedRecommendations);
-    const alreadySaved = savedRecommendations.some(item => item.place_id === psikolog.place_id);
+    // if (!psikolog.place_id) {
+    //   console.warn('Warning: psikolog.place_id is missing or undefined:', psikolog);
+    // }
+    const alreadySaved = savedRecommendations.some(item => {
+      if (!item.place_id) {
+        console.warn('Warning: savedRecommendations item missing place_id:', item);
+        return false;
+      }
+      const isMatch = item.place_id === psikolog.place_id;
+      console.log(`Comparing saved item place_id: ${item.place_id} with psikolog.place_id: ${psikolog.place_id} => ${isMatch}`);
+      return isMatch;
+    });
     console.log('Already saved:', alreadySaved, 'for', psikolog.name, 'id', psikolog.id);
-    if (alreadySaved == true) {
+    if (!alreadySaved || psikolog.id) {
       try {
         const token = getToken();
         const data = {
