@@ -368,190 +368,204 @@ const JournalCalendar = () => {
               </div>
               <div className="card-body p-2 p-md-4">
                 {/* Judul hari: selalu 7 kolom */}
-                <div className="calendar-grid-header mb-2 mb-md-4">
+                {/* <div className="calendar-grid-header mb-2 mb-md-4">
                   {dayNames.map((day) => (
                     <div
                       key={day}
-                      className="text-center text-muted fw-medium py-2 small"
+                      className="text-center text-muted fw-medium py-2 small calendar-header-cell"
+                      style={{ background: "#f8fafc" }}
                     >
                       {day}
                     </div>
                   ))}
-                </div>
+                </div> */}
                 {/* Grid tanggal: responsif */}
-                <div className="calendar-grid-responsive mt-1 mt-md-3">
-                  {calendarDays.map((day, index) => {
-                    const dayForRender = new Date(day);
-                    dayForRender.setHours(0, 0, 0, 0);
+                <div className="calendar-scroll-wrapper">
+                  <div className="calendar-grid-responsive mt-1 mt-md-3">
+                    {/* Render header hari */}
+                    {dayNames.map((day) => (
+                      <div
+                        key={day}
+                        className="text-center text-muted fw-medium py-2 small calendar-header-cell"
+                        style={{ background: "#f8fafc" }}
+                      >
+                        {day}
+                      </div>
+                    ))}
+                    {/* Render tanggal */}
+                    {calendarDays.map((day, index) => {
+                      const dayForRender = new Date(day);
+                      dayForRender.setHours(0, 0, 0, 0);
 
-                    const isTodayDay = isToday(dayForRender);
-                    const isCurrentMonthDate = isCurrentMonth(dayForRender);
-                    const status = getEntryStatus(dayForRender);
-                    const isPast = dayForRender < today;
-                    const isFuture = dayForRender > today;
+                      const isTodayDay = isToday(dayForRender);
+                      const isCurrentMonthDate = isCurrentMonth(dayForRender);
+                      const status = getEntryStatus(dayForRender);
+                      const isPast = dayForRender < today;
+                      const isFuture = dayForRender > today;
 
-                    const canClick =
-                      isCurrentMonthDate &&
-                      !isFuture &&
-                      (isTodayDay || status.hasEntry);
-                    const allSentiments = getAllSentiments(
-                      journalEntries[formatDate(dayForRender)]?.results
-                    );
+                      const canClick =
+                        isCurrentMonthDate &&
+                        !isFuture &&
+                        (isTodayDay || status.hasEntry);
+                      const allSentiments = getAllSentiments(
+                        journalEntries[formatDate(dayForRender)]?.results
+                      );
 
-                    return (
-                      <div key={index}>
-                        <div
-                          className={`border rounded p-3 position-relative h-100 ${
-                            isCurrentMonthDate ? "bg-white" : "bg-light"
-                          } ${
-                            isTodayDay
-                              ? "border-primary border-2"
-                              : "border-light"
-                          } ${
-                            canClick
-                              ? "cursor-pointer hover-shadow"
-                              : "cursor-not-allowed"
-                          } ${
-                            status.hasEntry && isCurrentMonthDate
-                              ? "border-success border-2"
-                              : ""
-                          } ${
-                            !isCurrentMonthDate || isFuture ? "opacity-50" : ""
-                          }`}
-                          style={{
-                            minHeight: "220px",
-                            cursor: canClick ? "pointer" : "not-allowed",
-                            transition: "all 0.2s ease",
-                          }}
-                          onClick={() =>
-                            canClick && handleDateClick(dayForRender)
-                          }
-                        >
-                          <div className="d-flex justify-content-between align-items-start mb-3">
-                            <span
-                              className={`h4 fw-bold ${
-                                isTodayDay
-                                  ? "text-primary"
-                                  : isCurrentMonthDate
-                                  ? "text-dark"
-                                  : "text-muted"
-                              }`}
-                            >
-                              {dayForRender.getDate()}
-                            </span>
-                            {isPast && isCurrentMonthDate && (
-                              <div className="d-flex align-items-center gap-1">
-                                {status.isFinal ? (
-                                  <CheckCircle
-                                    size={20}
-                                    className="text-success"
-                                  />
-                                ) : status.isDraft ? (
-                                  <Edit3 size={20} className="text-warning" />
-                                ) : null}
-                              </div>
-                            )}
-                            {isTodayDay && !status.hasEntry && (
-                              <XCircle size={20} className="text-danger" />
-                            )}
-                          </div>
-                          {isCurrentMonthDate && !isFuture && (
-                            <div className="d-flex flex-column h-75">
-                              <div className="mb-3">
-                                {status.isFinal ? (
-                                  <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
-                                    Completed
-                                  </span>
-                                ) : status.isDraft ? (
-                                  <span className="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">
-                                    Draft
-                                  </span>
-                                ) : isToday(dayForRender) ? (
-                                  <span className="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">
-                                    Not Started
-                                  </span>
-                                ) : !status.hasEntry ? (
-                                  <span className="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">
-                                    Missed
-                                  </span>
-                                ) : null}
-                              </div>
-                              {allSentiments.length > 0 && status.isFinal && (
-                                <div className="mt-auto">
-                                  <div className="small text-muted mb-2 fw-medium">
-                                    Sentiments:
-                                  </div>
-                                  <div
-                                    className="d-flex flex-column gap-1"
-                                    style={{
-                                      maxHeight: "120px",
-                                      overflowY: "auto",
-                                    }}
-                                  >
-                                    {allSentiments.map(([sentiment, score]) => {
-                                      const sentimentData =
-                                        sentimentEmojis[
-                                          sentiment.toLowerCase()
-                                        ];
-                                      if (!sentimentData) return null;
-                                      const percentage = Math.round(
-                                        score * 100
-                                      );
-                                      return (
-                                        <div
-                                          key={sentiment}
-                                          className="d-flex align-items-center justify-content-between rounded px-2 py-1"
-                                          style={{
-                                            backgroundColor:
-                                              sentimentData.bgColor,
-                                            border: `1px solid ${sentimentData.borderColor}`,
-                                            minHeight: "26px",
-                                          }}
-                                        >
+                      return (
+                        <div key={index}>
+                          <div
+                            className={`border rounded p-3 position-relative h-100 ${
+                              isCurrentMonthDate ? "bg-white" : "bg-light"
+                            } ${
+                              isTodayDay
+                                ? "border-primary border-2"
+                                : "border-light"
+                            } ${
+                              canClick
+                                ? "cursor-pointer hover-shadow"
+                                : "cursor-not-allowed"
+                            } ${
+                              status.hasEntry && isCurrentMonthDate
+                                ? "border-success border-2"
+                                : ""
+                            } ${
+                              !isCurrentMonthDate || isFuture ? "opacity-50" : ""
+                            }`}
+                            style={{
+                              minHeight: "220px",
+                              cursor: canClick ? "pointer" : "not-allowed",
+                              transition: "all 0.2s ease",
+                            }}
+                            onClick={() =>
+                              canClick && handleDateClick(dayForRender)
+                            }
+                          >
+                            <div className="d-flex justify-content-between align-items-start mb-3">
+                              <span
+                                className={`h4 fw-bold ${
+                                  isTodayDay
+                                    ? "text-primary"
+                                    : isCurrentMonthDate
+                                    ? "text-dark"
+                                    : "text-muted"
+                                }`}
+                              >
+                                {dayForRender.getDate()}
+                              </span>
+                              {isPast && isCurrentMonthDate && (
+                                <div className="d-flex align-items-center gap-1">
+                                  {status.isFinal ? (
+                                    <CheckCircle
+                                      size={20}
+                                      className="text-success"
+                                    />
+                                  ) : status.isDraft ? (
+                                    <Edit3 size={20} className="text-warning" />
+                                  ) : null}
+                                </div>
+                              )}
+                              {isTodayDay && !status.hasEntry && (
+                                <XCircle size={20} className="text-danger" />
+                              )}
+                            </div>
+                            {isCurrentMonthDate && !isFuture && (
+                              <div className="d-flex flex-column h-75">
+                                <div className="mb-3">
+                                  {status.isFinal ? (
+                                    <span className="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+                                      Completed
+                                    </span>
+                                  ) : status.isDraft ? (
+                                    <span className="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">
+                                      Draft
+                                    </span>
+                                  ) : isToday(dayForRender) ? (
+                                    <span className="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">
+                                      Not Started
+                                    </span>
+                                  ) : !status.hasEntry ? (
+                                    <span className="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">
+                                      Missed
+                                    </span>
+                                  ) : null}
+                                </div>
+                                {allSentiments.length > 0 && status.isFinal && (
+                                  <div className="mt-auto">
+                                    <div className="small text-muted mb-2 fw-medium">
+                                      Sentiments:
+                                    </div>
+                                    <div
+                                      className="d-flex flex-column gap-1"
+                                      style={{
+                                        maxHeight: "120px",
+                                        overflowY: "auto",
+                                      }}
+                                    >
+                                      {allSentiments.map(([sentiment, score]) => {
+                                        const sentimentData =
+                                          sentimentEmojis[
+                                            sentiment.toLowerCase()
+                                          ];
+                                        if (!sentimentData) return null;
+                                        const percentage = Math.round(
+                                          score * 100
+                                        );
+                                        return (
                                           <div
-                                            className="d-flex align-items-center"
-                                            style={{ gap: "4px" }}
+                                            key={sentiment}
+                                            className="d-flex align-items-center justify-content-between rounded px-2 py-1"
+                                            style={{
+                                              backgroundColor:
+                                                sentimentData.bgColor,
+                                              border: `1px solid ${sentimentData.borderColor}`,
+                                              minHeight: "26px",
+                                            }}
                                           >
-                                            <span
-                                              style={{
-                                                fontSize: "12px",
-                                                lineHeight: "1",
-                                              }}
+                                            <div
+                                              className="d-flex align-items-center"
+                                              style={{ gap: "4px" }}
                                             >
-                                              {sentimentData.emoji}
-                                            </span>
+                                              <span
+                                                style={{
+                                                  fontSize: "12px",
+                                                  lineHeight: "1",
+                                                }}
+                                              >
+                                                {sentimentData.emoji}
+                                              </span>
+                                              <span
+                                                className={`${sentimentData.color} fw-medium`}
+                                                style={{
+                                                  fontSize: "11px",
+                                                  lineHeight: "1",
+                                                }}
+                                              >
+                                                {sentimentData.label}
+                                              </span>
+                                            </div>
                                             <span
-                                              className={`${sentimentData.color} fw-medium`}
+                                              className="fw-bold"
                                               style={{
                                                 fontSize: "11px",
                                                 lineHeight: "1",
+                                                color: "#495057",
                                               }}
                                             >
-                                              {sentimentData.label}
+                                              {percentage}%
                                             </span>
                                           </div>
-                                          <span
-                                            className="fw-bold"
-                                            style={{
-                                              fontSize: "11px",
-                                              lineHeight: "1",
-                                              color: "#495057",
-                                            }}
-                                          >
-                                            {percentage}%
-                                          </span>
-                                        </div>
-                                      );
-                                    })}
+                                        );
+                                      })}
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
-                          )}
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

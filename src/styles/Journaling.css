@@ -113,6 +113,26 @@
 .modal-buttons button:last-child:hover {
   background-color: #1e40af;
 }
+
+.calendar-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.calendar-grid-header,
+.calendar-grid-responsive {
+  min-width: 560px; /* 7 x 80px, sesuaikan dengan kebutuhan */
+  width: 100%;
+}
+
+.calendar-grid-header,
+.calendar-grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  min-width: 560px; /* 7 x 80px, sesuaikan dengan kebutuhan */
+  gap: 8px;
+}
 /* Responsif showmodal journaling */
 @media (max-width: 600px) {
   .modal-content {
@@ -135,5 +155,26 @@
   .modal-buttons button {
     width: 100%;
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .calendar-grid-header,
+  .calendar-grid-responsive {
+    min-width: 560px;
+    max-width: 100vw;
+  }
+
+  .calendar-scroll-wrapper {
+    /* Lebar minimum agar grid tetap kecil dan bisa discroll */
+    min-width: 560px;
+    max-width: 90vw;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+  .calendar-grid-responsive {
+    min-width: 50px;
+    /* grid tetap 7 kolom agar tidak terlalu besar di mobile */
+    grid-template-columns: repeat(7, 1fr) !important;
   }
 }
