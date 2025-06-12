@@ -1,14 +1,32 @@
 import React from "react";
 import LandingNavbar from "../components/LandingNavbar";
 import Footer from "../components/FooterSection";
+import useInView from "../hooks/useInView";
+import "../styles/LandingPageAnimations.css";
 
 const FeaturesPage = () => {
+  const [heroRef, heroVisible] = useInView({ threshold: 0.1 });
+  const [introRef, introVisible] = useInView({ threshold: 0.1 });
+  const [featuresRef, featuresVisible] = useInView({ threshold: 0.1 });
+  // const [ctaRef, ctaVisible] = useInView({ threshold: 0.1 });
+
+  // Add useInView hooks for each feature card
+  const [feature1Ref, feature1Visible] = useInView({ threshold: 0.1 });
+  const [feature2Ref, feature2Visible] = useInView({ threshold: 0.1 });
+  const [feature3Ref, feature3Visible] = useInView({ threshold: 0.1 });
+  const [feature4Ref, feature4Visible] = useInView({ threshold: 0.1 });
+
+  // Remove unused ctaRef and ctaVisible to fix eslint warning
+
   return (
     <>
       <main id="main-content" className="container my-3">
         {/* Hero Section */}
         <div
-          className="p-5 text-center rounded"
+          ref={heroRef}
+          className={`fade-in-section p-5 text-center rounded ${
+            heroVisible ? "is-visible" : ""
+          }`}
           style={{
             backgroundColor: "#4a90e2",
             color: "white",
@@ -22,7 +40,12 @@ const FeaturesPage = () => {
         </div>
 
         {/* Introduction Section */}
-        <section className="my-5">
+        <section
+          ref={introRef}
+          className={`fade-in-section my-5 ${
+            introVisible ? "is-visible" : ""
+          }`}
+        >
           <h2 className="mb-4 text-center">Why Mental Health Matters</h2>
           <p className="lead text-center mx-auto" style={{ maxWidth: "700px" }}>
             Mental health issues among students in Indonesia are a growing
@@ -33,12 +56,22 @@ const FeaturesPage = () => {
         </section>
 
         {/* Features Section */}
-        <section className="my-5">
+        <section
+          ref={featuresRef}
+          className={`fade-in-section my-5 ${
+            featuresVisible ? "is-visible" : ""
+          }`}
+        >
           <h2 className="mb-4 text-center">Our Key Features</h2>
           <div className="row justify-content-center">
             {/* Feature 1: Self-Assessment */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm feature-card">
+              <div
+                ref={feature1Ref}
+                className={`fade-in-section card h-100 shadow-sm feature-card ${
+                  feature1Visible ? "is-visible" : ""
+                }`}
+              >
                 <img
                   src="/assets/assesment.png"
                   alt="Self-Assessment Feature"
@@ -63,7 +96,12 @@ const FeaturesPage = () => {
 
             {/* Feature 2: Counselor Recommendation */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm feature-card">
+              <div
+                ref={feature2Ref}
+                className={`fade-in-section card h-100 shadow-sm feature-card ${
+                  feature2Visible ? "is-visible" : ""
+                }`}
+              >
                 <img
                   src="/assets/conselor.png"
                   alt="Counselor Recommendation Feature"
@@ -88,7 +126,12 @@ const FeaturesPage = () => {
 
             {/* Feature 3: Journaling */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm feature-card">
+              <div
+                ref={feature3Ref}
+                className={`fade-in-section card h-100 shadow-sm feature-card ${
+                  feature3Visible ? "is-visible" : ""
+                }`}
+              >
                 <img
                   src="/assets/journaling.png"
                   alt="Journaling Feature"
@@ -113,7 +156,12 @@ const FeaturesPage = () => {
 
             {/* Feature 4: Interactive Chatbot */}
             <div className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm feature-card">
+              <div
+                ref={feature4Ref}
+                className={`fade-in-section card h-100 shadow-sm feature-card ${
+                  feature4Visible ? "is-visible" : ""
+                }`}
+              >
                 <img
                   src="/assets/chatbot.png"
                   alt="Interactive Chatbot Feature"
