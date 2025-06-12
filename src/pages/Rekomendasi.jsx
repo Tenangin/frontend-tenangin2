@@ -38,7 +38,6 @@ const Recomendasi = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusMessage, setStatusMessage] = useState('Menginisialisasi...');
-  // const [savedRecommendations, setSavedRecommendations] = useState([]);
   const hasFetchedRef = useRef(false);
 
   const mapContainerRef = useRef(null);
