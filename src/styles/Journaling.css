@@ -113,7 +113,7 @@
 .modal-buttons button:last-child:hover {
   background-color: #1e40af;
 }
-
+/* Responsif showmodal journaling */
 @media (max-width: 600px) {
   .modal-content {
     min-width: unset !important;

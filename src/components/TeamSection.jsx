@@ -33,22 +33,6 @@ const teamMembers = [
     role: "Full-Stack Developer",
     description: "Enjoys creating smooth and efficient mobile app experiences."
   },
-  // {
-  //   name: "Najmi Iqbal Hanif ",
-  //   university: "Universitas Telkom, Bandung",
-  //   cohortId: "FC012D5Y0322",
-  //   program: "Coding Camp powered by DBS Foundation 2025",
-  //   role: "Front-End Designer",
-  //   description: "Dedicated to designing user-friendly interfaces that delight users."
-  // },
-  // {
-  //   name: "Alwan Irfan F. Rasyid",
-  //   university: "Universitas Handayani Makassar",
-  //   cohortId: "Cohort 06",
-  //   program: "Coding Camp powered by DBS Foundation 2025",
-  //   role: "Back-End Developer",
-  //   description: "Passionate about automating processes and maintaining reliable systems."
-  // },
 ];
 
 const TeamSection = () => {
@@ -56,9 +40,9 @@ const TeamSection = () => {
     <section className="my-5">
       <h2 className="mb-4 text-center">Meet the Team</h2>
       <p className="text-center mb-4 fst-italic">
-        We are six university students from different universities currently enrolled in the Coding Camp powered by DBS Foundation 2025.
+        We are four university students from different universities currently enrolled in the Coding Camp powered by DBS Foundation 2025.
       </p>
-      <div className="row">
+      <div className="row justify-content-center">
         {teamMembers.map((member, index) => (
           <div className="col-md-4 mb-4" key={index}>
             <div className="card h-100 shadow-sm d-flex flex-column justify-content-center p-4 text-center">
