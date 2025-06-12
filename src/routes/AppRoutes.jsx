@@ -29,6 +29,11 @@ function AnimatedRoutes() {
 
   const isTransitionRoute = transitionRoutes.includes(location.pathname);
 
+  React.useEffect(() => {
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <>
       {isTransitionRoute ? (
