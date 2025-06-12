@@ -40,8 +40,8 @@ const FeaturesPage = () => {
             <div className="col-md-4 mb-4">
               <div className="card h-100 shadow-sm">
                 <img
-                  src="./src/assets/assesment.png"
-                  alt="Journaling Feature"
+                  src="/assets/assesment.png"
+                  alt="Self-Assessment Feature"
                   className="card-img-top"
                   style={{
                     objectFit: "contain",
@@ -65,8 +65,8 @@ const FeaturesPage = () => {
             <div className="col-md-4 mb-4">
               <div className="card h-100 shadow-sm">
                 <img
-                  src="./src/assets/conselor.png"
-                  alt="Journaling Feature"
+                  src="/assets/conselor.png"
+                  alt="Counselor Recommendation Feature"
                   className="card-img-top"
                   style={{
                     objectFit: "contain",
@@ -86,10 +86,11 @@ const FeaturesPage = () => {
               </div>
             </div>
 
+            {/* Feature 3: Journaling */}
             <div className="col-md-4 mb-4">
               <div className="card h-100 shadow-sm">
                 <img
-                  src="./src/assets/journaling.png"
+                  src="/assets/journaling.png"
                   alt="Journaling Feature"
                   className="card-img-top"
                   style={{
@@ -114,8 +115,8 @@ const FeaturesPage = () => {
             <div className="col-md-4 mb-4">
               <div className="card h-100 shadow-sm">
                 <img
-                  src="./src/assets/chatbot.png"
-                  alt="Journaling Feature"
+                  src="/assets/chatbot.png"
+                  alt="Interactive Chatbot Feature"
                   className="card-img-top"
                   style={{
                     objectFit: "contain",
