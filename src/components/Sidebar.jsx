@@ -35,7 +35,7 @@ const Sidebar = ({ isOverlay, isVisible, onClose }) => {
           </button>
         )}
         <div className="d-flex align-items-center justify-content-between mb-4">
-          <img src="../src/assets/logo2.png" alt="Tenangin Logo" style={{ height: "40px" }} />
+          <img src="/icons/LogoTenangin.png" alt="Tenangin Logo" style={{ height: "40px" }} />
         </div>
 
         <ul className="nav flex-column">
