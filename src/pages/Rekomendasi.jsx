@@ -223,7 +223,7 @@ const handleSaveRecommendations = async (psikolog, event) => {
     console.log('Current savedRecommendations:', savedRecommendations);
     const alreadySaved = savedRecommendations.some(item => item.place_id === psikolog.place_id);
     console.log('Already saved:', alreadySaved, 'for', psikolog.name, 'id', psikolog.id);
-    if (alreadySaved) {
+    if (alreadySaved == true) {
       try {
         const token = getToken();
         const data = {
