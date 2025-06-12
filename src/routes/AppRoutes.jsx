@@ -10,6 +10,7 @@ import Journaling from '../pages/Journaling';
 import HealthCheck from '../pages/healthCheck';
 import Rekomendasi from '../pages/Rekomendasi';
 import PrivateRoute from '../components/PrivateRoute';
+import PublicOnlyRoute from '../components/PublicOnlyRoute';
 import AboutUsPage from '../pages/AboutUsPage';
 import FeaturesPage from '../pages/FeaturesPage';
 import BenefitsPage from '../pages/BenefitsPage';
@@ -43,10 +44,26 @@ function AnimatedRoutes() {
             >
               <div ref={nodeRef} style={{ position: 'relative', zIndex: 1 }}>
                 <Routes location={location}>
-                  <Route path="/" element={<LandingLayout><LandingPage /></LandingLayout>} />
-                  <Route path="/about" element={<LandingLayout><AboutUsPage /></LandingLayout>} />
-                  <Route path="/features" element={<LandingLayout><FeaturesPage /></LandingLayout>} />
-                  <Route path="/benefits" element={<LandingLayout><BenefitsPage /></LandingLayout>} />
+                  <Route path="/" element={
+                    <PublicOnlyRoute>
+                      <LandingLayout><LandingPage /></LandingLayout>
+                    </PublicOnlyRoute>
+                  } />
+                  <Route path="/about" element={
+                    <PublicOnlyRoute>
+                      <LandingLayout><AboutUsPage /></LandingLayout>
+                    </PublicOnlyRoute>
+                  } />
+                  <Route path="/features" element={
+                    <PublicOnlyRoute>
+                      <LandingLayout><FeaturesPage /></LandingLayout>
+                    </PublicOnlyRoute>
+                  } />
+                  <Route path="/benefits" element={
+                    <PublicOnlyRoute>
+                      <LandingLayout><BenefitsPage /></LandingLayout>
+                    </PublicOnlyRoute>
+                  } />
                 </Routes>
               </div>
             </CSSTransition>

@@ -1,11 +1,17 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { getToken } from '../utils/auth';
 
 export default function PrivateRoute({ children }) {
   const token = getToken();
+  const location = useLocation();
+
   if (!token) {
     return <Navigate to="/login" replace />;
   }
+
+  // Store the current path as lastPrivateRoute in localStorage
+  localStorage.setItem('lastPrivateRoute', location.pathname);
+
   return children;
 }
