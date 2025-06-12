@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar';
 // import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
-import { createRecommendation } from '../data/api/api';
+import { createRecommendation, getRecommendations } from '../data/api/api';
 import { getToken } from '../utils/auth';
 
 // --- Helper Function (Tidak Berubah) ---
@@ -38,6 +38,7 @@ const Recomendasi = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusMessage, setStatusMessage] = useState('Menginisialisasi...');
+  const [savedRecommendations, setSavedRecommendations] = useState([]);
   const hasFetchedRef = useRef(false);
 
   const mapContainerRef = useRef(null);
@@ -212,42 +213,91 @@ useEffect(() => {
     }
   };
 
-  const [savedRecommendations, setSavedRecommendations] = useState(() => {
-    const stored = localStorage.getItem('savedRecommendations');
-    return stored ? JSON.parse(stored) : [];
-  });
-
-  const handleSaveRecommendations = async (psikolog) => {
-    const alreadySaved = savedRecommendations.some(item => item.place_id === psikolog.place_id);
-    console.log(savedRecommendations, 'savedRecommendations');
-    console.log('Already saved:', alreadySaved, 'for', psikolog.name, 'id', psikolog.id);
-    if (alreadySaved) {
+    useEffect(() => {
+    
+    // 3. Buat fungsi async di dalam useEffect
+    const fetchSavedRecommendations = async () => {
       try {
-        const token = getToken();
-        const data = {
-          clinics_id: psikolog.id,
-          notes: "",
-        };
-        console.log("data:", data);
-        const response = await createRecommendation(token, data);
-        console.log('API createRecommendation response:', response);
-
-        const updated = [...savedRecommendations, psikolog];
-        setSavedRecommendations(updated);
-        localStorage.setItem('savedRecommendations', JSON.stringify(updated));
-        alert(`${psikolog.name} telah disimpan!, Cek Di Profile mu untuk mendapatkan Rute`);
-      } catch (error) {
-        console.error('Failed to save recommendation:', error);
-        if (error && error.error && error.error.includes('duplicate key value')) {
-          alert(`Rekomendasi ${psikolog.name} sudah ada di server.`);
+        const storedData = await getRecommendations(getToken());
+        
+        // Pastikan data yang diterima adalah array sebelum di-set
+        if (Array.isArray(storedData)) {
+          setSavedRecommendations(storedData);
         } else {
-          alert(`Gagal menyimpan ${psikolog.name}. Silakan coba lagi.`);
+          // Jika API tidak mengembalikan array, set sebagai array kosong untuk keamanan
+          setSavedRecommendations([]); 
         }
-      }
-    } else {
-      alert(`${psikolog.name} sudah ada di daftar simpan.`);
+
+      } catch (error) {
+        console.error("Gagal mengambil data rekomendasi yang disimpan:", error);
+      } 
+    };
+
+    fetchSavedRecommendations(); // Panggil fungsi async tersebut
+
+  }, []); 
+
+
+
+const handleSaveRecommendations = async (psikolog) => {
+  console.log("Mengecek daftar simpan:", savedRecommendations);
+const alreadySaved = savedRecommendations.some(item => {
+    // Pastikan item yang ada di array valid
+    if (!item) return false;
+
+    // Prioritas 1: Cek berdasarkan place_id jika keduanya ada. Ini paling akurat.
+    if (item.place_id && psikolog.place_id) {
+      return item.place_id === psikolog.place_id;
     }
-  };
+    
+    // Prioritas 2 (Fallback): Jika place_id tidak bisa diandalkan, cek berdasarkan nama.
+    // Ini untuk menangani kasus di mana item (lama atau baru) tidak punya place_id.
+    // Kita menggunakan trim() untuk menghapus spasi di awal/akhir yang mungkin tidak terlihat.
+    if (item.name && psikolog.name) {
+      return item.name.trim().toLowerCase() === psikolog.name.trim().toLowerCase();
+    }
+    
+    // Jika tidak ada key yang bisa diandalkan untuk perbandingan, anggap bukan duplikat.
+    return false;
+  });
+  console.log("Apakah sudah disimpan? (alreadySaved):", alreadySaved);
+  console.log('Mencoba menyimpan:', psikolog.name, 'dengan ID:', psikolog.id);
+
+  // PERUBAHAN DI SINI: Tambahkan '!' untuk membalik logika.
+  // Kode ini sekarang dibaca sebagai: "JIKA BELUM DISIMPAN, maka..."
+  if (!alreadySaved) {
+    try {
+      const token = getToken();
+      const data = {
+        clinics_id: psikolog.id, // Pastikan nama field ini (clinics_id) sesuai dengan yang diharapkan API Anda
+        notes: "",
+      };
+      
+      console.log("Mengirim data ke API:", data);
+      const response = await createRecommendation(token, data);
+      console.log('Respons dari API createRecommendation:', response);
+
+      // Update state dan localStorage SETELAH berhasil menyimpan ke API
+      const updated = [...savedRecommendations, psikolog];
+      setSavedRecommendations(updated);
+      localStorage.setItem('savedRecommendations', JSON.stringify(updated));
+
+      alert(`${psikolog.name} telah berhasil disimpan! Cek di Profile Anda untuk melihat rute.`);
+
+    } catch (error) {
+      console.error('Gagal menyimpan rekomendasi:', error);
+      // Cek error duplikat dari server untuk jaga-jaga
+      if (error && error.error && error.error.includes('duplicate key value')) {
+        alert(`Rekomendasi ${psikolog.name} sudah ada di server.`);
+      } else {
+        alert(`Gagal menyimpan ${psikolog.name}. Terjadi kesalahan, silakan coba lagi.`);
+      }
+    }
+  } else {
+    // Blok ini sekarang berjalan jika item SUDAH DISIMPAN
+    alert(`${psikolog.name} sudah ada di dalam daftar rekomendasi Anda.`);
+  }
+};
 
   const handleOpenGoogleMaps = (lat, lon, event) => {
     event.stopPropagation();

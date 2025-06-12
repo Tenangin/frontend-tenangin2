@@ -101,20 +101,35 @@ const JournalCalendar = () => {
   };
 
   // Mengambil data dari localStorage saat komponen pertama kali dimuat
-  const fetchJournalEntries = async () => {
-    try {
-      setLoading(true);
-      const storedEntries = await getJournalEntries(token);
-      if (storedEntries) {
-        console.log(formatEntries(storedEntries));
-        setJournalEntries(formatEntries(storedEntries));
-      }
-    } catch (error) {
-      console.error("Error fetching journal entries :", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchJournalEntries = async () => {
+  try {
+    setLoading(true);
+
+    // Langkah 1: Ambil data dari server (entri yang sudah final)
+    const serverEntriesArray = (await getJournalEntries(token)) || [];
+    const serverEntries = formatEntries(serverEntriesArray);
+
+    // Langkah 2: Ambil data dari localStorage (termasuk draf yang belum disubmit)
+    const localEntriesText = localStorage.getItem("journalEntries");
+    const localEntries = localEntriesText ? JSON.parse(localEntriesText) : {};
+
+    // Langkah 3: Gabungkan keduanya.
+    // Objek dari `localEntries` akan menimpa objek dari `serverEntries` jika key (tanggal) nya sama.
+    // Ini memastikan draf Anda yang paling update yang akan ditampilkan.
+    const combinedEntries = { ...serverEntries, ...localEntries };
+
+    console.log("Combined Entries on Load:", combinedEntries);
+    setJournalEntries(combinedEntries);
+    
+    // Simpan juga data gabungan ke localStorage agar sinkron
+    localStorage.setItem("journalEntries", JSON.stringify(combinedEntries));
+
+  } catch (error) {
+    console.error("Error fetching journal entries:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchJournalEntries();
