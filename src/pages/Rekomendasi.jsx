@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar';
 // import Notifications from '../components/Notifications';
 import Account from '../components/Account';
 import useSidebarToggle from '../hooks/useSidebarToggle';
-import { createRecommendation } from '../data/api/api';
+import { createRecommendation, getRecommendations } from '../data/api/api';
 import { getToken } from '../utils/auth';
 
 // --- Helper Function (Tidak Berubah) ---
@@ -221,49 +221,44 @@ useEffect(() => {
   });
 
 const handleSaveRecommendations = async (psikolog, event) => {
-    event.preventDefault();
-    console.log('handleSaveRecommendations called with psikolog:', psikolog);
-    console.log('Current savedRecommendations:', savedRecommendations);
-    // if (!psikolog.place_id) {
-    //   console.warn('Warning: psikolog.place_id is missing or undefined:', psikolog);
-    // }
-    const alreadySaved = savedRecommendations.some(item => {
-      if (!item.place_id) {
-        console.warn('Warning: savedRecommendations item missing place_id:', item);
-        return false;
-      }
-      const isMatch = item.place_id === psikolog.place_id;
-      console.log(`Comparing saved item place_id: ${item.place_id} with psikolog.place_id: ${psikolog.place_id} => ${isMatch}`);
-      return isMatch;
-    });
-    console.log('Already saved:', alreadySaved, 'for', psikolog.name, 'id', psikolog.id);
-    if (!alreadySaved || psikolog.id) {
-      try {
-        const token = getToken();
-        const data = {
-          clinics_id: psikolog.id,
-          notes: "",
-        };
-        console.log("data to send:", data);
-        const response = await createRecommendation(token, data);
-        console.log('API createRecommendation response:', response);
-
-        const updated = [...savedRecommendations, psikolog];
-        setSavedRecommendations(updated);
-        localStorage.setItem('savedRecommendations', JSON.stringify(updated));
-        alert(`${psikolog.name} telah disimpan!, Cek Di Profile mu untuk mendapatkan Rute`);
-      } catch (error) {
-        console.error('Failed to save recommendation:', error);
-        if (error && error.error && error.error.includes('duplicate key value')) {
-          alert(`Rekomendasi ${psikolog.name} sudah ada di server.`);
-        } else {
-          alert(`Gagal menyimpan ${psikolog.name}. Silakan coba lagi.`);
-        }
-      }
-    } else {
+  event.preventDefault();
+  console.log('handleSaveRecommendations called with psikolog:', psikolog);
+  try {
+    const token = getToken();
+    // Fetch existing recommendations from server
+    const existingRecommendations = await getRecommendations(token);
+    console.log('Existing recommendations from server:', existingRecommendations);
+    const alreadySavedOnServer = existingRecommendations.some(item => item.clinics_id === psikolog.id);
+    console.log('Already saved on server:', alreadySavedOnServer, 'for', psikolog.name, 'id', psikolog.id);
+    if (alreadySavedOnServer) {
       alert(`${psikolog.name} sudah ada di daftar simpan.`);
+      return;
     }
-  };
+    // Proceed to save recommendation
+    const data = {
+      clinics_id: psikolog.id,
+      notes: "",
+    };
+    console.log("data to send:", data);
+    const response = await createRecommendation(token, data);
+    console.log('API createRecommendation response:', response);
+
+    // Update local savedRecommendations state and localStorage
+    const filtered = savedRecommendations.filter(item => item.place_id !== psikolog.place_id);
+    const updated = [...filtered, psikolog];
+    setSavedRecommendations(updated);
+    localStorage.setItem('savedRecommendations', JSON.stringify(updated));
+    alert(`${psikolog.name} telah disimpan!, Cek Di Profile mu untuk mendapatkan Rute`);
+  } catch (error) {
+    console.error('Failed to save recommendation:', error);
+    if (error && error.error && error.error.includes('duplicate key value')) {
+      alert(`Rekomendasi ${psikolog.name} sudah ada di server.`);
+    } else {
+      alert(`Gagal menyimpan ${psikolog.name}. Silakan coba lagi.`);
+    }
+  }
+};
+
 
   const handleOpenGoogleMaps = (lat, lon, event) => {
     event.stopPropagation();
