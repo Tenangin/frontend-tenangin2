@@ -70,6 +70,21 @@
   max-width: 400px;
 }
 
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Pastikan tombol back selalu di atas */
+.back-btn {
+  align-self: flex-start;
+  margin-bottom: 1rem;
+  /* Jika sebelumnya pakai position absolute, hapus! */
+  position: static !important;
+}
+
+
 .logo-brain {
   max-width: 180px;
   width: 100%;
@@ -155,4 +170,52 @@
   .flowers-top-right {
     display: none; 
   } */
+}
+
+/* Pastikan parent pakai flex-column */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Pastikan tombol back selalu di atas */
+.back-btn {
+  align-self: flex-start;
+  margin-bottom: 1rem;
+  /* Jika sebelumnya pakai position absolute, hapus! */
+  position: static !important;
+}
+
+/* Responsive: pastikan tidak absolute di mobile */
+@media (max-width: 600px) {
+  .back-btn {
+    position: static !important;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* New styles to fix Back link position and spacing on small screens */
+@media (max-width: 576px) {
+  div[style*="position: absolute"][style*="bottom: 25px"][style*="right: 25px"] {
+    bottom: 70px !important;
+    right: 15px !important;
+  }
+
+  .register-form-container p.text-center.mt-3 {
+    margin-top: 2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  div[style*="position: absolute"][style*="bottom: 25px"][style*="right: 25px"] {
+    position: relative !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    margin-top: 1rem;
+    text-align: center;
+  }
 }

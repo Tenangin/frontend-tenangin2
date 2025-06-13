@@ -77,6 +77,17 @@ function Register() {
       return;
     }
 
+    // New validation: check password validations
+    if (
+      !passwordValidations.minLength ||
+      !passwordValidations.hasLower ||
+      !passwordValidations.hasUpper ||
+      !passwordValidations.hasNumber
+    ) {
+      setError("Password does not meet all the requirements.");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await registerUser(username, email, password, confirmPassword);
@@ -314,7 +325,7 @@ function Register() {
             </a>
           </p>
         </div>
-        <div
+        <div className="back-btn" 
           style={{
             position: "absolute",
             bottom: "25px",
