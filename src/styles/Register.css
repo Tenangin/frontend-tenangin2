@@ -78,10 +78,12 @@
 
 /* Pastikan tombol back selalu di atas */
 .back-btn {
-  align-self: flex-start;
+  display: flex;
+  align-items: flex-end;
+  align-self: flex-end;
   margin-bottom: 1rem;
   /* Jika sebelumnya pakai position absolute, hapus! */
-  position: static !important;
+  /* position: static !important; */
 }
 
 

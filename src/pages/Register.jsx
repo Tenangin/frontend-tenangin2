@@ -324,32 +324,33 @@ function Register() {
               Sign In
             </a>
           </p>
-        </div>
-        <div className="back-btn" 
-          style={{
-            position: "absolute",
-            bottom: "25px",
-            right: "25px",
-            fontWeight: "bold",
-            userSelect: "none",
-          }}
-        >
-          <a
-            href="/"
+          <div className="back-btn" 
             style={{
-              color: "#0d6efd",
-              cursor: "pointer",
-              textDecoration: "none",
-              display: "inline-block",
+              position: "absolute",
+              bottom: "25px",
+              right: "25px",
               fontWeight: "bold",
               userSelect: "none",
-              textAlign: "center",
+              justifyContent: "flex-end",
             }}
           >
-            <span>Back</span>
-            <br />
-            <span style={{ fontSize: "20px", lineHeight: "10px" }}>▼</span>
-          </a>
+            <a
+              href="/"
+              style={{
+                color: "#0d6efd",
+                cursor: "pointer",
+                textDecoration: "none",
+                display: "inline-block",
+                fontWeight: "bold",
+                userSelect: "none",
+                textAlign: "center",
+              }}
+            >
+              <span>Back</span>
+              <br />
+              <span style={{ fontSize: "20px", lineHeight: "10px" }}>▼</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
