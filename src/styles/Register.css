@@ -82,6 +82,7 @@
   align-items: flex-end;
   align-self: flex-end;
   margin-bottom: 1rem;
+  transform: translateX(35%);
   /* Jika sebelumnya pakai position absolute, hapus! */
   /* position: static !important; */
 }
@@ -197,6 +198,7 @@
     margin-top: 0;
     left: 0;
     right: 0;
+    transform: translateX(0);
   }
 }
 
@@ -205,6 +207,7 @@
   div[style*="position: absolute"][style*="bottom: 25px"][style*="right: 25px"] {
     bottom: 70px !important;
     right: 15px !important;
+    transform: translateX(0);
   }
 
   .register-form-container p.text-center.mt-3 {
@@ -219,5 +222,6 @@
     right: 0 !important;
     margin-top: 1rem;
     text-align: center;
+    transform: translateX(0);
   }
 }

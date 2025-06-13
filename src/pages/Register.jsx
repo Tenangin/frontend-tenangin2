@@ -328,7 +328,7 @@ function Register() {
             style={{
               position: "absolute",
               bottom: "25px",
-              right: "25px",
+              right: "0px",
               fontWeight: "bold",
               userSelect: "none",
               justifyContent: "flex-end",
